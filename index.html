@@ -829,14 +829,70 @@ function doExport(type){ type==='pdf' ? _doPDF() : _doExcel(); }
 // SPONSOR REGISTRY — รายชื่อ Sponsor ทั้งหมด
 // เพิ่ม Sponsor ใหม่ตรงนี้ได้เลย
 // ═══════════════════════════════════════════
-const SPONSOR_REGISTRY = [
-  { id:'sp_biggas', name:'บิ๊กแก๊ส เทคโนโลยี จำกัด', shortName:'บิ๊กแก๊ส',     logo:'🟠', verified:true  },
-  { id:'sp_thailpg',name:'Thai LPG Industrial',        shortName:'Thai LPG',       logo:'🟠', verified:true  },
-  { id:'sp_prism',  name:'Prism Energy LNG',            shortName:'Prism LNG',      logo:'🔵', verified:true  },
-  { id:'sp_tag',    name:'TAG Energy',                  shortName:'TAG Energy',     logo:'🌿', verified:false },
-  { id:'sp_none',   name:'ติดต่อซัพพลายเออร์',          shortName:'สอบถามราคา',    logo:'📞', verified:false },
-  // เพิ่ม Sponsor ใหม่ได้ที่นี่
+// ═══════════════════════════════════════════
+// SPONSOR REGISTRY — โหลดจาก Admin Panel
+// Admin บันทึกใน localStorage key: fuelcostth_admin
+// ═══════════════════════════════════════════
+const SPONSOR_REGISTRY_DEFAULT = [
+  { id:'sp_biggas', name:'บิ๊กแก๊ส เทคโนโลยี จำกัด', shortName:'บิ๊กแก๊ส',  logo:'🟠', verified:true,  tag:'LPG & LNG อุตสาหกรรม · ส่งทั่วประเทศ', displayPrice:'฿22.30/กก.' },
+  { id:'sp_thailpg',name:'Thai LPG Industrial',        shortName:'Thai LPG',    logo:'🟠', verified:true,  tag:'ส่งทั่วไทย · MOQ 500 กก.', displayPrice:'฿22.30/กก.' },
+  { id:'sp_prism',  name:'Prism Energy LNG',            shortName:'Prism LNG',   logo:'🔵', verified:true,  tag:'ระบบ LNG ครบ · ติดตั้งฟรี', displayPrice:'฿18.90/กก.' },
+  { id:'sp_tag',    name:'TAG Energy',                  shortName:'TAG Energy',  logo:'🌿', verified:false, tag:'น้ำมันทดแทน Green Energy', displayPrice:'' },
+  { id:'sp_none',   name:'ติดต่อซัพพลายเออร์',          shortName:'สอบถามราคา', logo:'📞', verified:false, tag:'', displayPrice:'' },
 ];
+
+// โหลด Sponsor จาก Admin Panel (localStorage)
+function loadSponsorRegistry() {
+  try {
+    const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
+    if (adminData.sponsors && adminData.sponsors.length > 0) {
+      // Map admin sponsors to registry format
+      const mapped = adminData.sponsors
+        .filter(s => s.status === 'active' || s.status === 'queue')
+        .map(s => ({
+          id: s.id,
+          name: s.name,
+          shortName: s.name.length > 14 ? s.name.substring(0,14)+'...' : s.name,
+          logo: '🏭',
+          verified: s.package === 'verified' || s.package === 'featured' || s.package === 'exclusive',
+          tag: s.tag || '',
+          displayPrice: s.displayPrice || '',
+          email: s.email || '',
+          phone: s.phone || '',
+          package: s.package,
+        }));
+      // Always keep sp_none
+      mapped.push({ id:'sp_none', name:'ติดต่อซัพพลายเออร์', shortName:'สอบถามราคา', logo:'📞', verified:false, tag:'', displayPrice:'' });
+      return mapped;
+    }
+  } catch(e) {}
+  return SPONSOR_REGISTRY_DEFAULT;
+}
+
+let SPONSOR_REGISTRY = loadSponsorRegistry();
+
+// อัปเดต Featured Banner จาก Admin
+function updateFeaturedBanner() {
+  try {
+    const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
+    if (!adminData.sponsors) return;
+    // หา Featured Sponsor
+    const featured = adminData.sponsors.find(s =>
+      (s.package === 'featured' || s.package === 'exclusive') && s.status === 'active'
+    );
+    if (featured) {
+      const nameEl    = document.querySelector('.feat-name');
+      const tagEl     = document.querySelector('.feat-tag');
+      const priceEl   = document.querySelector('.feat-price');
+      const btnEl     = document.querySelector('.feat button.btn-gold');
+      if (nameEl)  nameEl.textContent  = featured.name;
+      if (tagEl)   tagEl.textContent   = featured.tag || '';
+      if (priceEl) priceEl.textContent = featured.displayPrice || '';
+      if (btnEl)   btnEl.setAttribute('onclick', `openLead('${featured.name}','${featured.fuelType||''}')`);
+    }
+  } catch(e) {}
+}
+
 
 // ═══════════════════════════════════════════
 // FUEL SLOT CONFIG — กำหนดปุ่มแต่ละเชื้อเพลิง
@@ -1733,6 +1789,8 @@ V.K.P. Intertrade Co., Ltd.
 }
 
 initProfile();
+SPONSOR_REGISTRY = loadSponsorRegistry();
+updateFeaturedBanner();
 init();
 </script>
 
@@ -1826,7 +1884,8 @@ function clearProfile() {
       <!-- Slot config table (hidden until authed) -->
       <div id="saGrid" style="display:none">
         <div style="font-size:11px;color:#94A3B8;margin-bottom:10px">
-          เปิด/ปิดปุ่มและเลือก Sponsor สำหรับแต่ละเชื้อเพลิง — บันทึกอัตโนมัติทันที
+          เปิด/ปิดปุ่มและเลือก Sponsor — <strong style="color:#FCD34D">บันทึกอัตโนมัติ อัปเดตหน้าเว็บทันที</strong><br>
+          <span style="font-size:10px;color:#64748B">⚠️ Sponsor ต้องเพิ่มใน Admin Panel (fuelcostth.com/FuelCostTH_admin.html) ก่อน จึงจะปรากฏในรายการ</span>
         </div>
         <div class="sa-row hdr">
           <div>แสดง</div>
@@ -1875,6 +1934,8 @@ function saAuth() {
 }
 
 function renderSaRows() {
+  // Reload fresh from admin data each time
+  SPONSOR_REGISTRY = loadSponsorRegistry();
   const spOpts = SPONSOR_REGISTRY.map(s =>
     `<option value="${s.id}">${s.logo} ${s.shortName}</option>`
   ).join('');
