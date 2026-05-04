@@ -349,6 +349,32 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
         </div>
         <div class="alert alert-info">💡 แก้ไขข้อมูลเว็บในไฟล์ index.html โดยตรง</div>
       </div>
+
+      <!-- EMAIL & PRIVACY SETTINGS -->
+      <div class="card">
+        <div class="card-title">📧 ข้อมูลติดต่อ & นโยบายความเป็นส่วนตัว</div>
+        <div style="margin-bottom:12px">
+          <label class="f-label">อีเมลติดต่อโฆษณา / Sponsor</label>
+          <input class="f-input" id="contactEmail" placeholder="contact@fuelcostth.com">
+          <div style="font-size:11px;color:#64748B;margin-top:4px">แสดงในหน้าเว็บ ลิงก์ "ติดต่อโฆษณา" ใน Footer</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label class="f-label">อีเมลรับ Lead (FormSubmit)</label>
+          <input class="f-input" id="leadEmail" placeholder="vkpintertrade@gmail.com">
+          <div style="font-size:11px;color:#64748B;margin-top:4px">อีเมลที่ Lead form จะส่งข้อมูลมาให้</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label class="f-label">นโยบายความเป็นส่วนตัว (Privacy Policy)</label>
+          <textarea class="f-input" id="privacyText" rows="8"
+            style="font-size:12px;line-height:1.6;resize:vertical"
+            placeholder="พิมพ์ข้อความนโยบายความเป็นส่วนตัวที่นี่..."></textarea>
+        </div>
+        <button class="btn btn-gold" onclick="saveContactSettings()">💾 บันทึก</button>
+        <div id="contactMsg" style="margin-top:8px;font-size:12px"></div>
+        <div class="alert alert-warn" style="margin-top:12px">
+          ⚠️ หลังบันทึกข้อมูลนี้จะเก็บใน browser — หากต้องการให้แสดงบนเว็บจริงต้องแก้ในไฟล์ index.html ด้วยครับ
+        </div>
+      </div>
     </div>
 
   </div>
@@ -510,7 +536,26 @@ function doLogout() {
   document.getElementById('loginErr').style.display = 'none';
 }
 
-function changePw() {
+function saveContactSettings() {
+  const email   = document.getElementById('contactEmail').value.trim();
+  const lead    = document.getElementById('leadEmail').value.trim();
+  const privacy = document.getElementById('privacyText').value.trim();
+  const data = { contactEmail:email, leadEmail:lead, privacyText:privacy };
+  localStorage.setItem('fct_contact_settings', JSON.stringify(data));
+  const msg = document.getElementById('contactMsg');
+  msg.style.color = '#6EE7B7';
+  msg.textContent = '✅ บันทึกแล้ว';
+  setTimeout(()=>{ msg.textContent=''; }, 3000);
+}
+
+function loadContactSettings() {
+  try {
+    const d = JSON.parse(localStorage.getItem('fct_contact_settings')||'{}');
+    if (d.contactEmail) document.getElementById('contactEmail').value = d.contactEmail;
+    if (d.leadEmail)    document.getElementById('leadEmail').value    = d.leadEmail;
+    if (d.privacyText)  document.getElementById('privacyText').value  = d.privacyText;
+  } catch(e) {}
+}
   const old = document.getElementById('oldPw').value;
   const nw  = document.getElementById('newPw').value;
   const msg = document.getElementById('pwMsg');
@@ -921,6 +966,7 @@ function renderAll() {
   renderSponsorTable();
   renderRotation();
   renderSettings();
+  loadContactSettings();
 }
 
 // ═══════════════════════════════════════════════════════
