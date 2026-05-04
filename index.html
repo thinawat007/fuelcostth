@@ -547,8 +547,24 @@ footer a{color:var(--blue);text-decoration:none}
 
 <footer>
   ⚡ <strong style="color:#fff">FuelCostTH.com</strong> — เปรียบเทียบต้นทุนพลังงานฟรี |
-  <a href="mailto:contact@fuelcostth.com">ติดต่อโฆษณา</a> | <a href="#">นโยบายความเป็นส่วนตัว</a>
+  <a href="mailto:vkpintertrade@gmail.com">ติดต่อโฆษณา</a> | <a href="#" onclick="showPrivacy();return false;">นโยบายความเป็นส่วนตัว</a>
 </footer>
+
+<!-- PRIVACY MODAL -->
+<div class="gate-overlay" id="privacyModal" onclick="if(event.target===this)document.getElementById('privacyModal').classList.remove('open')">
+  <div class="gate-modal" style="max-width:600px">
+    <div class="gate-header">
+      <div class="gate-icon">🔒</div>
+      <div class="gate-title">นโยบายความเป็นส่วนตัว</div>
+      <div class="gate-sub">FuelCostTH.com · V.K.P. Intertrade Co., Ltd.</div>
+    </div>
+    <div class="gate-body">
+      <div id="privacyContent" style="font-size:12px;line-height:1.9;color:var(--text);white-space:pre-wrap;max-height:60vh;overflow-y:auto"></div>
+      <button class="btn btn-navy" style="margin-top:16px;width:100%;justify-content:center;padding:10px"
+        onclick="document.getElementById('privacyModal').classList.remove('open')">ปิด</button>
+    </div>
+  </div>
+</div>
 
 <!-- LEAD MODAL -->
 <div class="modal-overlay" id="leadModal" onclick="closeOut(event)">
@@ -1671,6 +1687,49 @@ function _doExcel() {
   XLSX.utils.book_append_sheet(wb, ws2, 'ค่าความร้อนอ้างอิง');
 
   XLSX.writeFile(wb, 'FuelCostTH_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+function showPrivacy() {
+  const defaultText = `นโยบายความเป็นส่วนตัว (Privacy Policy)
+FuelCostTH.com — บริหารงานโดย V.K.P. Intertrade Co., Ltd.
+อัปเดตล่าสุด: พฤษภาคม 2568
+
+1. ข้อมูลที่เก็บรวบรวม
+เราเก็บข้อมูลที่ท่านกรอกผ่านแบบฟอร์มขอใบเสนอราคาและฟอร์ม Export รายงาน ได้แก่ ชื่อ-นามสกุล ตำแหน่งงาน ชื่อบริษัท/โรงงาน ประเภทธุรกิจ จังหวัด เบอร์โทรศัพท์ และอีเมล
+
+2. วัตถุประสงค์การใช้ข้อมูล
+- ส่งต่อข้อมูลให้ซัพพลายเออร์ที่ท่านร้องขอใบเสนอราคา
+- ส่งข่าวสารราคาเชื้อเพลิงและข้อมูลที่เป็นประโยชน์ (เฉพาะกรณีที่ท่านยินยอม)
+- ปรับปรุงบริการของเว็บไซต์
+
+3. การเปิดเผยข้อมูล
+เราจะไม่ขายหรือเปิดเผยข้อมูลส่วนบุคคลของท่านแก่บุคคลภายนอก ยกเว้นซัพพลายเออร์ที่ท่านร้องขอโดยตรงและได้รับความยินยอมจากท่านแล้วเท่านั้น
+
+4. ระยะเวลาการเก็บข้อมูล
+เราเก็บข้อมูลไว้ไม่เกิน 1 ปี นับจากวันที่ท่านกรอกข้อมูล หรือจนกว่าท่านจะขอลบข้อมูล
+
+5. สิทธิของเจ้าของข้อมูล
+ท่านมีสิทธิ์ขอดู แก้ไข หรือลบข้อมูลส่วนบุคคลได้ทุกเมื่อ ติดต่อมาที่ vkpintertrade@gmail.com
+
+6. การรักษาความปลอดภัย
+เราใช้มาตรการที่เหมาะสมในการรักษาความปลอดภัยของข้อมูล รวมถึงการเข้ารหัส SSL
+
+7. คุกกี้และ Local Storage
+เว็บไซต์นี้ใช้ Local Storage ของเบราว์เซอร์เพื่อจดจำข้อมูลการใช้งาน ไม่มีการส่งออกไปภายนอก
+
+8. ติดต่อเรา
+V.K.P. Intertrade Co., Ltd.
+อีเมล: vkpintertrade@gmail.com | เว็บไซต์: fuelcostth.com
+
+นโยบายนี้เป็นไปตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)`;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('fct_contact_settings')||'{}');
+    document.getElementById('privacyContent').textContent = saved.privacyText || defaultText;
+  } catch(e) {
+    document.getElementById('privacyContent').textContent = defaultText;
+  }
+  document.getElementById('privacyModal').classList.add('open');
 }
 
 initProfile();

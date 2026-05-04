@@ -551,10 +551,49 @@ function saveContactSettings() {
 function loadContactSettings() {
   try {
     const d = JSON.parse(localStorage.getItem('fct_contact_settings')||'{}');
-    if (d.contactEmail) document.getElementById('contactEmail').value = d.contactEmail;
-    if (d.leadEmail)    document.getElementById('leadEmail').value    = d.leadEmail;
-    if (d.privacyText)  document.getElementById('privacyText').value  = d.privacyText;
+    document.getElementById('contactEmail').value = d.contactEmail || 'vkpintertrade@gmail.com';
+    document.getElementById('leadEmail').value    = d.leadEmail    || 'vkpintertrade@gmail.com';
+    document.getElementById('privacyText').value  = d.privacyText  || getDefaultPrivacy();
   } catch(e) {}
+}
+
+function getDefaultPrivacy() {
+  return `นโยบายความเป็นส่วนตัว (Privacy Policy)
+FuelCostTH.com — บริหารงานโดย V.K.P. Intertrade Co., Ltd.
+อัปเดตล่าสุด: พฤษภาคม 2568
+
+1. ข้อมูลที่เก็บรวบรวม
+เราเก็บข้อมูลที่ท่านกรอกผ่านแบบฟอร์มขอใบเสนอราคาและฟอร์ม Export รายงาน ได้แก่ ชื่อ-นามสกุล ตำแหน่งงาน ชื่อบริษัท/โรงงาน ประเภทธุรกิจ จังหวัด เบอร์โทรศัพท์ และอีเมล
+
+2. วัตถุประสงค์การใช้ข้อมูล
+- ส่งต่อข้อมูลให้ซัพพลายเออร์ที่ท่านร้องขอใบเสนอราคา
+- ส่งข่าวสารราคาเชื้อเพลิงและข้อมูลที่เป็นประโยชน์ (เฉพาะกรณีที่ท่านยินยอม)
+- ปรับปรุงบริการของเว็บไซต์
+
+3. การเปิดเผยข้อมูล
+เราจะไม่ขายหรือเปิดเผยข้อมูลส่วนบุคคลของท่านแก่บุคคลภายนอก ยกเว้นซัพพลายเออร์ที่ท่านร้องขอโดยตรงและได้รับความยินยอมจากท่านแล้วเท่านั้น
+
+4. ระยะเวลาการเก็บข้อมูล
+เราเก็บข้อมูลไว้ไม่เกิน 1 ปี นับจากวันที่ท่านกรอกข้อมูล หรือจนกว่าท่านจะขอลบข้อมูล
+
+5. สิทธิของเจ้าของข้อมูล
+ท่านมีสิทธิ์ขอดู แก้ไข หรือลบข้อมูลส่วนบุคคลของท่านได้ทุกเมื่อ โดยติดต่อมาที่อีเมล vkpintertrade@gmail.com
+
+6. การรักษาความปลอดภัย
+เราใช้มาตรการที่เหมาะสมในการรักษาความปลอดภัยของข้อมูล รวมถึงการเข้ารหัส SSL และการจำกัดการเข้าถึงข้อมูล
+
+7. คุกกี้และ Local Storage
+เว็บไซต์นี้ใช้ Local Storage ของเบราว์เซอร์เพื่อจดจำข้อมูลการใช้งาน ไม่มีการส่งข้อมูลนี้ออกไปภายนอก
+
+8. การเปลี่ยนแปลงนโยบาย
+เราอาจปรับปรุงนโยบายนี้เป็นครั้งคราว โดยจะแจ้งให้ทราบผ่านหน้าเว็บไซต์
+
+9. ติดต่อเรา
+V.K.P. Intertrade Co., Ltd.
+อีเมล: vkpintertrade@gmail.com
+เว็บไซต์: fuelcostth.com
+
+นโยบายนี้เป็นไปตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)`;
 }
 
 function changePw() {
