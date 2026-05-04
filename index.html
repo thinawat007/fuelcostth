@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FuelCostTH — เปรียบเทียบต้นทุนพลังงานโรงงาน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{--navy:#0F2A5E;--navy2:#1B3A7A;--blue:#0EA5E9;--gold:#F59E0B;--green:#059669;--green2:#10B981;--red:#DC2626;--gray:#64748B;--lgray:#F1F5F9;--border:#E2E8F0;--white:#FFFFFF;--dark:#0F172A;--text:#1E293B;--muted:#94A3B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sarabun',sans-serif;background:var(--lgray);color:var(--text);font-size:14px;line-height:1.5}
+nav{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.nav-logo{display:flex;align-items:center;gap:8px}
+.nav-logo .name{color:#fff;font-size:19px;font-weight:800;letter-spacing:-.3px}
+.nav-logo .badge{background:var(--gold);color:var(--dark);font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px}
+.nav-actions{display:flex;gap:8px}
+.btn{border:none;border-radius:7px;padding:6px 14px;font-family:'Sarabun',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff}.btn-ghost:hover{background:rgba(255,255,255,.22)}
+.btn-gold{background:var(--gold);color:var(--dark)}.btn-gold:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-green{background:var(--green);color:#fff}
+.btn-navy{background:var(--navy2);color:#fff;border:1px solid rgba(255,255,255,.15)}
+.btn-sm{padding:4px 10px;font-size:11px;border-radius:5px}
+/* Featured sponsor */
+.feat{background:linear-gradient(120deg,var(--navy),#1a4580 60%,#0369a1);padding:11px 20px;display:flex;align-items:center;justify-content:space-between}
+.feat-info{display:flex;align-items:center;gap:12px}
+.feat-logo{font-size:28px}
+.feat-name{color:#fff;font-size:15px;font-weight:700}
+.feat-tag{color:#93C5FD;font-size:11px}
+.feat-price{font-size:17px;font-weight:800;color:var(--gold)}
+.spbadge{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:3px;background:rgba(245,158,11,.2);color:var(--gold);border:1px solid var(--gold)}
+/* Layout */
+.layout{max-width:1160px;margin:16px auto;padding:0 14px;display:grid;grid-template-columns:1fr 290px;gap:16px}
+.main-col{display:flex;flex-direction:column;gap:14px}
+.side-col{display:flex;flex-direction:column;gap:14px}
+
+/* ── TABLET (iPad ≤ 1024px) ── */
+@media(max-width:1024px){
+  .layout{grid-template-columns:1fr!important;gap:12px}
+  .side-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .rev-item{font-size:11px}
+}
+
+/* ── MOBILE (≤ 640px) ── */
+@media(max-width:640px){
+  nav{padding:0 12px;height:48px}
+  .nav-logo .name{font-size:16px}
+  .btn{padding:5px 10px;font-size:11px}
+  .layout{padding:0 10px;margin:10px auto}
+  .side-col{grid-template-columns:1fr}
+  .feat{padding:10px 12px;flex-wrap:wrap;gap:8px}
+  .feat-logo{font-size:22px}
+  .feat-name{font-size:13px}
+  .featured-price{font-size:15px}
+  .feat>div:last-child{width:100%;display:flex;justify-content:flex-end;align-items:center;gap:10px}
+  .card{padding:14px 12px}
+  .card-title{font-size:14px}
+  .input-grid{grid-template-columns:1fr!important}
+  .sumgrid{grid-template-columns:1fr 1fr}
+  .sitem-val{font-size:15px}
+  .ftable{font-size:12px}
+  .ftable th{padding:5px 6px;font-size:9px}
+  .ftable td{padding:5px 6px}
+  .price-inp{width:68px;font-size:11px}
+  .hv-inp{width:60px}
+  .cpm-cell{font-size:11px}
+  .rrow{padding:10px 10px}
+  .cmj{font-size:14px}
+  .rdetail{grid-template-columns:1fr 1fr!important}
+  .gate-modal{width:96vw;padding:0}
+  .gate-header{padding:14px 16px}
+  .gate-body{padding:14px 16px}
+  .gate-grid{grid-template-columns:1fr!important}
+  .gate-actions{flex-direction:column}
+  .quick-confirm{width:96vw;padding:16px}
+  .sa-row{grid-template-columns:26px 90px 1fr 80px;gap:5px}
+}
+.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.07),0 3px 10px rgba(0,0,0,.04)}
+.card-title{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+/* Inputs */
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.flabel{font-size:11px;font-weight:600;color:var(--gray);margin-bottom:5px;display:block}
+.finput{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;color:var(--dark);background:#fff;transition:border-color .15s}
+.finput:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
+.fhint{font-size:10px;color:var(--muted);margin-top:3px}
+/* Category tabs */
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.cat-tab{border:1.5px solid var(--border);background:#fff;color:var(--gray);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s}
+.cat-tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* Fuel table */
+.ftable{width:100%;border-collapse:collapse}
+.ftable th{text-align:left;font-size:10px;font-weight:700;color:var(--gray);padding:6px 8px;border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.ftable td{padding:5px 8px;border-bottom:1px solid #F8FAFC;vertical-align:middle}
+.ftable tr:last-child td{border-bottom:none}
+.ftable tr:hover td{background:#FAFBFC}
+.fuel-name-cell{font-weight:700;font-size:13px}
+.cat-chip{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;display:inline-block;margin-top:2px}
+.chip-fossil{background:#FEF3C7;color:#92400E}
+.chip-bio{background:#DCFCE7;color:#166534}
+.chip-biomass{background:#FEF9C3;color:#713F12}
+.chip-electric{background:#EDE9FE;color:#5B21B6}
+.chip-gas{background:#DBEAFE;color:#1E40AF}
+.price-inp{width:80px;padding:4px 7px;text-align:right;border:1.5px solid var(--border);border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--dark)}
+.price-inp:focus{outline:none;border-color:var(--blue)}
+.price-inp.hv-inp{width:72px;background:#F8FAFC}
+.price-inp.hv-inp:focus{background:#fff}
+.unit-sel{padding:4px 6px;border:1.5px solid var(--border);border-radius:5px;font-family:'Sarabun',sans-serif;font-size:12px;background:#fff;cursor:pointer;color:var(--dark)}
+.unit-sel:focus{outline:none;border-color:var(--blue)}
+.cpm-cell{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;text-align:right;white-space:nowrap}
+.vbadge{font-size:8px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(5,150,105,.1);color:var(--green);border:1px solid var(--green);text-transform:uppercase;white-space:nowrap}
+.spname{font-size:9px;color:var(--gray)}
+/* Results */
+.rrow{border:1.5px solid var(--border);border-radius:9px;padding:11px 13px;margin-bottom:7px;cursor:pointer;transition:all .15s}
+.rrow.best{border-color:var(--green);background:#F0FDF4}
+.rrow.sel{border-color:var(--blue);background:#F0F9FF}
+.rrow:hover{box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.rtop{display:flex;align-items:center;gap:9px}
+.rrank{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.rrank.r1{background:var(--green);color:#fff}
+.rrank.rx{background:var(--border);color:var(--gray)}
+.rname{flex:1;min-width:0}
+.rlabel{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bestbadge{background:#DCFCE7;color:#15803D;font-size:9px;font-weight:700;padding:1px 7px;border-radius:7px}
+.rbar-wrap{height:4px;background:#F1F5F9;border-radius:3px;margin-top:5px;overflow:hidden}
+.rbar{height:100%;border-radius:3px;transition:width .5s ease}
+.rcost{text-align:right;flex-shrink:0}
+.cmj{font-size:16px;font-weight:800}
+.cmo{font-size:11px;color:var(--gray)}
+.rdetail{margin-top:10px;padding-top:8px;border-top:1px solid var(--border);display:none;grid-template-columns:repeat(4,1fr);gap:7px}
+.rdetail.open{display:grid}
+.dbox{background:#F8FAFC;border-radius:7px;padding:8px 10px}
+.dbox-label{font-size:9px;color:var(--muted);margin-bottom:2px}
+.dbox-val{font-size:13px;font-weight:700}
+/* Summary */
+.sumbox{background:var(--navy);border-radius:12px;padding:16px}
+.sumgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.sitem{background:rgba(255,255,255,.08);border-radius:7px;padding:10px 12px}
+.sitem-label{color:#93C5FD;font-size:10px;margin-bottom:3px}
+.sitem-val{font-size:18px;font-weight:800}
+.sitem-sub{font-size:10px;margin-top:2px}
+/* Sidebar sponsor */
+.ssp{border-radius:10px;padding:12px;border:1.5px solid var(--border)}
+.ssp-head{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.slogo{font-size:24px}
+.sname{font-weight:700;font-size:12px}
+.stype{font-size:10px;color:var(--gray)}
+.sprice{font-size:17px;font-weight:800;color:var(--gold);margin:5px 0 1px}
+.sprice-label{font-size:10px;color:var(--muted)}
+.scta{width:100%;margin-top:9px;padding:8px 0;justify-content:center}
+.sinfo{font-size:10px;color:var(--gray);margin-top:5px;line-height:1.4}
+.rev-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #334155;font-size:12px}
+.rev-item:last-child{border-bottom:none;font-weight:700;font-size:13px}
+/* HV info box */
+.hv-info{background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;font-size:11px;color:#1E40AF;line-height:1.5}
+.hv-info strong{display:block;margin-bottom:3px;font-size:12px}
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;padding:24px;width:440px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:su .2s ease}
+@keyframes su{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.modal-title{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:3px}
+.modal-sub{font-size:12px;color:var(--gray);margin-bottom:16px}
+.modal-to{background:var(--lgray);border-radius:7px;padding:9px 12px;margin-bottom:16px}
+.modal-to-label{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:3px}
+.modal-to-co{font-weight:700;font-size:13px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ffull{grid-column:1/-1}
+.ffield{display:flex;flex-direction:column;gap:4px}
+.ffield label{font-size:11px;font-weight:600;color:var(--gray)}
+.ffield input,.ffield textarea{padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--dark);background:#fff}
+.ffield input:focus,.ffield textarea:focus{outline:none;border-color:var(--blue)}
+.factions{display:flex;gap:9px;margin-top:14px}
+.factions .btn{flex:1;justify-content:center;padding:11px;font-size:14px}
+.fsuccess{display:none;text-align:center;padding:20px}
+.fsuccess .ck{font-size:44px;margin-bottom:8px}
+.fsuccess h3{font-size:18px;font-weight:800;color:var(--green)}
+.fsuccess p{color:var(--gray);font-size:12px;margin-top:5px}
+footer{background:var(--navy);color:#93C5FD;font-size:11px;text-align:center;padding:12px;margin-top:28px}
+footer a{color:var(--blue);text-decoration:none}
+.tip-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px;align-items:flex-start}
+.tip-num{background:var(--blue);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.mode-btn{border:1.5px solid var(--border);background:#fff;color:var(--gray);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .15s}
+.mode-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* ── SOFT GATE ── */
+.gate-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.gate-overlay.open{display:flex}
+.gate-modal{background:#fff;border-radius:16px;width:480px;max-width:95vw;max-height:95vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.35);animation:su .25s ease}
+.gate-header{background:var(--navy);border-radius:16px 16px 0 0;padding:20px 24px;position:relative;overflow:hidden}
+.gate-header::before{content:'';position:absolute;right:-30px;top:-30px;width:120px;height:120px;background:rgba(255,255,255,.05);border-radius:50%}
+.gate-icon{font-size:28px;margin-bottom:6px}
+.gate-title{color:#fff;font-size:19px;font-weight:800;margin-bottom:3px}
+.gate-sub{color:#93C5FD;font-size:12px}
+.gate-body{padding:20px 24px}
+.gate-why{background:#F0F9FF;border:1px solid #BAE6FD;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:#0369A1;line-height:1.6}
+.gate-why strong{display:block;margin-bottom:3px;font-size:12px;color:#0F2A5E}
+.gate-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.gate-full{grid-column:1/-1}
+.gate-field{display:flex;flex-direction:column;gap:4px}
+.gate-field label{font-size:11px;font-weight:700;color:var(--gray)}
+.gate-field label .req{color:var(--red)}
+.gate-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--dark);background:#fff;transition:border-color .15s}
+.gate-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
+.gate-input.err{border-color:var(--red)}
+.gate-select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Sarabun',sans-serif;font-size:13px;color:var(--dark);background:#fff;cursor:pointer}
+.gate-select:focus{outline:none;border-color:var(--blue)}
+.gate-opt{display:flex;align-items:flex-start;gap:8px;margin-top:6px;font-size:11px;color:var(--gray)}
+.gate-opt input{margin-top:2px;accent-color:var(--blue);cursor:pointer}
+.gate-actions{display:flex;gap:10px;margin-top:16px}
+.gate-actions .btn{flex:1;justify-content:center;padding:12px;font-size:14px;border-radius:9px}
+.gate-privacy{font-size:10px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5}
+/* ── RETURNING USER QUICK CONFIRM ── */
+.quick-confirm{background:#fff;border-radius:14px;padding:22px 24px;width:400px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:su .2s ease}
+.qc-avatar{width:48px;height:48px;border-radius:50%;background:var(--navy);color:#fff;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.qc-name{font-size:18px;font-weight:800;color:var(--navy)}
+.qc-company{font-size:13px;color:var(--gray);margin-top:2px}
+.qc-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0;background:var(--lgray);border-radius:8px;padding:10px 12px}
+.qc-info-item label{font-size:10px;color:var(--muted);font-weight:600;display:block}
+.qc-info-item span{font-size:12px;font-weight:700;color:var(--dark)}
+/* ── SLOT ADMIN PANEL ── */
+.slot-admin-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:3000;align-items:flex-start;justify-content:flex-end;padding:58px 16px 0}
+.slot-admin-ov.open{display:flex}
+.slot-admin-box{background:#1E293B;border:1px solid rgba(255,255,255,.12);border-radius:14px;width:560px;max-width:98vw;max-height:82vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:su .2s ease}
+.slot-admin-head{background:#0F2A5E;border-radius:14px 14px 0 0;padding:12px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1}
+.sa-title{color:#fff;font-size:14px;font-weight:800}
+.sa-close{background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px}
+.slot-admin-body{padding:14px 16px}
+.sa-row{display:grid;grid-template-columns:30px 110px 1fr 90px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}
+.sa-row:last-child{border-bottom:none}
+.sa-row.hdr{color:#64748B;font-size:10px;font-weight:700;text-transform:uppercase;padding-bottom:8px;border-bottom:2px solid rgba(255,255,255,.1)}
+.sa-fuel{color:#E2E8F0;font-weight:600}
+.sa-sel{background:rgba(30,41,59,.9);border:1px solid rgba(255,255,255,.12);border-radius:5px;color:#fff;font-family:'Sarabun',sans-serif;font-size:11px;padding:4px 6px;width:100%;cursor:pointer}
+.sa-sel:focus{outline:none;border-color:var(--blue)}
+.sa-inp{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:5px;color:#fff;font-family:'Sarabun',sans-serif;font-size:11px;padding:4px 6px;width:100%}
+.sa-inp:focus{outline:none;border-color:var(--blue)}
+.sa-pw-box{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#FCD34D}
+.sa-pw-box input{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:6px;color:#fff;font-family:'Sarabun',monospace;font-size:13px;padding:6px 10px;letter-spacing:3px;margin:6px 0;width:100%}
+.sa-pw-box input:focus{outline:none;border-color:var(--blue)}
+.gate-success{text-align:center;padding:30px 24px}
+.gate-success .gs-icon{font-size:52px;margin-bottom:12px}
+.gate-success h3{font-size:20px;font-weight:800;color:var(--green);margin-bottom:6px}
+.gate-success p{color:var(--gray);font-size:13px}
+/* Profile badge in nav */
+.profile-badge{display:none;align-items:center;gap:6px;background:rgba(255,255,255,.12);border-radius:20px;padding:4px 12px 4px 6px}
+.profile-badge.show{display:flex}
+.profile-avatar{width:24px;height:24px;border-radius:50%;background:var(--gold);color:var(--dark);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.profile-name{color:#fff;font-size:12px;font-weight:600}
+
+/* ── PRINT / PDF ── */
+@media print {
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  nav,footer,.feat,.side-col,.modal-overlay,.hv-info,.cat-tabs,
+  .nav-actions,.spbadge,.btn,.scta,.ssp,.rev-item{display:none!important}
+  body{background:#fff!important;font-size:12px}
+  .layout{grid-template-columns:1fr!important;margin:0!important;padding:0!important;gap:0!important}
+  .card{box-shadow:none!important;border:1px solid #E2E8F0;border-radius:6px;margin-bottom:10px;padding:12px}
+  .rrow{break-inside:avoid}
+  .rdetail{display:grid!important}
+  .print-header{display:block!important}
+  .sumbox{background:#0F2A5E!important;color:#fff!important;border-radius:6px;padding:14px}
+  .sitem{background:rgba(255,255,255,.12)!important}
+  .ftable{font-size:11px}
+  @page{margin:15mm;size:A4}
+}
+.print-header{display:none;background:#0F2A5E;color:#fff;padding:14px 18px;border-radius:8px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.print-header-left .ph-title{font-size:22px;font-weight:800;letter-spacing:-.3px}
+.print-header-left .ph-sub{font-size:11px;color:#93C5FD;margin-top:2px}
+.print-header-right{text-align:right;font-size:11px;color:#93C5FD}
+.print-header-right strong{display:block;color:#fff;font-size:13px}
+.print-footer-note{display:none;text-align:center;font-size:10px;color:#94A3B8;margin-top:12px;padding-top:10px;border-top:1px solid #E2E8F0}
+@media print{
+  .print-header{display:flex!important}
+  .print-footer-note{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <span style="font-size:20px">⚡</span>
+    <span class="name">FuelCostTH</span>
+    <span class="badge">FREE</span>
+  </div>
+  <div class="nav-actions">
+    <div class="profile-badge" id="profileBadge" onclick="clearProfile()" title="คลิกเพื่อล้างข้อมูล" style="cursor:pointer">
+      <div class="profile-avatar" id="profileAvatar">?</div>
+      <span class="profile-name" id="profileName">—</span>
+    </div>
+    <button class="btn btn-ghost" onclick="openSlotAdmin()" title="จัดการ Sponsor per Fuel" style="font-size:11px;padding:4px 10px">⚙️ Slot</button>
+    <button class="btn btn-ghost" onclick="exportExcel()">📊 Excel</button>
+    <button class="btn btn-gold" onclick="exportPDF()">📄 PDF</button>
+  </div>
+</nav>
+
+<div class="feat">
+  <div class="feat-info">
+    <div class="feat-logo">🟠</div>
+    <div>
+      <div style="margin-bottom:3px"><span class="spbadge">⭐ Featured Sponsor</span></div>
+      <div class="feat-name">บิ๊กแก๊ส เทคโนโลยี จำกัด</div>
+      <div class="feat-tag">LPG & LNG อุตสาหกรรม · ส่งทั่วประเทศ · ISO 9001:2015</div>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div style="text-align:right">
+      <div class="feat-price">฿22.30/กก.</div>
+      <div style="color:#93C5FD;font-size:10px">ราคา LPG อัปเดต</div>
+    </div>
+    <button class="btn btn-gold" onclick="openLead('บิ๊กแก๊ส เทคโนโลยี','LPG & LNG')">ขอใบเสนอราคา →</button>
+  </div>
+</div>
+
+<div class="layout">
+<!-- Print header (hidden on screen, shown on print) -->
+<div id="printHeaderWrap" style="grid-column:1/-1">
+  <div class="print-header">
+    <div class="print-header-left">
+      <div class="ph-title">⚡ FuelCostTH</div>
+      <div class="ph-sub">รายงานเปรียบเทียบต้นทุนพลังงาน · fuelcostth.com</div>
+    </div>
+    <div class="print-header-right">
+      <strong id="printDate"></strong>
+      <span id="printMeta"></span>
+    </div>
+  </div>
+</div>
+<div class="main-col">
+
+<!-- INPUT -->
+<div class="card">
+  <div class="card-title">🔢 เชื้อเพลิงที่ใช้อยู่ตอนนี้</div>
+
+  <!-- Mode toggle -->
+  <div style="display:flex;gap:8px;margin-bottom:14px">
+    <button class="mode-btn active" id="modeQty" onclick="setMode('qty')">⛽ ปริมาณที่ใช้/เดือน</button>
+    <button class="mode-btn" id="modeMJ" onclick="setMode('mj')">🔬 ใส่ MJ/เดือน (ขั้นสูง)</button>
+  </div>
+
+  <!-- MODE A: ปริมาณเชื้อเพลิง -->
+  <div id="modeQtyPanel">
+    <div class="input-grid" style="grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <label class="flabel">เชื้อเพลิงที่ใช้อยู่ตอนนี้</label>
+        <select class="finput" id="currentFuel" onchange="onCurrentFuelChange()">
+        </select>
+      </div>
+      <div>
+        <label class="flabel">ปริมาณที่ซื้อ/เดือน</label>
+        <div style="display:flex;gap:6px">
+          <input type="text" class="finput" id="qtyAmount" value="5,000"
+            oninput="formatQtyInput(this)" onblur="formatQtyInput(this)"
+            style="flex:1;font-variant-numeric:tabular-nums" inputmode="numeric" placeholder="0">
+          <select class="finput" id="qtyUnitLabel"
+            onchange="onQtyUnitChange()"
+            style="width:80px;flex-shrink:0;padding:8px 6px;background:var(--lgray);font-weight:700;cursor:pointer">
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="flabel">ระยะเวลาเปรียบเทียบ</label>
+        <select class="finput" id="months" onchange="calc()">
+          <option value="1">1 เดือน</option>
+          <option value="3">3 เดือน</option>
+          <option value="6">6 เดือน</option>
+          <option value="12" selected>12 เดือน</option>
+        </select>
+      </div>
+    </div>
+    <!-- Auto-calculated MJ display -->
+    <div id="mjDisplay" style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:18px">⚡</span>
+        <div>
+          <div style="font-size:10px;color:var(--gray);font-weight:600">พลังงานที่ได้รับ/เดือน (คำนวณอัตโนมัติ)</div>
+          <div style="font-size:18px;font-weight:800;color:var(--navy)" id="mjResult">—</div>
+        </div>
+      </div>
+      <div style="width:1px;height:36px;background:var(--border)"></div>
+      <div>
+        <div style="font-size:10px;color:var(--gray);font-weight:600">ค่าใช้จ่ายปัจจุบัน/เดือน</div>
+        <div style="font-size:18px;font-weight:800;color:var(--red)" id="currentCostResult">—</div>
+      </div>
+      <div style="width:1px;height:36px;background:var(--border)"></div>
+      <div>
+        <div style="font-size:10px;color:var(--gray);font-weight:600">ต้นทุน</div>
+        <div style="font-size:18px;font-weight:800;color:var(--gray)" id="currentCPM">—</div>
+      </div>
+      <div style="margin-left:auto;font-size:11px;color:var(--muted);max-width:200px;line-height:1.4">
+        💡 ระบบจะใช้ค่านี้เปรียบเทียบกับเชื้อเพลิงทุกชนิด
+      </div>
+    </div>
+  </div>
+
+  <!-- MODE B: MJ ตรง -->
+  <div id="modeMJPanel" style="display:none">
+    <div class="input-grid">
+      <div>
+        <label class="flabel">ปริมาณพลังงานที่ใช้ต่อเดือน (MJ)</label>
+        <input type="text" class="finput" id="usageMJ" value="50,000"
+          oninput="formatMJInput(this)" inputmode="numeric" placeholder="0">
+        <div class="fhint">💡 โรงงานกลาง ≈ 30,000–80,000 MJ/เดือน</div>
+      </div>
+      <div>
+        <label class="flabel">ระยะเวลาเปรียบเทียบ</label>
+        <select class="finput" id="months2" onchange="calc()">
+          <option value="1">1 เดือน</option>
+          <option value="3">3 เดือน</option>
+          <option value="6">6 เดือน</option>
+          <option value="12" selected>12 เดือน</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HV INFO -->
+<div class="hv-info">
+  <strong>🔬 ค่าความร้อน (Heating Value) คืออะไร?</strong>
+  พลังงานที่ได้จากการเผาไหม้เชื้อเพลิง 1 หน่วย เลือกแสดงได้ 4 หน่วย: <strong>MJ · BTU · kcal · kWh</strong> — ค่าที่แสดงเป็นค่ามาตรฐาน <strong>แก้ไขได้</strong> ตามผลทดสอบจริงของโรงงานคุณ · การคำนวณ ฿/MJ ใช้ MJ เป็นฐานเสมอ
+</div>
+
+<!-- FUEL TABLE -->
+<div class="card">
+  <div class="card-title">⛽ ราคาและค่าความร้อนเชื้อเพลิง</div>
+  <div class="cat-tabs" id="catTabs">
+    <button class="cat-tab active" onclick="setCategory('all',this)">ทั้งหมด</button>
+    <button class="cat-tab" onclick="setCategory('fossil',this)">⛽ ฟอสซิล</button>
+    <button class="cat-tab" onclick="setCategory('bio',this)">🌿 ไบโอดีเซล</button>
+    <button class="cat-tab" onclick="setCategory('biomass',this)">🪵 ชีวมวล</button>
+    <button class="cat-tab" onclick="setCategory('gas',this)">💨 ก๊าซชีวภาพ</button>
+    <button class="cat-tab" onclick="setCategory('electric',this)">⚡ ไฟฟ้า</button>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="ftable" id="fuelTable">
+    <thead>
+      <tr>
+        <th style="width:36px;text-align:center">
+          <input type="checkbox" id="checkAll" onchange="toggleAll(this.checked)"
+            title="เลือก/ยกเลิกทั้งหมด" style="width:15px;height:15px;cursor:pointer" checked>
+        </th>
+        <th style="min-width:130px">เชื้อเพลิง</th>
+        <th style="min-width:90px">ราคา/หน่วย (฿)</th>
+        <th style="min-width:90px">หน่วย</th>
+        <th style="min-width:130px">ค่าความร้อน
+          <br>
+          <select id="hvUnitSel" onchange="changeHVUnit(this.value)"
+            style="font-size:9px;font-weight:600;border:1px solid var(--border);border-radius:4px;padding:1px 4px;background:#fff;color:var(--dark);cursor:pointer;margin-top:2px">
+            <option value="MJ">MJ/หน่วย</option>
+            <option value="BTU">BTU/หน่วย</option>
+            <option value="kcal">kcal/หน่วย</option>
+            <option value="kWh">kWh/หน่วย</option>
+          </select>
+        </th>
+        <th style="min-width:90px;text-align:right">฿/<span id="costUnitLabel">MJ</span></th>
+        <th style="min-width:110px">ซัพพลายเออร์</th>
+      </tr>
+    </thead>
+    <tbody id="fuelRows"></tbody>
+  </table>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="card">
+  <div class="card-title">📊 ผลเปรียบเทียบต้นทุน <span style="font-size:11px;font-weight:400;color:var(--gray)">(คลิกแถวเพื่อดูรายละเอียด)</span></div>
+  <div id="results"></div>
+</div>
+
+<!-- SUMMARY -->
+<div class="sumbox" id="sumbox">
+  <div class="card-title" style="color:#fff;margin-bottom:12px">💡 สรุปผล</div>
+  <div class="sumgrid" id="sumgrid"></div>
+</div>
+
+</div><!-- /main-col -->
+
+<div class="side-col">
+
+  <!-- Sponsor 1 -->
+  <div class="ssp" style="background:#FFFBEB;border-color:#FCD34D">
+    <div class="ssp-head">
+      <div class="slogo">🟠</div>
+      <div><div class="sname">Thai LPG Industrial</div><div class="stype" style="color:var(--gold)">✓ Verified Price</div></div>
+      <span class="spbadge" style="margin-left:auto;font-size:8px">Verified</span>
+    </div>
+    <div class="sprice">฿22.30<span style="font-size:12px;font-weight:400;color:var(--gray)">/กก.</span></div>
+    <div class="sprice-label">อัปเดต 3 พ.ค. 2569</div>
+    <button class="btn btn-gold scta" onclick="openLead('Thai LPG Industrial','LPG')">ขอใบเสนอราคา</button>
+    <div class="sinfo">✓ ส่งทั่วไทย · MOQ 500 กก. · ตอบ 24 ชม.</div>
+  </div>
+
+  <!-- Sponsor 2 -->
+  <div class="ssp" style="background:#F0FDF4;border-color:#86EFAC">
+    <div class="ssp-head">
+      <div class="slogo">🔵</div>
+      <div><div class="sname">Prism Energy LNG</div><div class="stype" style="color:var(--green)">✓ Verified Price</div></div>
+      <span class="spbadge" style="margin-left:auto;font-size:8px;background:rgba(5,150,105,.1);color:var(--green);border-color:var(--green)">Verified</span>
+    </div>
+    <div class="sprice" style="color:var(--green)">฿18.90<span style="font-size:12px;font-weight:400;color:var(--gray)">/กก.</span></div>
+    <div class="sprice-label">อัปเดต 1 พ.ค. 2569</div>
+    <button class="btn btn-green scta" onclick="openLead('Prism Energy LNG','LNG')">ขอใบเสนอราคา</button>
+    <div class="sinfo">✓ ระบบ LNG ครบ · ติดตั้งฟรี · ประกัน 2 ปี</div>
+  </div>
+
+  <!-- Sponsor 3 -->
+  <div class="ssp">
+    <div class="ssp-head">
+      <div class="slogo">🌿</div>
+      <div><div class="sname">TAG Energy</div><div class="stype">น้ำมันเตาทดแทน / Green</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--gray);margin-bottom:7px;line-height:1.5">ใช้แทนน้ำมันเตาได้ทันที ไม่ต้องเปลี่ยนอุปกรณ์ ราคาถูกกว่า 20–30%</div>
+    <button class="btn btn-navy scta" onclick="openLead('TAG Energy','น้ำมันเตาทดแทน')">สอบถามราคา</button>
+  </div>
+
+  <!-- Tips -->
+  <div class="card">
+    <div class="card-title" style="font-size:13px">📚 วิธีใช้</div>
+    <div class="tip-item"><div class="tip-num">1</div><div>ใส่ปริมาณ MJ/เดือน จากบิลเชื้อเพลิง</div></div>
+    <div class="tip-item"><div class="tip-num">2</div><div>เลือกหน่วยที่ซื้อ (ลิตร/กก./ปอนด์)</div></div>
+    <div class="tip-item"><div class="tip-num">3</div><div>แก้ค่าความร้อนตามผลทดสอบจริง</div></div>
+    <div class="tip-item"><div class="tip-num">4</div><div>คลิกแถวผลลัพธ์ดู Break-even</div></div>
+    <div class="tip-item"><div class="tip-num">5</div><div>Export PDF ส่งผู้บริหารได้เลย</div></div>
+  </div>
+
+  <!-- Revenue preview -->
+  <div class="card" style="background:var(--dark);color:#fff">
+    <div class="card-title" style="color:var(--gold);font-size:12px">💰 รายได้ Sponsor (ตัวอย่าง)</div>
+    <div class="rev-item"><span style="color:#94A3B8">Featured</span><span style="font-weight:700;color:#C084FC">฿12,000</span></div>
+    <div class="rev-item"><span style="color:#94A3B8">Verified ×2</span><span style="font-weight:700;color:var(--gold)">฿12,000</span></div>
+    <div class="rev-item"><span style="color:#94A3B8">Listed ×1</span><span style="font-weight:700;color:#60A5FA">฿3,000</span></div>
+    <div class="rev-item"><span style="color:#94A3B8">Lead Fee ×20</span><span style="font-weight:700;color:var(--green2)">฿16,000</span></div>
+    <div class="rev-item"><span>รวม/เดือน</span><span style="font-weight:700;color:var(--green2);font-size:15px">฿43,000</span></div>
+  </div>
+
+</div><!-- /side-col -->
+<div class="print-footer-note" style="grid-column:1/-1">
+  Powered by FuelCostTH.com · เปรียบเทียบต้นทุนพลังงานฟรี
+</div>
+</div><!-- /layout -->
+
+<footer>
+  ⚡ <strong style="color:#fff">FuelCostTH.com</strong> — เปรียบเทียบต้นทุนพลังงานฟรี |
+  <a href="mailto:contact@fuelcostth.com">ติดต่อโฆษณา</a> | <a href="#">นโยบายความเป็นส่วนตัว</a>
+</footer>
+
+<!-- LEAD MODAL -->
+<div class="modal-overlay" id="leadModal" onclick="closeOut(event)">
+  <div class="modal">
+    <div id="fv">
+      <div class="modal-title">📋 ขอใบเสนอราคา</div>
+      <div class="modal-sub">กรอกข้อมูลด้านล่าง ซัพพลายเออร์ติดต่อกลับภายใน 24 ชม.</div>
+      <div class="modal-to">
+        <div class="modal-to-label">ส่งถึง</div>
+        <div class="modal-to-co" id="mco">—</div>
+        <div style="font-size:11px;color:var(--gray)" id="mtype">—</div>
+      </div>
+      <div class="fgrid">
+        <div class="ffield"><label>ชื่อ-นามสกุล *</label><input type="text" id="fn" placeholder="สมชาย ใจดี"></div>
+        <div class="ffield"><label>ตำแหน่ง</label><input type="text" id="fp" placeholder="ผู้จัดการจัดซื้อ"></div>
+        <div class="ffield ffull"><label>บริษัท/โรงงาน *</label><input type="text" id="fc" placeholder="บริษัท... จำกัด"></div>
+        <div class="ffield"><label>เบอร์โทร *</label><input type="tel" id="fph" placeholder="08X-XXX-XXXX"></div>
+        <div class="ffield"><label>อีเมล</label><input type="email" id="fe" placeholder="email@company.com"></div>
+        <div class="ffield"><label>ปริมาณใช้/เดือน</label><input type="text" id="fu" placeholder="เช่น 50,000 MJ"></div>
+        <div class="ffield"><label>จังหวัด</label><input type="text" id="fpr" placeholder="ระยอง, ชลบุรี..."></div>
+        <div class="ffield ffull"><label>ข้อความเพิ่มเติม</label><textarea id="fnote" rows="2" placeholder="เงื่อนไขพิเศษ..."></textarea></div>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:9px">🔒 ข้อมูลส่งตรงถึงซัพพลายเออร์ ไม่มีการขายข้อมูลต่อ</div>
+      <div class="factions">
+        <button class="btn btn-navy" onclick="closeModal()">ยกเลิก</button>
+        <button class="btn btn-gold" onclick="submitLead()">ส่งคำขอ →</button>
+      </div>
+    </div>
+    <div class="fsuccess" id="sv">
+      <div class="ck">✅</div>
+      <h3>ส่งคำขอสำเร็จ!</h3>
+      <p>ทีมงาน <strong id="sco"></strong> จะติดต่อกลับภายใน 24 ชั่วโมง</p>
+      <button class="btn btn-green" style="margin:14px auto 0;display:flex" onclick="closeModal()">ปิด</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── SOFT GATE MODAL ── -->
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-modal">
+    <div id="gateForm">
+      <div class="gate-header">
+        <div class="gate-icon" id="gateIcon">📄</div>
+        <div class="gate-title" id="gateTitle">รับไฟล์รายงาน PDF</div>
+        <div class="gate-sub">กรอกข้อมูลด้านล่างเพื่อดาวน์โหลดไฟล์ของคุณ</div>
+      </div>
+      <div class="gate-body">
+        <div class="gate-why">
+          <strong>📬 ทำไมต้องกรอกข้อมูล?</strong>
+          เพื่อส่งราคาเชื้อเพลิงอัปเดตและข่าวสารพลังงานให้คุณรายเดือน — ฟรีทั้งหมด ยกเลิกได้ทุกเมื่อ
+        </div>
+        <div class="gate-grid">
+          <div class="gate-field">
+            <label>ชื่อ-นามสกุล <span class="req">*</span></label>
+            <input class="gate-input" id="gName" placeholder="สมชาย ใจดี">
+          </div>
+          <div class="gate-field">
+            <label>ตำแหน่ง <span class="req">*</span></label>
+            <select class="gate-select" id="gPosition">
+              <option value="">— เลือกตำแหน่ง —</option>
+              <option>ผู้จัดการ/หัวหน้าฝ่ายจัดซื้อ</option>
+              <option>เจ้าหน้าที่จัดซื้อ</option>
+              <option>วิศวกร/ช่างเทคนิค</option>
+              <option>ผู้บริหาร/เจ้าของกิจการ</option>
+              <option>นักบัญชี/การเงิน</option>
+              <option>อื่นๆ</option>
+            </select>
+          </div>
+          <div class="gate-field gate-full">
+            <label>บริษัท/โรงงาน <span class="req">*</span></label>
+            <input class="gate-input" id="gCompany" placeholder="บริษัท... จำกัด">
+          </div>
+          <div class="gate-field">
+            <label>ประเภทธุรกิจ <span class="req">*</span></label>
+            <select class="gate-select" id="gBizType" onchange="toggleBizOther()">
+              <option value="">— เลือกประเภท —</option>
+              <option>โรงงานอาหาร/เบเกอรี่</option>
+              <option>โรงงานพลาสติก/ยาง</option>
+              <option>โรงงานสิ่งทอ/เครื่องนุ่งห่ม</option>
+              <option>โรงงานกระดาษ/บรรจุภัณฑ์</option>
+              <option>โรงงานเคมีภัณฑ์</option>
+              <option>โรงแรม/รีสอร์ท</option>
+              <option>โรงพยาบาล</option>
+              <option value="other">อุตสาหกรรมอื่นๆ</option>
+            </select>
+          </div>
+          <!-- ช่องระบุเมื่อเลือก "อื่นๆ" -->
+          <div class="gate-field gate-full" id="bizOtherWrap" style="display:none">
+            <label>ระบุประเภทอุตสาหกรรม <span class="req">*</span></label>
+            <input class="gate-input" id="gBizOther" placeholder="เช่น โรงงานเหล็ก, โรงสีข้าว, โรงงานยาง...">
+          </div>
+          <div class="gate-field">
+            <label>จังหวัด</label>
+            <input class="gate-input" id="gProvince" placeholder="ระยอง, ชลบุรี, กทม...">
+          </div>
+          <div class="gate-field">
+            <label>เบอร์โทรศัพท์</label>
+            <input class="gate-input" id="gPhone" placeholder="08X-XXX-XXXX" type="tel">
+          </div>
+          <div class="gate-field gate-full">
+            <label>อีเมล <span style="color:var(--muted);font-weight:400">(รับราคาอัปเดตรายเดือน)</span></label>
+            <input class="gate-input" id="gEmail" placeholder="email@company.com" type="email">
+          </div>
+        </div>
+        <label class="gate-opt">
+          <input type="checkbox" id="gConsent" checked>
+          <span>ยินยอมรับราคาเชื้อเพลิงอัปเดตและข่าวสารพลังงานทางอีเมลรายเดือน</span>
+        </label>
+        <div class="gate-actions">
+          <button class="btn btn-ghost btn-navy" onclick="closeGate()">ยกเลิก</button>
+          <button class="btn btn-gold" onclick="submitGate()" id="gateSubmitBtn">
+            <span id="gateSubmitLabel">📄 รับไฟล์เลย</span>
+          </button>
+        </div>
+        <div class="gate-privacy">🔒 ข้อมูลของคุณปลอดภัย ไม่มีการขายให้บุคคลที่สาม<br>เป็นไปตาม PDPA พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล</div>
+      </div>
+    </div>
+    <div class="gate-success" id="gateSuccess" style="display:none">
+      <div class="gs-icon" id="gateSuccessIcon">📄</div>
+      <h3>กำลังดาวน์โหลด...</h3>
+      <p id="gateSuccessMsg">ไฟล์รายงานของคุณกำลังเปิดขึ้นมา</p>
+      <p style="margin-top:6px;color:var(--muted);font-size:11px">ถ้าไม่มีอะไรเปิดขึ้น กรุณาอนุญาต Popup ในเบราว์เซอร์</p>
+      <button class="btn btn-green" style="margin:16px auto 0;display:flex" onclick="closeGate()">ปิด</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── USER PROFILE (session) ──────────────────────────
+let userProfile = null;
+let pendingExport = null;
+
+function initProfile() {
+  try { userProfile = JSON.parse(localStorage.getItem('fct_profile')||'null'); } catch(e) {}
+  if (userProfile) showProfileBadge();
+}
+
+function showProfileBadge() {
+  if (!userProfile) return;
+  document.getElementById('profileAvatar').textContent = userProfile.name.charAt(0)||'?';
+  document.getElementById('profileName').textContent   = userProfile.name.split(' ')[0];
+  document.getElementById('profileBadge').classList.add('show');
+}
+
+// ─── SOFT GATE ────────────────────────────────────────
+function openGate(type) {
+  pendingExport = type;
+  const isPDF = type === 'pdf';
+  document.getElementById('gateIcon').textContent        = isPDF ? '📄' : '📊';
+  document.getElementById('gateTitle').textContent       = isPDF ? 'รับไฟล์รายงาน PDF' : 'รับไฟล์รายงาน Excel';
+  document.getElementById('gateSubmitLabel').textContent = isPDF ? '📄 รับไฟล์ PDF เลย' : '📊 รับไฟล์ Excel เลย';
+  document.getElementById('gateSuccessIcon').textContent = isPDF ? '📄' : '📊';
+  document.getElementById('gateForm').style.display    = 'block';
+  document.getElementById('gateSuccess').style.display = 'none';
+  if (userProfile) {
+    document.getElementById('gName').value     = userProfile.name||'';
+    document.getElementById('gPosition').value = userProfile.position||'';
+    document.getElementById('gCompany').value  = userProfile.company||'';
+    // Restore bizType - handle "อื่นๆ" case
+    const biz = userProfile.bizType||'';
+    if (biz.startsWith('อุตสาหกรรมอื่นๆ: ')) {
+      document.getElementById('gBizType').value  = 'other';
+      document.getElementById('gBizOther').value = biz.replace('อุตสาหกรรมอื่นๆ: ','');
+      document.getElementById('bizOtherWrap').style.display = 'flex';
+    } else {
+      document.getElementById('gBizType').value  = biz;
+      document.getElementById('bizOtherWrap').style.display = 'none';
+    }
+    document.getElementById('gProvince').value = userProfile.province||'';
+    document.getElementById('gPhone').value    = userProfile.phone||'';
+    document.getElementById('gEmail').value    = userProfile.email||'';
+  }
+  document.getElementById('gateOverlay').classList.add('open');
+}
+
+function closeGate() {
+  document.getElementById('gateOverlay').classList.remove('open');
+  pendingExport = null; // ยกเลิก — ไม่ download
+}
+
+function skipGate() {
+  closeGate(); // ไม่ใช้แล้ว แต่เก็บไว้กันพัง
+}
+
+function submitGate() {
+  const name    = document.getElementById('gName').value.trim();
+  const pos     = document.getElementById('gPosition').value;
+  const company = document.getElementById('gCompany').value.trim();
+  const biz     = document.getElementById('gBizType').value;
+  const isOther = biz === 'other';
+  const bizOther= document.getElementById('gBizOther').value.trim();
+  let ok = true;
+  [['gName',name],['gPosition',pos],['gCompany',company],['gBizType',biz]].forEach(([id,val])=>{
+    const el = document.getElementById(id);
+    if (!val) { el.classList.add('err'); ok=false; } else el.classList.remove('err');
+  });
+  // Validate other field if "อื่นๆ" selected
+  if (isOther && !bizOther) {
+    document.getElementById('gBizOther').classList.add('err');
+    ok = false;
+  } else {
+    document.getElementById('gBizOther').classList.remove('err');
+  }
+  if (!ok) return;
+  const finalBiz = isOther ? `อุตสาหกรรมอื่นๆ: ${bizOther}` : biz;
+
+  userProfile = {
+    name, position:pos, company, bizType:finalBiz,
+    province: document.getElementById('gProvince').value.trim(),
+    phone:    document.getElementById('gPhone').value.trim(),
+    email:    document.getElementById('gEmail').value.trim(),
+    consent:  document.getElementById('gConsent').checked,
+    exportType: pendingExport,
+    ts: new Date().toISOString(),
+  };
+  try { localStorage.setItem('fct_profile', JSON.stringify(userProfile)); } catch(e) {}
+
+  // Send data (replace YOUR_EMAIL@gmail.com with your actual email)
+  fetch('https://formsubmit.co/ajax/vkpintertrade@gmail.com', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({
+      _subject:'📊 FuelCostTH — ผู้ใช้ Export รายงาน',
+      ชื่อ:name, ตำแหน่ง:pos, บริษัท:company,
+      ประเภทธุรกิจ:finalBiz,
+      จังหวัด:userProfile.province||'—',
+      โทร:userProfile.phone||'—',
+      อีเมล:userProfile.email||'—',
+      ไฟล์:pendingExport==='pdf'?'PDF':'Excel',
+      วันที่:new Date().toLocaleDateString('th-TH'),
+    })
+  }).catch(()=>{});
+
+  document.getElementById('gateSuccessMsg').textContent = `สวัสดีคุณ${name} — ไฟล์กำลังเปิดขึ้นมา`;
+  document.getElementById('gateForm').style.display    = 'none';
+  document.getElementById('gateSuccess').style.display = 'block';
+  showProfileBadge();
+
+  const type = pendingExport; pendingExport = null;
+  setTimeout(()=>doExport(type), 400);
+}
+
+// ── SOFT GATE JS ──────────────────────────
+function toggleBizOther() {
+  const val  = document.getElementById('gBizType').value;
+  const wrap = document.getElementById('bizOtherWrap');
+  const inp  = document.getElementById('gBizOther');
+  if (val === 'other') {
+    wrap.style.display = 'flex';
+    inp.focus();
+  } else {
+    wrap.style.display = 'none';
+    inp.value = '';
+    inp.classList.remove('err');
+  }
+}
+function exportPDF()   { if (!userProfile) { openGate('pdf');   return; } openQuickConfirm('pdf'); }
+function exportExcel() { if (!userProfile) { openGate('excel'); return; } openQuickConfirm('excel'); }
+function doExport(type){ type==='pdf' ? _doPDF() : _doExcel(); }
+
+// ═══════════════════════════════════════════
+// SPONSOR REGISTRY — รายชื่อ Sponsor ทั้งหมด
+// เพิ่ม Sponsor ใหม่ตรงนี้ได้เลย
+// ═══════════════════════════════════════════
+const SPONSOR_REGISTRY = [
+  { id:'sp_biggas', name:'บิ๊กแก๊ส เทคโนโลยี จำกัด', shortName:'บิ๊กแก๊ส',     logo:'🟠', verified:true  },
+  { id:'sp_thailpg',name:'Thai LPG Industrial',        shortName:'Thai LPG',       logo:'🟠', verified:true  },
+  { id:'sp_prism',  name:'Prism Energy LNG',            shortName:'Prism LNG',      logo:'🔵', verified:true  },
+  { id:'sp_tag',    name:'TAG Energy',                  shortName:'TAG Energy',     logo:'🌿', verified:false },
+  { id:'sp_none',   name:'ติดต่อซัพพลายเออร์',          shortName:'สอบถามราคา',    logo:'📞', verified:false },
+  // เพิ่ม Sponsor ใหม่ได้ที่นี่
+];
+
+// ═══════════════════════════════════════════
+// FUEL SLOT CONFIG — กำหนดปุ่มแต่ละเชื้อเพลิง
+// บันทึกใน localStorage: fct_slots
+// show: แสดงปุ่มไหม | sponsorId: Sponsor ที่ link | btnText: ข้อความบนปุ่ม
+// ═══════════════════════════════════════════
+const FUEL_SLOTS_DEFAULT = [
+  { fuelId:'fo_a',   show:true,  sponsorId:'sp_none',    btnText:'ขอใบเสนอราคา' },
+  { fuelId:'fo_c',   show:true,  sponsorId:'sp_none',    btnText:'ขอใบเสนอราคา' },
+  { fuelId:'fo_alt', show:true,  sponsorId:'sp_tag',     btnText:'ขอใบเสนอราคา' },
+  { fuelId:'lpg',    show:true,  sponsorId:'sp_biggas',  btnText:'ขอใบเสนอราคา' },
+  { fuelId:'lng',    show:true,  sponsorId:'sp_prism',   btnText:'ขอใบเสนอราคา' },
+  { fuelId:'cng',    show:true,  sponsorId:'sp_none',    btnText:'สอบถามราคา'   },
+  { fuelId:'hvo',    show:true,  sponsorId:'sp_none',    btnText:'ขอใบเสนอราคา' },
+  { fuelId:'b100',   show:true,  sponsorId:'sp_none',    btnText:'ขอใบเสนอราคา' },
+  { fuelId:'b20',    show:true,  sponsorId:'sp_none',    btnText:'ขอใบเสนอราคา' },
+  { fuelId:'pellet', show:true,  sponsorId:'sp_none',    btnText:'สอบถามราคา'   },
+  { fuelId:'palm',   show:true,  sponsorId:'sp_none',    btnText:'สอบถามราคา'   },
+  { fuelId:'rice',   show:true,  sponsorId:'sp_none',    btnText:'สอบถามราคา'   },
+  { fuelId:'biogas', show:false, sponsorId:'sp_none',    btnText:'สอบถามราคา'   },
+  { fuelId:'elec',   show:false, sponsorId:'sp_none',    btnText:'สอบถามราคา'   },
+];
+
+let FUEL_SLOTS = (() => {
+  try {
+    const saved = localStorage.getItem('fct_slots');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      // Merge with defaults (add new fuels if missing)
+      const ids = parsed.map(s=>s.fuelId);
+      FUEL_SLOTS_DEFAULT.forEach(d => { if (!ids.includes(d.fuelId)) parsed.push({...d}); });
+      return parsed;
+    }
+  } catch(e) {}
+  return FUEL_SLOTS_DEFAULT.map(s=>({...s}));
+})();
+
+function saveFuelSlots() {
+  try { localStorage.setItem('fct_slots', JSON.stringify(FUEL_SLOTS)); } catch(e) {}
+}
+
+function getFuelSlot(fuelId) {
+  return FUEL_SLOTS.find(s => s.fuelId === fuelId) || { show:false, sponsorId:'sp_none', btnText:'สอบถามราคา' };
+}
+
+function getSponsor(id) {
+  return SPONSOR_REGISTRY.find(s => s.id === id) || SPONSOR_REGISTRY.find(s=>s.id==='sp_none');
+}
+
+// Legacy helper (backward compat)
+function getSponsorsForFuel(fuelId) {
+  const slot = getFuelSlot(fuelId);
+  if (!slot.show) return [];
+  const sp = getSponsor(slot.sponsorId);
+  return sp ? [sp] : [];
+}
+
+// Units: ลิตร, กก., ปอนด์, m³, หน่วย(kWh), ตัน
+// HV stored per each unit
+// ═══════════════════════════════════════════
+const FUELS = [
+  // ─── FOSSIL ───
+  {
+    id:'fo_a', name:'น้ำมันเตา A', cat:'fossil', color:'#DC2626', enabled:true, selected:true,
+    price:24.5, unit:'ลิตร',
+    units:['ลิตร','กก.','ปอนด์'],
+    hvByUnit:{'ลิตร':38.5,'กก.':43.75,'ปอนด์':19.84},
+    hv:38.5, sponsor:null
+  },
+  {
+    id:'fo_c', name:'น้ำมันเตา C', cat:'fossil', color:'#EA580C', enabled:true, selected:true,
+    price:20.8, unit:'ลิตร',
+    units:['ลิตร','กก.','ปอนด์'],
+    hvByUnit:{'ลิตร':39.8,'กก.':42.34,'ปอนด์':19.21},
+    hv:39.8, sponsor:null
+  },
+  {
+    id:'fo_alt', name:'น้ำมันเตาทดแทน', cat:'fossil', color:'#B45309', enabled:true, selected:true,
+    price:15.5, unit:'ลิตร',
+    units:['ลิตร','กก.','ปอนด์'],
+    hvByUnit:{'ลิตร':36.0,'กก.':40.91,'ปอนด์':18.57},
+    hv:36.0, sponsor:{name:'TAG Energy',verified:false}
+  },
+  {
+    id:'lpg', name:'LPG', cat:'fossil', color:'#CA8A04', enabled:true, selected:true,
+    price:22.3, unit:'กก.',
+    units:['กก.','ลิตร','ปอนด์'],
+    hvByUnit:{'กก.':46.1,'ลิตร':25.3,'ปอนด์':20.91},
+    hv:46.1, sponsor:{name:'Thai LPG Industrial',verified:true}
+  },
+  {
+    id:'lng', name:'LNG', cat:'fossil', color:'#0891B2', enabled:true, selected:true,
+    price:18.9, unit:'กก.',
+    units:['กก.','ลิตร','ปอนด์'],
+    hvByUnit:{'กก.':48.6,'ลิตร':22.4,'ปอนด์':22.04},
+    hv:48.6, sponsor:{name:'Prism Energy LNG',verified:true}
+  },
+  {
+    id:'cng', name:'ก๊าซธรรมชาติ (CNG)', cat:'fossil', color:'#0369A1', enabled:true, selected:true,
+    price:12.5, unit:'m³',
+    units:['m³','กก.'],
+    hvByUnit:{'m³':35.9,'กก.':47.1},
+    hv:35.9, sponsor:null
+  },
+  // ─── BIOFUEL ───
+  {
+    id:'hvo', name:'HVO Biodiesel', cat:'bio', color:'#059669', enabled:true, selected:true,
+    price:28.1, unit:'ลิตร',
+    units:['ลิตร','กก.','ปอนด์'],
+    hvByUnit:{'ลิตร':34.3,'กก.':44.0,'ปอนด์':19.96},
+    hv:34.3, sponsor:null
+  },
+  {
+    id:'b100', name:'B100 ไบโอดีเซล', cat:'bio', color:'#16A34A', enabled:true, selected:true,
+    price:26.0, unit:'ลิตร',
+    units:['ลิตร','กก.','ปอนด์'],
+    hvByUnit:{'ลิตร':32.8,'กก.':37.3,'ปอนด์':16.92},
+    hv:32.8, sponsor:null
+  },
+  {
+    id:'b20', name:'B20 (ผสม 20%)', cat:'bio', color:'#22C55E', enabled:true, selected:true,
+    price:21.5, unit:'ลิตร',
+    units:['ลิตร','กก.','ปอนด์'],
+    hvByUnit:{'ลิตร':35.8,'กก.':41.5,'ปอนด์':18.82},
+    hv:35.8, sponsor:null
+  },
+  // ─── BIOMASS ───
+  {
+    id:'pellet', name:'Wood Pellet', cat:'biomass', color:'#92400E', enabled:true, selected:true,
+    price:4.5, unit:'กก.',
+    units:['กก.','ปอนด์','ตัน'],
+    hvByUnit:{'กก.':17.5,'ปอนด์':7.94,'ตัน':17500},
+    hv:17.5, sponsor:null
+  },
+  {
+    id:'palm', name:'กะลาปาล์ม', cat:'biomass', color:'#A16207', enabled:true, selected:true,
+    price:3.2, unit:'กก.',
+    units:['กก.','ปอนด์','ตัน'],
+    hvByUnit:{'กก.':18.0,'ปอนด์':8.16,'ตัน':18000},
+    hv:18.0, sponsor:null
+  },
+  {
+    id:'rice', name:'แกลบ / ชีวมวล', cat:'biomass', color:'#D97706', enabled:true, selected:true,
+    price:1.8, unit:'กก.',
+    units:['กก.','ปอนด์','ตัน'],
+    hvByUnit:{'กก.':13.0,'ปอนด์':5.90,'ตัน':13000},
+    hv:13.0, sponsor:null
+  },
+  // ─── GAS ───
+  {
+    id:'biogas', name:'Biogas ก๊าซชีวภาพ', cat:'gas', color:'#7C3AED', enabled:true, selected:true,
+    price:3.5, unit:'m³',
+    units:['m³'],
+    hvByUnit:{'m³':23.4},
+    hv:23.4, sponsor:null
+  },
+  // ─── ELECTRIC ───
+  {
+    id:'elec', name:'ไฟฟ้า (Boiler)', cat:'electric', color:'#6366F1', enabled:true, selected:true,
+    price:4.2, unit:'หน่วย',
+    units:['หน่วย'],
+    hvByUnit:{'หน่วย':3.6},
+    hv:3.6, sponsor:null
+  },
+];
+
+let activeCategory = 'all';
+let currentMode = 'qty'; // 'qty' or 'mj'
+let currentMJ = 50000;   // shared MJ value used by calc()
+
+// ── MODE TOGGLE ──────────────────────────────
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeQtyPanel').style.display = mode==='qty'?'block':'none';
+  document.getElementById('modeMJPanel').style.display  = mode==='mj' ?'block':'none';
+  document.getElementById('modeQty').classList.toggle('active', mode==='qty');
+  document.getElementById('modeMJ').classList.toggle('active',  mode==='mj');
+  calc();
+}
+
+// ── INIT CURRENT FUEL DROPDOWN ───────────────
+function initCurrentFuelDropdown() {
+  const sel = document.getElementById('currentFuel');
+  sel.innerHTML = FUELS.map(f =>
+    `<option value="${f.id}">${f.name}</option>`
+  ).join('');
+  onCurrentFuelChange();
+}
+
+function onCurrentFuelChange() {
+  const f = FUELS.find(x => x.id === document.getElementById('currentFuel').value);
+  if (!f) return;
+  // Populate unit dropdown with all available units for this fuel
+  const sel = document.getElementById('qtyUnitLabel');
+  sel.innerHTML = f.units.map(u =>
+    `<option value="${u}" ${u === f.unit ? 'selected' : ''}>${u}</option>`
+  ).join('');
+  calcFromQty();
+}
+
+function onQtyUnitChange() {
+  const f = FUELS.find(x => x.id === document.getElementById('currentFuel').value);
+  const newUnit = document.getElementById('qtyUnitLabel').value;
+  if (!f) return;
+  // Update the fuel's active unit so HV calculation stays correct
+  f.unit = newUnit;
+  if (f.hvByUnit[newUnit] !== undefined) f.hv = f.hvByUnit[newUnit];
+  calcFromQty();
+}
+
+// ── QTY INPUT FORMATTING ─────────────────────
+function formatQtyInput(el) {
+  // Strip non-digits
+  const raw = el.value.replace(/[^0-9]/g, '');
+  const num = parseInt(raw)||0;
+  // Format with commas
+  if (raw !== '') el.value = num.toLocaleString('th-TH');
+  calcFromQty();
+}
+
+function getQtyAmount() {
+  const el = document.getElementById('qtyAmount');
+  if (!el) return 0;
+  return parseFloat(el.value.replace(/[^0-9.]/g,''))||0;
+}
+
+function calcFromQty() {
+  const f = FUELS.find(x => x.id === document.getElementById('currentFuel').value);
+  if (!f || f.hv <= 0) return;
+  const qty  = getQtyAmount();
+  const mj   = qty * f.hv;
+  const cost = qty * f.price;
+  const cpm  = f.price / f.hv;
+  currentMJ  = mj;
+
+  document.getElementById('mjResult').textContent          = mj > 0 ? fmt(mj)+' MJ' : '—';
+  document.getElementById('currentCostResult').textContent = mj > 0 ? '฿'+fmt(cost) : '—';
+  document.getElementById('currentCPM').textContent        = mj > 0 ? '฿'+cpm.toFixed(3)+'/MJ' : '—';
+  calc();
+}
+
+// ── GET USAGE MJ ─────────────────────────────
+function formatMJInput(el) {
+  const raw = el.value.replace(/[^0-9]/g, '');
+  const num = parseInt(raw)||0;
+  if (raw !== '') el.value = num.toLocaleString('th-TH');
+  calc();
+}
+
+function getUsageMJ() {
+  if (currentMode === 'qty') return currentMJ;
+  const el = document.getElementById('usageMJ');
+  return parseFloat((el?.value||'0').replace(/[^0-9.]/g,''))||0;
+}
+
+function getMonths() {
+  if (currentMode === 'qty') return parseInt(document.getElementById('months').value)||12;
+  return parseInt(document.getElementById('months2').value)||12;
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+function init() { initCurrentFuelDropdown(); renderFuelTable(); calc(); }
+
+function setCategory(cat, el) {
+  activeCategory = cat;
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderFuelTable();
+  calc();
+}
+
+// ═══════════════════════════════════════════
+// CAT LABELS
+// ═══════════════════════════════════════════
+function catChip(cat) {
+  const map = {
+    fossil:   ['chip-fossil','ฟอสซิล'],
+    bio:      ['chip-bio','ชีวภาพ'],
+    biomass:  ['chip-biomass','ชีวมวล'],
+    gas:      ['chip-gas','ก๊าซชีวภาพ'],
+    electric: ['chip-electric','ไฟฟ้า'],
+  };
+  const [cls,lbl] = map[cat]||['',''];
+  return `<span class="cat-chip ${cls}">${lbl}</span>`;
+}
+
+// ═══════════════════════════════════════════
+// RENDER FUEL TABLE
+// ═══════════════════════════════════════════
+function renderFuelTable() {
+  const visible = FUELS.filter(f => activeCategory === 'all' || f.cat === activeCategory);
+  const tbody = document.getElementById('fuelRows');
+  tbody.innerHTML = visible.map(f => {
+    const unitOpts = f.units.map(u => `<option value="${u}" ${u===f.unit?'selected':''}>${u}</option>`).join('');
+    const rowStyle = f.selected ? '' : 'opacity:0.45';
+    return `
+    <tr style="${rowStyle}" id="tr_${f.id}">
+      <td style="text-align:center;padding:5px 4px">
+        <input type="checkbox" id="chk_${f.id}" ${f.selected?'checked':''}
+          onchange="toggleFuel('${f.id}',this.checked)"
+          style="width:15px;height:15px;cursor:pointer;accent-color:var(--green)">
+      </td>
+      <td>
+        <div class="fuel-name-cell" style="color:${f.color}">${f.name}</div>
+        ${catChip(f.cat)}
+      </td>
+      <td>
+        <input class="price-inp" type="number" step="0.01" min="0"
+          value="${f.price}" id="price_${f.id}" oninput="updatePrice('${f.id}',this.value)"
+          ${f.selected?'':'disabled'}>
+      </td>
+      <td>
+        <select class="unit-sel" id="unit_${f.id}" onchange="changeUnit('${f.id}',this.value)"
+          ${f.selected?'':'disabled'}>
+          ${unitOpts}
+        </select>
+      </td>
+      <td>
+        <input class="price-inp hv-inp" type="number" step="0.01" min="0"
+          value="${toHVDisplay(f.hv)}" id="hv_${f.id}" oninput="updateHV('${f.id}',this.value)"
+          title="แก้ไขค่าความร้อนตามผลทดสอบจริง" ${f.selected?'':'disabled'}>
+      </td>
+      <td class="cpm-cell">
+        <span id="cpm_${f.id}" style="color:${f.color}">${f.hv>0?'฿'+(f.price/f.hv).toFixed(3):'—'}</span>
+        <div style="font-size:9px;color:var(--muted)">/MJ</div>
+      </td>
+      <td>
+        ${(() => {
+          const slot = getFuelSlot(f.id);
+          if (!slot.show) return `<span class="spname" style="color:var(--muted)">—</span>`;
+          const sp = getSponsor(slot.sponsorId);
+          const isReal = slot.sponsorId !== 'sp_none';
+          return `
+            <div style="padding:6px 7px;background:${isReal?(sp.verified?'#F0FDF4':'#FAFAFA'):'#F8FAFC'};border:1px solid ${isReal?(sp.verified?'#BBF7D0':'#E2E8F0'):'#E2E8F0'};border-radius:6px">
+              <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">
+                <span style="font-size:13px">${sp.logo||'📞'}</span>
+                ${sp.verified?'<span class="vbadge">✓ Verified</span>':''}
+                <span class="spname" style="font-weight:600">${sp.shortName}</span>
+              </div>
+              <button class="btn btn-green btn-sm" style="width:100%;justify-content:center"
+                onclick="openLead('${sp.name}','${f.name}')">${slot.btnText}</button>
+            </div>`;
+        })()}
+      </td>
+    </tr>`;
+  }).join('');
+  updateCheckAll();
+}
+
+// ── CHECKBOX HANDLERS ────────────────────────
+function toggleFuel(id, checked) {
+  const f = FUELS.find(x => x.id === id);
+  if (!f) return;
+  f.selected = checked;
+  const tr = document.getElementById('tr_'+id);
+  if (tr) tr.style.opacity = checked ? '' : '0.45';
+  ['price_','unit_','hv_'].forEach(prefix => {
+    const el = document.getElementById(prefix+id);
+    if (el) el.disabled = !checked;
+  });
+  updateCheckAll();
+  calc();
+}
+
+function toggleAll(checked) {
+  const visible = FUELS.filter(f => activeCategory==='all'||f.cat===activeCategory);
+  visible.forEach(f => {
+    f.selected = checked;
+    const chk = document.getElementById('chk_'+f.id);
+    if (chk) chk.checked = checked;
+    const tr  = document.getElementById('tr_'+f.id);
+    if (tr)  tr.style.opacity = checked ? '' : '0.45';
+    ['price_','unit_','hv_'].forEach(prefix => {
+      const el = document.getElementById(prefix+f.id);
+      if (el) el.disabled = !checked;
+    });
+  });
+  calc();
+}
+
+function updateCheckAll() {
+  const visible  = FUELS.filter(f => activeCategory==='all'||f.cat===activeCategory);
+  const allCheck = document.getElementById('checkAll');
+  if (!allCheck) return;
+  const allSelected = visible.every(f => f.selected);
+  const noneSelected= visible.every(f => !f.selected);
+  allCheck.checked = allSelected;
+  allCheck.indeterminate = !allSelected && !noneSelected;
+}
+
+// ── SELECTED COUNT BADGE ─────────────────────
+function getSelectedCount() {
+  const visible = FUELS.filter(f => activeCategory==='all'||f.cat===activeCategory);
+  return visible.filter(f => f.selected).length;
+}
+// ── HV UNIT CONVERSION ───────────────────────
+// Internal storage always in MJ — display converts
+let hvUnit = 'MJ'; // current display unit
+
+const HV_CONV = {
+  MJ:   { factor: 1,        label: 'MJ',   decimals: 2 },
+  BTU:  { factor: 947.817,  label: 'BTU',  decimals: 0 },
+  kcal: { factor: 238.846,  label: 'kcal', decimals: 1 },
+  kWh:  { factor: 0.27778,  label: 'kWh',  decimals: 3 },
+};
+
+function toHVDisplay(mjVal) {
+  const c = HV_CONV[hvUnit];
+  return (mjVal * c.factor).toFixed(c.decimals);
+}
+
+function fromHVDisplay(displayVal) {
+  const c = HV_CONV[hvUnit];
+  return (parseFloat(displayVal)||0) / c.factor;
+}
+
+function changeHVUnit(unit) {
+  hvUnit = unit;
+  const c = HV_CONV[unit];
+  // Update label in cost column header
+  const lbl = document.getElementById('costUnitLabel');
+  if (lbl) lbl.textContent = 'MJ'; // cost always in MJ
+
+  // Re-render all HV input values in new unit
+  FUELS.forEach(f => {
+    const el = document.getElementById('hv_' + f.id);
+    if (el) el.value = toHVDisplay(f.hv);
+  });
+}
+
+function updatePrice(id, val) {
+  const f = FUELS.find(x => x.id === id);
+  if (f) { f.price = parseFloat(val)||0; updateCPM(f); calc(); }
+}
+
+function updateHV(id, val) {
+  const f = FUELS.find(x => x.id === id);
+  if (f) {
+    // Convert from display unit back to MJ for internal storage
+    f.hv = fromHVDisplay(val);
+    updateCPM(f);
+    calc();
+  }
+}
+
+function changeUnit(id, newUnit) {
+  const f = FUELS.find(x => x.id === id);
+  if (!f) return;
+  f.unit = newUnit;
+  if (f.hvByUnit[newUnit] !== undefined) {
+    f.hv = f.hvByUnit[newUnit]; // store in MJ
+    const hvEl = document.getElementById('hv_' + id);
+    if (hvEl) hvEl.value = toHVDisplay(f.hv); // show in selected unit
+  }
+  updateCPM(f);
+  calc();
+}
+
+function updateCPM(f) {
+  const el = document.getElementById('cpm_' + f.id);
+  if (el) el.textContent = f.hv > 0 ? '฿' + (f.price/f.hv).toFixed(2) : '—';
+}
+
+// ═══════════════════════════════════════════
+// CALCULATE
+// ═══════════════════════════════════════════
+function calc() {
+  const usage  = getUsageMJ();
+  const months = getMonths();
+  const visible = FUELS.filter(f => (activeCategory==='all'||f.cat===activeCategory) && f.selected);
+  const results = visible
+    .filter(f => f.hv > 0 && f.price >= 0)
+    .map(f => {
+      const cpm = f.price / f.hv;
+      return { ...f, costPerMJ: cpm, monthly: cpm * usage, total: cpm * usage * months };
+    })
+    .sort((a,b) => a.costPerMJ - b.costPerMJ);
+  renderResults(results, months);
+  renderSummary(results, months);
+}
+
+// ═══════════════════════════════════════════
+// RENDER RESULTS
+// ═══════════════════════════════════════════
+function renderResults(results, months) {
+  if (!results.length) {
+    document.getElementById('results').innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">ไม่มีเชื้อเพลิงในหมวดนี้</div>';
+    return;
+  }
+  const maxC = Math.max(...results.map(r => r.monthly));
+  document.getElementById('results').innerHTML = results.map((r,i) => {
+    const bw    = maxC > 0 ? (r.monthly/maxC*100) : 0;
+    const best  = i === 0;
+    const saving = results[results.length-1].monthly - r.monthly;
+    return `
+    <div class="rrow${best?' best':''}" id="rr_${r.id}" onclick="toggleD('${r.id}')">
+      <div class="rtop">
+        <div class="rrank ${best?'r1':'rx'}">${i+1}</div>
+        <div class="rname">
+          <div class="rlabel">
+            <span style="color:${r.color}">${r.name}</span>
+            ${best?'<span class="bestbadge">✓ ถูกสุด</span>':''}
+            ${getSponsorsForFuel(r.id).slice(0,1).map(sp=>`
+              ${sp.verified?'<span class="vbadge">✓ Verified</span>':''}
+              <span class="spname">${sp.shortName}</span>
+            `).join('')}
+            ${catChip(r.cat)}
+          </div>
+          <div class="rbar-wrap"><div class="rbar" style="width:${bw}%;background:${r.color}"></div></div>
+        </div>
+        <div class="rcost">
+          <div class="cmj" style="color:${best?'var(--green)':'var(--dark)'}">
+            ${r.costPerMJ.toFixed(3)}<span style="font-size:10px;font-weight:400;color:var(--gray)">/MJ</span>
+          </div>
+          <div class="cmo">฿${fmt(r.monthly)}/เดือน</div>
+        </div>
+        ${getSponsorsForFuel(r.id).slice(0,1).map(sp=>`<button class="btn btn-navy btn-sm" style="flex-shrink:0" onclick="event.stopPropagation();openLead('${sp.name}','${r.name}')">ขอราคา</button>`).join('')}
+      </div>
+      <div class="rdetail" id="rd_${r.id}">
+        <div class="dbox"><div class="dbox-label">หน่วยที่ใช้</div><div class="dbox-val">฿${r.price}/${r.unit}</div></div>
+        <div class="dbox"><div class="dbox-label">ค่าความร้อน</div><div class="dbox-val">${r.hv} MJ/${r.unit}</div></div>
+        <div class="dbox"><div class="dbox-label">รวม ${months} เดือน</div><div class="dbox-val">฿${fmt(r.total)}</div></div>
+        <div class="dbox"><div class="dbox-label">ประหยัดเทียบแพงสุด</div><div class="dbox-val" style="color:var(--green)">฿${fmt(saving)}/เดือน</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleD(id) {
+  const el = document.getElementById('rd_'+id);
+  const row = document.getElementById('rr_'+id);
+  if (!el) return;
+  if (el.classList.contains('open')) {
+    el.classList.remove('open'); row.classList.remove('sel');
+  } else {
+    document.querySelectorAll('.rdetail.open').forEach(e=>e.classList.remove('open'));
+    document.querySelectorAll('.rrow.sel').forEach(e=>e.classList.remove('sel'));
+    el.classList.add('open'); row.classList.add('sel');
+  }
+}
+
+// ═══════════════════════════════════════════
+// SUMMARY
+// ═══════════════════════════════════════════
+function renderSummary(results, months) {
+  if (results.length < 2) {
+    document.getElementById('sumgrid').innerHTML = '<div style="color:#fff;opacity:.6">ต้องการเชื้อเพลิงอย่างน้อย 2 ชนิด</div>';
+    return;
+  }
+  const c = results[0], e = results[results.length-1];
+  const savePct = ((e.costPerMJ - c.costPerMJ) / e.costPerMJ * 100).toFixed(1);
+  document.getElementById('sumgrid').innerHTML = `
+    <div class="sitem"><div class="sitem-label">ถูกที่สุด</div><div class="sitem-val" style="color:#4ADE80">${c.name}</div><div class="sitem-sub" style="color:#86EFAC">฿${c.costPerMJ.toFixed(3)}/MJ</div></div>
+    <div class="sitem"><div class="sitem-label">แพงที่สุด</div><div class="sitem-val" style="color:#F87171">${e.name}</div><div class="sitem-sub" style="color:#FCA5A5">฿${e.costPerMJ.toFixed(3)}/MJ</div></div>
+    <div class="sitem"><div class="sitem-label">ประหยัดได้ใน ${months} เดือน</div><div class="sitem-val" style="color:#FCD34D">฿${fmt((e.monthly-c.monthly)*months)}</div><div class="sitem-sub" style="color:#FDE68A">เปลี่ยน ${e.name} → ${c.name}</div></div>
+    <div class="sitem"><div class="sitem-label">ต่างกัน</div><div class="sitem-val" style="color:#FCD34D">${savePct}%</div><div class="sitem-sub" style="color:#FDE68A">฿${fmt(e.monthly-c.monthly)}/เดือน</div></div>`;
+}
+
+// ═══════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════
+function fmt(n) { return Math.round(n).toLocaleString('th-TH'); }
+function fmtd(n) { return parseFloat(n).toFixed(3); }
+
+// ═══════════════════════════════════════════
+// LEAD MODAL
+// ═══════════════════════════════════════════
+let curSp = '';
+function openLead(co, type) {
+  curSp = co;
+  document.getElementById('mco').textContent = co;
+  document.getElementById('mtype').textContent = type;
+  document.getElementById('fv').style.display = 'block';
+  document.getElementById('sv').style.display = 'none';
+  document.getElementById('fu').value = fmt(getUsageMJ()) + ' MJ/เดือน';
+  document.getElementById('leadModal').classList.add('open');
+}
+function closeModal() { document.getElementById('leadModal').classList.remove('open'); }
+function closeOut(e) { if (e.target === document.getElementById('leadModal')) closeModal(); }
+function submitLead() {
+  const n = document.getElementById('fn').value.trim();
+  const c = document.getElementById('fc').value.trim();
+  const p = document.getElementById('fph').value.trim();
+  if (!n||!c||!p) { alert('กรุณากรอก ชื่อ, บริษัท และเบอร์โทร'); return; }
+  console.log('Lead:', {n,c,p,sp:curSp});
+  document.getElementById('fv').style.display = 'none';
+  document.getElementById('sv').style.display = 'block';
+  document.getElementById('sco').textContent = curSp;
+}
+
+// ═══════════════════════════════════════════
+// EXPORT PDF (new window → print)
+// ═══════════════════════════════════════════
+function _doPDF() {
+  const usage  = getUsageMJ();
+  const months = getMonths();
+  const today  = new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  const visible = FUELS.filter(f => (activeCategory==='all'||f.cat===activeCategory) && f.selected);
+  const results = visible.filter(f=>f.hv>0&&f.price>=0)
+    .map(f=>({...f,cpm:f.price/f.hv,mon:f.price/f.hv*usage,tot:f.price/f.hv*usage*months}))
+    .sort((a,b)=>a.cpm-b.cpm);
+  const catLabels={fossil:'ฟอสซิล',bio:'ชีวภาพ',biomass:'ชีวมวล',gas:'ก๊าซชีวภาพ',electric:'ไฟฟ้า'};
+  const cheapest=results[0], mostExp=results[results.length-1];
+  const rows = results.map((r,i)=>`
+    <tr style="background:${i%2===0?'#fff':'#F8FAFC'}">
+      <td style="text-align:center;font-weight:800;color:${i===0?'#059669':'#64748B'}">${i===0?'★':i+1}</td>
+      <td><span style="font-weight:700;color:${r.color}">${r.name}</span><br>
+        <span style="font-size:10px;background:${r.cat==='bio'?'#DCFCE7':r.cat==='biomass'?'#FEF9C3':r.cat==='electric'?'#EDE9FE':r.cat==='gas'?'#DBEAFE':'#FEF3C7'};color:#555;padding:1px 6px;border-radius:3px;font-size:9px">${catLabels[r.cat]||r.cat}</span>
+        ${r.sponsor?.verified?'<span style="font-size:9px;background:#DCFCE7;color:#15803D;padding:1px 5px;border-radius:3px;margin-left:3px">✓ Verified</span>':''}
+      </td>
+      <td style="text-align:right">฿${r.price}</td>
+      <td style="text-align:center">${r.unit}</td>
+      <td style="text-align:center">${r.hv}</td>
+      <td style="text-align:right;font-weight:800;color:${i===0?'#059669':'#0F172A'}">฿${r.cpm.toFixed(3)}</td>
+      <td style="text-align:right">฿${fmt(r.mon)}</td>
+      <td style="text-align:right;font-weight:700">฿${fmt(r.tot)}</td>
+    </tr>`).join('');
+
+  const html = `<!DOCTYPE html>
+<html lang="th"><head>
+<meta charset="UTF-8">
+<title>FuelCostTH — รายงานต้นทุนพลังงาน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Sarabun',sans-serif;font-size:13px;color:#1E293B;background:#fff}
+  .header{background:#0F2A5E;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+  .header-left h1{font-size:22px;font-weight:800;letter-spacing:-.3px}
+  .header-left p{font-size:11px;color:#93C5FD;margin-top:2px}
+  .header-right{text-align:right;font-size:11px;color:#93C5FD}
+  .header-right strong{display:block;font-size:13px;color:#fff}
+  .meta{background:#F1F5F9;padding:8px 20px;display:flex;gap:24px;font-size:11px;color:#64748B;border-bottom:1px solid #E2E8F0}
+  .meta span strong{color:#0F2A5E}
+  .content{padding:16px 20px}
+  table{width:100%;border-collapse:collapse;margin-bottom:16px}
+  th{background:#0F2A5E;color:#fff;padding:8px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+  th:not(:first-child):not(:nth-child(2)){text-align:right}
+  td{padding:7px 10px;border-bottom:1px solid #F1F5F9;font-size:12px;vertical-align:middle}
+  .summary{background:#0F2A5E;color:#fff;border-radius:8px;padding:14px 18px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin-bottom:16px}
+  .sum-item label{font-size:10px;color:#93C5FD;display:block;margin-bottom:3px}
+  .sum-item strong{font-size:16px;font-weight:800}
+  .sponsors{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  .sp-box{border:1px solid #E2E8F0;border-radius:6px;padding:10px 12px}
+  .sp-name{font-weight:700;font-size:13px}
+  .sp-price{font-size:15px;font-weight:800;color:#F59E0B;margin:3px 0}
+  .wm{text-align:center;font-size:10px;color:#94A3B8;padding:10px;border-top:1px solid #E2E8F0;margin-top:8px}
+  @media print{
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+    @page{size:A4;margin:10mm}
+    .no-print{display:none!important}
+  }
+</style>
+<scr\ipt>
+// Auto-open print dialog when page loads
+window.addEventListener('load', function() {
+  setTimeout(function() { window.print(); }, 600);
+});
+function downloadHTML() {
+  var content = document.documentElement.outerHTML;
+  var blob = new Blob([content], {type:'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'FuelCostTH_Report.html';
+  a.click();
+}
+function savePDF() {
+  var btn = document.getElementById('savePdfBtn');
+  btn.textContent = '⏳ กำลังสร้าง PDF...';
+  btn.disabled = true;
+
+  // Load html2pdf if not already loaded
+  if (typeof html2pdf === 'undefined') {
+    var s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+    s.onload = doSavePDF;
+    s.onerror = function() {
+      btn.textContent = '⚠️ โหลดไม่ได้ ลองเปิด Print';
+      btn.disabled = false;
+      window.print();
+    };
+    document.head.appendChild(s);
+  } else {
+    doSavePDF();
+  }
+}
+function doSavePDF() {
+  var btn = document.getElementById('savePdfBtn');
+  var el  = document.getElementById('reportContent');
+  var opt = {
+    margin:       [8, 8, 8, 8],
+    filename:     'FuelCostTH_Report_' + new Date().toISOString().slice(0,10) + '.pdf',
+    image:        { type:'jpeg', quality:0.97 },
+    html2canvas:  { scale:2, useCORS:true, logging:false },
+    jsPDF:        { unit:'mm', format:'a4', orientation:'portrait' }
+  };
+  html2pdf().set(opt).from(el).save().then(function() {
+    btn.textContent = '✅ บันทึก PDF แล้ว';
+    setTimeout(function(){ btn.textContent='💾 บันทึก PDF'; btn.disabled=false; }, 3000);
+  });
+}
+</scr\ipt>
+</head><body>
+<div class="no-print" id="instrBar" style="font-family:Sarabun,sans-serif">
+  <!-- Desktop instructions -->
+  <div id="desktopInstr" style="background:#0F2A5E;color:#fff;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="font-size:13px">
+      <strong style="color:#FCD34D">💾 วิธีบันทึก PDF:</strong>
+      กล่อง Print จะเปิดอัตโนมัติ →
+      ช่อง <strong>"Destination/Printer"</strong> เปลี่ยนเป็น
+      <strong style="color:#4ADE80">"Save as PDF"</strong> → กด Save
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="window.print()" style="background:#F59E0B;color:#1a1a1a;border:none;border-radius:7px;padding:8px 16px;font-family:Sarabun,sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">
+        🖨️ เปิด Print
+      </button>
+      <button id="savePdfBtn" onclick="savePDF()" style="background:#059669;color:#fff;border:none;border-radius:7px;padding:8px 16px;font-family:Sarabun,sans-serif;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap">
+        💾 บันทึก PDF
+      </button>
+    </div>
+  </div>
+  <!-- Mobile step guide -->
+  <div style="background:#FEF3C7;padding:10px 16px;border-bottom:2px solid #F59E0B;font-size:12px;color:#92400E">
+    <strong>📱 มือถือ Android:</strong> กดปุ่ม Print ด้านบน → แตะชื่อ Printer → เลือก <strong>"Save as PDF"</strong> → กด PDF ที่มุมขวาบน<br>
+    <strong>🍎 iPhone/iPad:</strong> กดปุ่ม Print → แตะ Share 📤 → เลือก <strong>"Save to Files"</strong>
+  </div>
+</div>
+<div id="reportContent">
+<div class="header">
+  <div class="header-left">
+    <h1>⚡ FuelCostTH</h1>
+    <p>รายงานเปรียบเทียบต้นทุนพลังงาน · fuelcostth.com</p>
+  </div>
+  <div class="header-right">
+    <strong>วันที่: ${today}</strong>
+    <span>ปริมาณ: ${fmt(usage)} MJ/เดือน</span>
+  </div>
+</div>
+<div class="meta">
+  <span>ปริมาณพลังงาน: <strong>${fmt(usage)} MJ/เดือน</strong></span>
+  <span>ระยะเวลาเปรียบเทียบ: <strong>${months} เดือน</strong></span>
+  <span>จำนวนเชื้อเพลิงที่เปรียบเทียบ: <strong>${results.length} ชนิด</strong></span>
+</div>
+<div class="content">
+  ${results.length>=2?`
+  <div class="summary">
+    <div class="sum-item"><label>ถูกที่สุด</label><strong style="color:#4ADE80">${cheapest.name}</strong><div style="font-size:11px;color:#86EFAC">฿${cheapest.cpm.toFixed(3)}/MJ</div></div>
+    <div class="sum-item"><label>แพงที่สุด</label><strong style="color:#F87171">${mostExp.name}</strong><div style="font-size:11px;color:#FCA5A5">฿${mostExp.cpm.toFixed(3)}/MJ</div></div>
+    <div class="sum-item"><label>ประหยัดได้/เดือน</label><strong style="color:#FCD34D">฿${fmt(mostExp.mon-cheapest.mon)}</strong></div>
+    <div class="sum-item"><label>ประหยัดได้ใน ${months} เดือน</label><strong style="color:#FCD34D">฿${fmt((mostExp.mon-cheapest.mon)*months)}</strong></div>
+  </div>`:''}
+  <table>
+    <thead><tr>
+      <th style="width:30px">#</th>
+      <th>เชื้อเพลิง</th>
+      <th style="text-align:right">ราคา/หน่วย</th>
+      <th style="text-align:center">หน่วย</th>
+      <th style="text-align:center">HV (MJ/หน่วย)</th>
+      <th style="text-align:right">฿/MJ</th>
+      <th style="text-align:right">฿/เดือน</th>
+      <th style="text-align:right">รวม ${months} เดือน</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <div class="sponsors">
+    <div class="sp-box" style="background:#FFFBEB;border-color:#FCD34D">
+      <div class="sp-name">🟠 Thai LPG Industrial</div>
+      <div class="sp-price">฿22.30/กก.</div>
+      <div style="font-size:11px;color:#92400E">✓ Verified · ส่งทั่วไทย</div>
+    </div>
+    <div class="sp-box" style="background:#F0FDF4;border-color:#86EFAC">
+      <div class="sp-name">🔵 Prism Energy LNG</div>
+      <div class="sp-price" style="color:#059669">฿18.90/กก.</div>
+      <div style="font-size:11px;color:#166534">✓ Verified · ติดตั้งฟรี</div>
+    </div>
+  </div>
+  <div class="wm">Powered by FuelCostTH.com · เปรียบเทียบต้นทุนพลังงานฟรี</div>
+</div>
+</div>
+</body></html>`;
+
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url  = URL.createObjectURL(blob);
+  const w    = window.open(url, '_blank');
+  if (!w) {
+    // Popup blocked fallback — download as HTML file
+    const a = document.createElement('a');
+    a.href = url; a.download = 'FuelCostTH_Report.html';
+    a.click();
+    alert('Popup ถูกบล็อก — ไฟล์ถูก download แล้ว เปิดไฟล์นั้นในเบราว์เซอร์แล้วกด Ctrl+P เพื่อบันทึก PDF');
+  }
+  setTimeout(()=>URL.revokeObjectURL(url), 10000);
+}
+
+// ═══════════════════════════════════════════
+// EXPORT EXCEL
+// ═══════════════════════════════════════════
+function _doExcel() {
+  const usage  = getUsageMJ();
+  const months = getMonths();
+  const today  = new Date().toLocaleDateString('th-TH');
+  const visible = FUELS.filter(f => (activeCategory==='all'||f.cat===activeCategory) && f.selected);
+  const results = visible.filter(f=>f.hv>0&&f.price>=0)
+    .map(f=>({...f,cpm:f.price/f.hv,mon:f.price/f.hv*usage,tot:f.price/f.hv*usage*months}))
+    .sort((a,b)=>a.cpm-b.cpm);
+  const catLabels = {fossil:'ฟอสซิล',bio:'ชีวภาพ',biomass:'ชีวมวล',gas:'ก๊าซชีวภาพ',electric:'ไฟฟ้า'};
+  const wb = XLSX.utils.book_new();
+
+  const data = [
+    ['วันที่: '+today,'','ปริมาณ: '+fmt(usage)+' MJ/เดือน','','ระยะเวลา: '+months+' เดือน'],
+    [],
+    ['#','เชื้อเพลิง','หมวด','ราคา/หน่วย (฿)','หน่วย','ค่าความร้อน (MJ/หน่วย)','฿/MJ','฿/เดือน','รวม '+months+' เดือน (฿)','ซัพพลายเออร์'],
+    ...results.map((r,i)=>[
+      i+1, r.name, catLabels[r.cat]||r.cat, r.price, r.unit, r.hv,
+      parseFloat(r.cpm.toFixed(4)), Math.round(r.mon), Math.round(r.tot),
+      r.sponsor ? r.sponsor.name+(r.sponsor.verified?' (Verified)':'') : '-'
+    ]),
+    [],
+    ['สรุป'],
+    ...(results.length>=2?[
+      ['ถูกสุด', results[0].name, '฿'+results[0].cpm.toFixed(3)+'/MJ'],
+      ['แพงสุด', results[results.length-1].name, '฿'+results[results.length-1].cpm.toFixed(3)+'/MJ'],
+      ['ประหยัดได้/เดือน', '฿'+fmt(results[results.length-1].mon-results[0].mon)],
+      ['ประหยัดได้ใน '+months+' เดือน', '฿'+fmt((results[results.length-1].mon-results[0].mon)*months)],
+    ]:[]),
+    [],
+    ['Powered by FuelCostTH.com'],
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{wch:6},{wch:22},{wch:12},{wch:14},{wch:8},{wch:20},{wch:12},{wch:16},{wch:20},{wch:28}];
+  XLSX.utils.book_append_sheet(wb, ws, 'ผลเปรียบเทียบ');
+
+  // Sheet 2: HV Reference
+  const hvData = [
+    ['ค่าความร้อนอ้างอิง (Heating Value Reference)'],
+    [],
+    ['เชื้อเพลิง','หมวด','MJ/ลิตร','MJ/กก.','MJ/ปอนด์','MJ/m³','MJ/หน่วย(kWh)','MJ/ตัน'],
+    ...FUELS.map(f=>[
+      f.name, catLabels[f.cat]||f.cat,
+      f.hvByUnit['ลิตร']||'-', f.hvByUnit['กก.']||'-', f.hvByUnit['ปอนด์']||'-',
+      f.hvByUnit['m³']||'-', f.hvByUnit['หน่วย']||'-', f.hvByUnit['ตัน']||'-',
+    ]),
+  ];
+  const ws2 = XLSX.utils.aoa_to_sheet(hvData);
+  ws2['!cols'] = [{wch:22},{wch:12},{wch:10},{wch:10},{wch:10},{wch:10},{wch:14},{wch:10}];
+  XLSX.utils.book_append_sheet(wb, ws2, 'ค่าความร้อนอ้างอิง');
+
+  XLSX.writeFile(wb, 'FuelCostTH_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+initProfile();
+init();
+</script>
+
+<!-- ── RETURNING USER QUICK CONFIRM ── -->
+<div class="gate-overlay" id="quickConfirmOv" onclick="if(event.target===this)closeQuickConfirm()">
+  <div class="quick-confirm">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div class="qc-avatar" id="qcAvatar">ส</div>
+      <div>
+        <div class="qc-name" id="qcName">สวัสดีครับ!</div>
+        <div class="qc-company" id="qcCompany">—</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--gray);margin-bottom:10px">
+      ข้อมูลของคุณถูกบันทึกไว้แล้ว ยืนยันเพื่อดาวน์โหลดไฟล์ได้เลยครับ
+    </div>
+    <div class="qc-info-grid" id="qcInfoGrid"></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn btn-ghost btn-navy" style="flex:1;justify-content:center;padding:10px" onclick="openFullGate()">
+        ✏️ แก้ไขข้อมูล
+      </button>
+      <button class="btn btn-gold" style="flex:2;justify-content:center;padding:10px;font-size:14px" onclick="confirmQuick()" id="qcConfirmBtn">
+        <span id="qcBtnLabel">📄 ดาวน์โหลดเลย</span>
+      </button>
+    </div>
+    <div class="gate-privacy" style="margin-top:10px">🔒 ข้อมูลบันทึกในเบราว์เซอร์ของคุณเท่านั้น</div>
+  </div>
+</div>
+
+<script>
+// ─── RETURNING USER QUICK CONFIRM ──────────────
+function openQuickConfirm(type) {
+  pendingExport = type;
+  const isPDF = type === 'pdf';
+  document.getElementById('qcBtnLabel').textContent = isPDF ? '📄 ดาวน์โหลด PDF เลย' : '📊 ดาวน์โหลด Excel เลย';
+  document.getElementById('qcAvatar').textContent   = userProfile.name.charAt(0)||'?';
+  document.getElementById('qcName').textContent     = `สวัสดีคุณ${userProfile.name.split(' ')[0]}!`;
+  document.getElementById('qcCompany').textContent  = userProfile.company + (userProfile.position ? ` · ${userProfile.position}` : '');
+  document.getElementById('qcInfoGrid').innerHTML = [
+    ['ประเภทธุรกิจ', userProfile.bizType||'—'],
+    ['จังหวัด',      userProfile.province||'—'],
+    ['เบอร์โทร',     userProfile.phone||'—'],
+    ['อีเมล',        userProfile.email||'—'],
+  ].map(([label, val]) => `
+    <div class="qc-info-item">
+      <label>${label}</label>
+      <span>${val}</span>
+    </div>`).join('');
+  document.getElementById('quickConfirmOv').classList.add('open');
+}
+
+function closeQuickConfirm() {
+  document.getElementById('quickConfirmOv').classList.remove('open');
+  pendingExport = null;
+}
+
+function confirmQuick() {
+  closeQuickConfirm();
+  doExport(pendingExport || 'pdf');
+  pendingExport = null;
+}
+
+function openFullGate() {
+  closeQuickConfirm();
+  // Open full gate form with existing data pre-filled
+  openGate(pendingExport || 'pdf');
+}
+
+// ─── CLEAR PROFILE (logout) ───────────────────
+function clearProfile() {
+  if (!confirm('ล้างข้อมูลที่บันทึกไว้?')) return;
+  userProfile = null;
+  try { localStorage.removeItem('fct_profile'); } catch(e) {}
+  document.getElementById('profileBadge').classList.remove('show');
+}
+</script>
+<div class="slot-admin-ov" id="slotAdminOv" onclick="if(event.target===this)closeSlotAdmin()">
+  <div class="slot-admin-box">
+    <div class="slot-admin-head">
+      <div class="sa-title">⚙️ จัดการ Sponsor ต่อเชื้อเพลิง</div>
+      <button class="sa-close" onclick="closeSlotAdmin()">✕ ปิด</button>
+    </div>
+    <div class="slot-admin-body">
+      <!-- Password gate -->
+      <div id="saAuthBox" class="sa-pw-box">
+        🔒 ต้องใส่รหัสผ่าน Admin ก่อนแก้ไข
+        <input type="password" id="saPwInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')saAuth()">
+        <button class="btn btn-gold" style="margin-top:6px;padding:5px 16px;font-size:12px" onclick="saAuth()">เข้าสู่ระบบ</button>
+        <div id="saAuthErr" style="color:#FCA5A5;font-size:11px;margin-top:4px;display:none">รหัสผ่านไม่ถูกต้อง</div>
+      </div>
+      <!-- Slot config table (hidden until authed) -->
+      <div id="saGrid" style="display:none">
+        <div style="font-size:11px;color:#94A3B8;margin-bottom:10px">
+          เปิด/ปิดปุ่มและเลือก Sponsor สำหรับแต่ละเชื้อเพลิง — บันทึกอัตโนมัติทันที
+        </div>
+        <div class="sa-row hdr">
+          <div>แสดง</div>
+          <div>เชื้อเพลิง</div>
+          <div>Sponsor ที่ link</div>
+          <div>ข้อความปุ่ม</div>
+        </div>
+        <div id="saRows"></div>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-blue" style="font-size:12px" onclick="saResetAll()">↺ Reset ทั้งหมด</button>
+          <button class="btn" style="background:rgba(255,255,255,.1);color:#fff;font-size:12px" onclick="closeSlotAdmin()">✓ เสร็จสิ้น</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SLOT ADMIN JS ──────────────────────────
+const SA_PW = () => localStorage.getItem('fct_admin_pw') || 'admin1234';
+let saAuthed = false;
+
+function openSlotAdmin() {
+  saAuthed = false;
+  document.getElementById('saAuthBox').style.display = 'block';
+  document.getElementById('saGrid').style.display    = 'none';
+  document.getElementById('saPwInput').value = '';
+  document.getElementById('saAuthErr').style.display = 'none';
+  document.getElementById('slotAdminOv').classList.add('open');
+}
+
+function closeSlotAdmin() {
+  document.getElementById('slotAdminOv').classList.remove('open');
+}
+
+function saAuth() {
+  const pw = document.getElementById('saPwInput').value;
+  if (pw === SA_PW()) {
+    saAuthed = true;
+    document.getElementById('saAuthBox').style.display = 'none';
+    document.getElementById('saGrid').style.display    = 'block';
+    renderSaRows();
+  } else {
+    document.getElementById('saAuthErr').style.display = 'block';
+  }
+}
+
+function renderSaRows() {
+  const spOpts = SPONSOR_REGISTRY.map(s =>
+    `<option value="${s.id}">${s.logo} ${s.shortName}</option>`
+  ).join('');
+
+  document.getElementById('saRows').innerHTML = FUELS.map(f => {
+    const slot = getFuelSlot(f.id);
+    return `
+    <div class="sa-row">
+      <div style="text-align:center">
+        <input type="checkbox" ${slot.show?'checked':''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--green)"
+          onchange="updateSlot('${f.id}','show',this.checked)">
+      </div>
+      <div class="sa-fuel" style="color:${f.color}">${f.name}</div>
+      <select class="sa-sel" onchange="updateSlot('${f.id}','sponsorId',this.value)">
+        ${spOpts.replace(`value="${slot.sponsorId}"`, `value="${slot.sponsorId}" selected`)}
+      </select>
+      <input class="sa-inp" value="${slot.btnText}" maxlength="12"
+        onchange="updateSlot('${f.id}','btnText',this.value)"
+        placeholder="ข้อความ">
+    </div>`;
+  }).join('');
+}
+
+function updateSlot(fuelId, key, val) {
+  const slot = FUEL_SLOTS.find(s => s.fuelId === fuelId);
+  if (slot) {
+    slot[key] = val;
+    saveFuelSlots();
+    renderFuelTable(); // update main table live
+  }
+}
+
+function saResetAll() {
+  if (!confirm('Reset ทุก slot กลับค่าเริ่มต้น?')) return;
+  FUEL_SLOTS = FUEL_SLOTS_DEFAULT.map(s=>({...s}));
+  saveFuelSlots();
+  renderSaRows();
+  renderFuelTable();
+}
+</script>
+</body>
+</html>
