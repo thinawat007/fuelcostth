@@ -59,7 +59,7 @@ nav{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:c
   .card{padding:14px 12px}
   .card-title{font-size:14px}
   .input-grid{grid-template-columns:1fr!important}
-  .sumgrid{grid-template-columns:1fr 1fr}
+  .rrow.sel .rdetail{grid-template-columns:1fr 1fr!important}
   .sitem-val{font-size:15px}
   /* Table: hide sponsor col on very small, hide HV col */
   .ftable th:nth-child(4),.ftable td:nth-child(4){display:none}
@@ -374,25 +374,25 @@ footer a{color:var(--blue);text-decoration:none}
       </div>
     </div>
     <!-- Auto-calculated MJ display -->
-    <div id="mjDisplay" style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:18px">⚡</span>
+    <div id="mjDisplay" style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:8px;padding:10px 14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:16px">⚡</span>
+          <div>
+            <div style="font-size:10px;color:var(--gray);font-weight:600">พลังงาน/เดือน</div>
+            <div style="font-size:16px;font-weight:800;color:var(--navy)" id="mjResult">—</div>
+          </div>
+        </div>
         <div>
-          <div style="font-size:10px;color:var(--gray);font-weight:600">พลังงานที่ได้รับ/เดือน (คำนวณอัตโนมัติ)</div>
-          <div style="font-size:18px;font-weight:800;color:var(--navy)" id="mjResult">—</div>
+          <div style="font-size:10px;color:var(--gray);font-weight:600">ค่าใช้จ่าย/เดือน</div>
+          <div style="font-size:16px;font-weight:800;color:var(--red)" id="currentCostResult">—</div>
+        </div>
+        <div>
+          <div style="font-size:10px;color:var(--gray);font-weight:600">ต้นทุน</div>
+          <div style="font-size:16px;font-weight:800;color:var(--gray)" id="currentCPM">—</div>
         </div>
       </div>
-      <div style="width:1px;height:36px;background:var(--border)"></div>
-      <div>
-        <div style="font-size:10px;color:var(--gray);font-weight:600">ค่าใช้จ่ายปัจจุบัน/เดือน</div>
-        <div style="font-size:18px;font-weight:800;color:var(--red)" id="currentCostResult">—</div>
-      </div>
-      <div style="width:1px;height:36px;background:var(--border)"></div>
-      <div>
-        <div style="font-size:10px;color:var(--gray);font-weight:600">ต้นทุน</div>
-        <div style="font-size:18px;font-weight:800;color:var(--gray)" id="currentCPM">—</div>
-      </div>
-      <div style="margin-left:auto;font-size:11px;color:var(--muted);max-width:200px;line-height:1.4">
+      <div style="margin-top:8px;font-size:11px;color:var(--muted);line-height:1.4">
         💡 ระบบจะใช้ค่านี้เปรียบเทียบกับเชื้อเพลิงทุกชนิด
       </div>
     </div>
