@@ -556,7 +556,8 @@ function loadContactSettings() {
     if (d.privacyText)  document.getElementById('privacyText').value  = d.privacyText;
   } catch(e) {}
 }
-  const old = document.getElementById('oldPw').value;
+
+function changePw() {
   const nw  = document.getElementById('newPw').value;
   const msg = document.getElementById('pwMsg');
   if (old !== state.password) { msg.style.color='#FCA5A5'; msg.textContent='รหัสผ่านปัจจุบันไม่ถูกต้อง'; return; }

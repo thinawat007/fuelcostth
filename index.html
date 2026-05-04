@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FuelCostTH — เปรียบเทียบต้นทุนพลังงานโรงงาน</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -61,11 +61,10 @@ nav{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:c
   .input-grid{grid-template-columns:1fr!important}
   .sumgrid{grid-template-columns:1fr 1fr}
   .sitem-val{font-size:15px}
-  /* Table: hide HV column, shrink on mobile */
-  .ftable{font-size:11px}
-  .ftable th{padding:4px 5px;font-size:9px}
-  .ftable td{padding:4px 5px}
-  .ftable th:nth-child(4),.ftable td:nth-child(4){display:none} /* hide HV col */
+  /* Table: hide sponsor col on very small, hide HV col */
+  .ftable th:nth-child(4),.ftable td:nth-child(4){display:none}
+  .ftable th:nth-child(6),.ftable td:nth-child(6){display:none}
+  .ftable th:nth-child(5){min-width:60px}
   .price-inp{width:62px;font-size:11px;padding:3px 5px}
   .hv-inp{width:55px}
   .unit-sel{font-size:11px;padding:3px 4px}
