@@ -472,88 +472,96 @@ footer a{color:var(--blue);text-decoration:none}
 <div class="card" id="labCard">
   <div class="card-title">🧪 วิเคราะห์ผลแลปเชื้อเพลิง <span style="font-size:11px;font-weight:400;color:var(--blue);background:#EFF6FF;padding:2px 8px;border-radius:10px">✨ AI-Powered</span></div>
   <div style="font-size:12px;color:var(--gray);margin-bottom:14px;line-height:1.6">
-    อัปโหลดผลทดสอบแลป (PDF หรือรูปภาพ) — AI จะอ่านค่าและเปรียบเทียบให้อัตโนมัติ
+    อัปโหลดผลแลป 1–3 ไฟล์ (PDF หรือรูปภาพ) — AI จะอ่านและ<strong>เปรียบเทียบพร้อมกัน</strong>อัตโนมัติ
   </div>
 
-  <!-- Upload area -->
-  <div id="labUploadArea" style="border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:#FAFBFC"
-    onclick="document.getElementById('labFileInput').click()"
-    ondragover="event.preventDefault();this.style.borderColor='var(--blue)'"
-    ondragleave="this.style.borderColor='var(--border)'"
-    ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleLabFile(event.dataTransfer.files[0])">
-    <div style="font-size:32px;margin-bottom:8px">📄</div>
-    <div style="font-weight:700;color:var(--navy);margin-bottom:4px">ลากไฟล์มาวางที่นี่ หรือคลิกเพื่อเลือก</div>
-    <div style="font-size:11px;color:var(--muted)">รองรับ PDF, PNG, JPG, JPEG · ขนาดไม่เกิน 10MB</div>
-    <input type="file" id="labFileInput" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="handleLabFile(this.files[0])">
+  <!-- Multi-file upload slots -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px" id="labSlots">
+    <!-- Slot 1 -->
+    <div class="lab-slot" id="labSlot0" onclick="document.getElementById('labFile0').click()"
+      style="border:2px dashed var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;background:#FAFBFC;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div style="font-size:22px;margin-bottom:4px">📄</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy)">ไฟล์ที่ 1</div>
+      <div style="font-size:9px;color:var(--muted)">คลิกเพื่อเลือก</div>
+      <input type="file" id="labFile0" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(0,this.files[0])">
+    </div>
+    <!-- Slot 2 -->
+    <div class="lab-slot" id="labSlot1" onclick="document.getElementById('labFile1').click()"
+      style="border:2px dashed var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;background:#FAFBFC;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div style="font-size:22px;margin-bottom:4px">📄</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy)">ไฟล์ที่ 2</div>
+      <div style="font-size:9px;color:var(--muted)">เปรียบเทียบ (ไม่บังคับ)</div>
+      <input type="file" id="labFile1" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(1,this.files[0])">
+    </div>
+    <!-- Slot 3 -->
+    <div class="lab-slot" id="labSlot2" onclick="document.getElementById('labFile2').click()"
+      style="border:2px dashed var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;background:#FAFBFC;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center">
+      <div style="font-size:22px;margin-bottom:4px">📄</div>
+      <div style="font-size:11px;font-weight:700;color:var(--navy)">ไฟล์ที่ 3</div>
+      <div style="font-size:9px;color:var(--muted)">เปรียบเทียบ (ไม่บังคับ)</div>
+      <input type="file" id="labFile2" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(2,this.files[0])">
+    </div>
   </div>
 
-  <!-- Fuel context selector -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
     <div>
-      <label class="flabel">ผลแลปนี้คือเชื้อเพลิงอะไร?</label>
+      <label class="flabel">ประเภทเชื้อเพลิงหลัก</label>
       <select class="finput" id="labFuelType" style="font-size:13px">
         <option value="">— เลือกประเภท —</option>
         <option>น้ำมันเตา A</option>
         <option>น้ำมันเตา C</option>
         <option>น้ำมันเตาทดแทน / Low Sulfur</option>
-        <option>LPG</option>
-        <option>LNG</option>
-        <option>HVO Biodiesel</option>
-        <option>Wood Pellet</option>
-        <option>อื่นๆ</option>
+        <option>LPG</option><option>LNG</option>
+        <option>HVO Biodiesel</option><option>Wood Pellet</option><option>อื่นๆ</option>
       </select>
     </div>
     <div>
-      <label class="flabel">เปรียบเทียบกับ</label>
+      <label class="flabel">เปรียบเทียบกับ (ในตาราง)</label>
       <select class="finput" id="labCompareWith" style="font-size:13px">
-        <option value="">— เลือกเชื้อเพลิงที่ใช้อยู่ —</option>
+        <option value="">— เลือกเชื้อเพลิง —</option>
       </select>
     </div>
   </div>
 
-  <!-- Status / Loading -->
-  <div id="labStatus" style="display:none;margin-top:14px;padding:12px 14px;border-radius:8px;font-size:13px;text-align:center">
+  <button class="btn btn-blue" onclick="analyzeAllLabs()" style="width:100%;justify-content:center;padding:10px;font-size:14px" id="labAnalyzeBtn">
+    🤖 วิเคราะห์ด้วย AI
+  </button>
+
+  <div id="labStatus" style="display:none;margin-top:14px;padding:12px;border-radius:8px;font-size:13px;text-align:center">
     <div id="labStatusIcon" style="font-size:24px;margin-bottom:6px">⏳</div>
     <div id="labStatusText">กำลังวิเคราะห์...</div>
   </div>
 
-  <!-- Results -->
   <div id="labResults" style="display:none;margin-top:16px">
-    <!-- Header -->
     <div style="background:var(--navy);border-radius:10px 10px 0 0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
       <div style="color:#fff;font-weight:800;font-size:14px">📊 ผลการวิเคราะห์</div>
       <div id="labFileName" style="color:#93C5FD;font-size:11px"></div>
     </div>
-
-    <!-- AI extracted values table -->
     <div style="border:1px solid var(--border);border-radius:0 0 10px 10px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse;font-size:13px" id="labTable">
         <thead>
           <tr style="background:#F8FAFC">
-            <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border);text-transform:uppercase">พารามิเตอร์</th>
-            <th style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--blue);border-bottom:2px solid var(--border);text-transform:uppercase">ผลแลป</th>
-            <th style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border);text-transform:uppercase">ค่ามาตรฐาน</th>
-            <th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border);text-transform:uppercase">ผลต่าง</th>
-            <th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border);text-transform:uppercase">สถานะ</th>
+            <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border)">พารามิเตอร์</th>
+            <th id="labTh0" style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--blue);border-bottom:2px solid var(--border)">ไฟล์ที่ 1</th>
+            <th id="labTh1" style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--green);border-bottom:2px solid var(--border);display:none">ไฟล์ที่ 2</th>
+            <th id="labTh2" style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--orange,#F97316);border-bottom:2px solid var(--border);display:none">ไฟล์ที่ 3</th>
+            <th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border)">มาตรฐาน</th>
+            <th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border)">สถานะ</th>
           </tr>
         </thead>
         <tbody id="labTableBody"></tbody>
       </table>
     </div>
-
-    <!-- AI Summary -->
     <div id="labAISummary" style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:10px;padding:14px 16px;margin-top:12px;font-size:13px;line-height:1.8"></div>
-
-    <!-- Cost impact -->
     <div id="labCostImpact" style="display:none;background:var(--navy);border-radius:10px;padding:14px 16px;margin-top:12px;color:#fff"></div>
-
-    <!-- Actions -->
     <div style="display:flex;gap:10px;margin-top:12px">
       <button class="btn btn-ghost btn-navy" style="flex:1;justify-content:center" onclick="resetLab()">🔄 วิเคราะห์ใหม่</button>
       <button class="btn btn-gold" style="flex:1;justify-content:center" onclick="exportPDF()">📄 Export รายงาน</button>
     </div>
   </div>
 </div>
+
+<!-- Status and results follow -->
 
 <!-- SUMMARY -->
 <div class="sumbox" id="sumbox">
@@ -610,6 +618,18 @@ footer a{color:var(--blue);text-decoration:none}
     <div style="background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:12px 14px;font-size:12px;color:#92400E;line-height:1.7" id="eqNote"></div>
   </div>
 </div>
+<!-- ── BOTTOM EXPORT BUTTONS ── -->
+<div class="card" style="background:var(--navy);padding:16px">
+  <div style="color:#fff;font-size:13px;font-weight:700;margin-bottom:10px;text-align:center">📥 บันทึกรายงาน</div>
+  <div style="display:flex;gap:10px">
+    <button class="btn btn-ghost" onclick="exportExcel()" style="flex:1;justify-content:center;background:rgba(255,255,255,.12);color:#fff;padding:10px;font-size:13px">
+      📊 ดาวน์โหลด Excel
+    </button>
+    <button class="btn btn-gold" onclick="exportPDF()" style="flex:1;justify-content:center;padding:10px;font-size:13px">
+      📄 ดาวน์โหลด PDF
+    </button>
+  </div>
+</div>
 
 </div><!-- /main-col -->
 
@@ -644,6 +664,13 @@ footer a{color:var(--blue);text-decoration:none}
   Powered by FuelCostTH.com · เปรียบเทียบต้นทุนพลังงานฟรี
 </div>
 </div><!-- /layout -->
+
+<!-- BOTTOM DOWNLOAD BAR -->
+<div style="background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
+  <span style="color:#93C5FD;font-size:12px">📥 บันทึกรายงาน:</span>
+  <button class="btn" style="background:#10B981;color:#fff;padding:8px 20px;font-size:13px" onclick="exportExcel()">📊 ดาวน์โหลด Excel</button>
+  <button class="btn btn-gold" style="padding:8px 20px;font-size:13px" onclick="exportPDF()">📄 ดาวน์โหลด PDF</button>
+</div>
 
 <footer>
   ⚡ <strong style="color:#fff">FuelCostTH.com</strong> — เปรียบเทียบต้นทุนพลังงานฟรี |
@@ -933,8 +960,8 @@ function doExport(type){ type==='pdf' ? _doPDF() : _doExcel(); }
 // SUPABASE CONFIG — ใส่ค่าจาก Supabase Dashboard
 // supabase.com → Project Settings → API
 // ═══════════════════════════════════════════
-const SUPABASE_URL  = localStorage.getItem('fct_sb_url')  || '';
-const SUPABASE_KEY  = localStorage.getItem('fct_sb_key')  || '';
+const SUPABASE_URL  = localStorage.getItem('fct_sb_url')  || 'https://kiclesfexffemaelfras.supabase.co';
+const SUPABASE_KEY  = localStorage.getItem('fct_sb_key')  || 'sb_publishable_-1KRQxe2MCS7K46C292rgg_3k61Kr5qRMnbQWg';
 
 let sbClient = null;
 if (SUPABASE_URL && SUPABASE_KEY && window.supabase) {
@@ -1016,10 +1043,15 @@ function updateFeaturedBannerData(s) {
 // ── RENDER SIDEBAR SPONSORS (from admin data) ──
 function renderSideSponsors() {
   try {
-    const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
-    const sponsors  = (adminData.sponsors || []).filter(s => s.status === 'active');
     const el = document.getElementById('sideSponsors');
     if (!el) return;
+
+    // Use SPONSOR_REGISTRY (already loaded from Supabase or localStorage)
+    const sponsors = SPONSOR_REGISTRY.filter(s =>
+      s.id !== 'sp_none' &&
+      (s.package === 'verified' || s.package === 'exclusive' ||
+       s.package === 'featured' || s.package === 'listed')
+    );
 
     if (!sponsors.length) {
       el.innerHTML = `<div class="ssp" style="text-align:center;color:var(--muted);font-size:12px;padding:16px">
@@ -1032,27 +1064,28 @@ function renderSideSponsors() {
 
     const pkgColor = { featured:'#F59E0B', verified:'#10B981', listed:'#64748B', exclusive:'#7C3AED' };
     el.innerHTML = sponsors.map(s => {
-      const color = pkgColor[s.package] || '#64748B';
-      const logoHtml = s.logoUrl?.startsWith('http')
-        ? `<img src="${s.logoUrl}" style="width:38px;height:38px;object-fit:contain;border-radius:6px;background:#fff;padding:2px" onerror="this.parentElement.textContent='🏭'">`
-        : `<span style="font-size:26px">${s.logoUrl||'🏭'}</span>`;
+      const color    = pkgColor[s.package] || '#64748B';
+      const logoUrl  = s.logo || s.logoUrl || s.logo_url || null;
+      const logoHtml = (logoUrl && logoUrl.startsWith('http'))
+        ? `<img src="${logoUrl}" style="width:38px;height:38px;object-fit:contain;border-radius:6px;background:#fff;padding:2px" onerror="this.parentElement.textContent='🏭'">`
+        : `<span style="font-size:26px">${logoUrl||'🏭'}</span>`;
       return `
       <div class="ssp" style="border-color:${color}40;background:${color}08">
         <div class="ssp-head">
           <div class="slogo">${logoHtml}</div>
           <div style="flex:1">
             <div class="sname">${s.name}</div>
-            <div class="stype" style="color:${color}">${s.verified?'✓ Verified Price':s.fuelType||''}</div>
+            <div class="stype" style="color:${color}">${s.verified?'✓ Verified Price':s.fuelType||s.tag||''}</div>
           </div>
-          <span class="spbadge" style="background:${color}15;color:${color};border-color:${color}40;font-size:8px">${s.package}</span>
+          <span class="spbadge" style="background:${color}15;color:${color};border-color:${color}40;font-size:8px">${s.package||'listed'}</span>
         </div>
-        ${s.displayPrice?`<div class="sprice" style="color:${color}">${s.displayPrice}</div>`:''}
+        ${s.displayPrice||s.display_price?`<div class="sprice" style="color:${color}">${s.displayPrice||s.display_price}</div>`:''}
         ${s.tag?`<div style="font-size:11px;color:var(--gray);margin-bottom:7px;line-height:1.5">${s.tag}</div>`:''}
         <button class="btn scta" style="background:${color};color:#fff;width:100%;justify-content:center"
-          onclick="openLead('${s.name}','${s.fuelType||''}')">ขอใบเสนอราคา</button>
+          onclick="openLead('${s.name}','${s.fuelType||s.tag||''}')">ขอใบเสนอราคา</button>
       </div>`;
     }).join('');
-  } catch(e) {}
+  } catch(e) { console.error(e); }
 }
 
 function updateFeaturedBanner() {
@@ -1125,23 +1158,24 @@ function loadSponsorRegistry() {
   try {
     const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
     if (adminData.sponsors && adminData.sponsors.length > 0) {
-      // Map admin sponsors to registry format
       const mapped = adminData.sponsors
         .filter(s => s.status === 'active' || s.status === 'queue')
         .map(s => ({
-          id: s.id,
-          name: s.name,
-          shortName: s.name.length > 14 ? s.name.substring(0,14)+'...' : s.name,
-          logo: '🏭',
-          verified: s.package === 'verified' || s.package === 'featured' || s.package === 'exclusive',
-          tag: s.tag || '',
+          id:           s.id,
+          name:         s.name,
+          shortName:    s.name.length > 14 ? s.name.substring(0,14)+'...' : s.name,
+          logo:         s.logoUrl || '🏭',
+          logoUrl:      s.logoUrl || null,
+          verified:     s.package === 'verified' || s.package === 'featured' || s.package === 'exclusive',
+          tag:          s.tag || '',
+          fuelType:     s.fuelType || '',
           displayPrice: s.displayPrice || '',
-          email: s.email || '',
-          phone: s.phone || '',
-          package: s.package,
+          email:        s.email || '',
+          phone:        s.phone || '',
+          package:      s.package,
+          status:       s.status,
         }));
-      // Always keep sp_none
-      mapped.push({ id:'sp_none', name:'ติดต่อซัพพลายเออร์', shortName:'สอบถามราคา', logo:'📞', verified:false, tag:'', displayPrice:'' });
+      mapped.push({ id:'sp_none', name:'ติดต่อซัพพลายเออร์', shortName:'สอบถามราคา', logo:'📞', verified:false, tag:'', package:'listed' });
       return mapped;
     }
   } catch(e) {}
@@ -1435,7 +1469,7 @@ function getMonths() {
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
-function init() { initCurrentFuelDropdown(); renderFuelTable(); calc(); initLabPanel(); }
+function init() { initCurrentFuelDropdown(); renderFuelTable(); renderSideSponsors(); calc(); initLabPanel(); }
 
 function setCategory(cat, el) {
   activeCategory = cat;
@@ -2030,221 +2064,153 @@ function _doExcel() {
 }
 
 // ═══════════════════════════════════════════
-// LAB RESULT ANALYZER (Claude API)
+// LAB RESULT ANALYZER (Multi-file, Claude API)
 // ═══════════════════════════════════════════
-
-// Standard reference values per fuel type
 const LAB_STANDARDS = {
-  'น้ำมันเตา A':        { 'ค่าความร้อน (GHV)': {val:'38.5 MJ/ลิตร', min:36, max:42, unit:'MJ/L'}, 'ความหนืด (40°C)': {val:'≤20 cSt', max:20, unit:'cSt'}, 'ซัลเฟอร์': {val:'≤0.5%', max:0.5, unit:'%'}, 'ความหนาแน่น': {val:'0.83-0.88 kg/L', min:0.83, max:0.88, unit:'kg/L'}, 'จุดวาบไฟ': {val:'≥60°C', min:60, unit:'°C'} },
-  'น้ำมันเตา C':        { 'ค่าความร้อน (GHV)': {val:'39.8 MJ/ลิตร', min:37, max:42, unit:'MJ/L'}, 'ความหนืด (50°C)': {val:'≤180 cSt', max:180, unit:'cSt'}, 'ซัลเฟอร์': {val:'≤3.5%', max:3.5, unit:'%'}, 'ความหนาแน่น': {val:'0.89-0.98 kg/L', min:0.89, max:0.98, unit:'kg/L'}, 'จุดวาบไฟ': {val:'≥66°C', min:66, unit:'°C'} },
-  'น้ำมันเตาทดแทน / Low Sulfur': { 'ค่าความร้อน (GHV)': {val:'36-38 MJ/ลิตร', min:34, max:40, unit:'MJ/L'}, 'ซัลเฟอร์': {val:'≤0.005%', max:0.005, unit:'%'}, 'ความหนาแน่น': {val:'0.82-0.87 kg/L', min:0.82, max:0.87, unit:'kg/L'} },
-  'LPG':  { 'ค่าความร้อน (NHV)': {val:'46.1 MJ/กก.', min:44, max:48, unit:'MJ/kg'}, 'ความดันไอ (40°C)': {val:'≤1400 kPa', max:1400, unit:'kPa'}, 'ซัลเฟอร์': {val:'≤0.02%', max:0.02, unit:'%'} },
-  'Wood Pellet': { 'ค่าความร้อน (NHV)': {val:'17.5 MJ/กก.', min:16, max:19, unit:'MJ/kg'}, 'ความชื้น': {val:'≤10%', max:10, unit:'%'}, 'เถ้า (Ash)': {val:'≤1.5%', max:1.5, unit:'%'} },
+  'น้ำมันเตา A':{'ค่าความร้อน':{val:'38.5 MJ/ลิตร',min:36,max:42},'ความหนืด(40°C)':{val:'≤20 cSt',max:20},'ซัลเฟอร์':{val:'≤0.5%',max:0.5},'จุดวาบไฟ':{val:'≥60°C',min:60}},
+  'น้ำมันเตา C':{'ค่าความร้อน':{val:'39.8 MJ/ลิตร',min:37,max:42},'ความหนืด(50°C)':{val:'≤180 cSt',max:180},'ซัลเฟอร์':{val:'≤3.5%',max:3.5},'จุดวาบไฟ':{val:'≥66°C',min:66}},
+  'น้ำมันเตาทดแทน / Low Sulfur':{'ค่าความร้อน':{val:'36-38 MJ/ลิตร',min:34,max:40},'ซัลเฟอร์':{val:'≤0.005%',max:0.005}},
+  'LPG':{'ค่าความร้อน':{val:'46.1 MJ/กก.',min:44,max:48},'ซัลเฟอร์':{val:'≤0.02%',max:0.02}},
+  'Wood Pellet':{'ค่าความร้อน':{val:'17.5 MJ/กก.',min:16,max:19},'ความชื้น':{val:'≤10%',max:10},'เถ้า':{val:'≤1.5%',max:1.5}},
 };
 
-let labFileData = null;
-let labFileType = null;
+let labFiles = [null, null, null]; // base64 data
+let labFileTypes = [null, null, null];
+let labFileNames = ['', '', ''];
 
-// Init compare-with dropdown
 function initLabPanel() {
   const sel = document.getElementById('labCompareWith');
-  sel.innerHTML = '<option value="">— เลือกเชื้อเพลิงที่ใช้อยู่ —</option>' +
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— เลือกเชื้อเพลิง —</option>' +
     FUELS.filter(f=>f.selected).map(f=>`<option value="${f.id}">${f.name}</option>`).join('');
 }
 
-async function handleLabFile(file) {
+async function loadLabSlot(idx, file) {
   if (!file) return;
-  const maxSize = 10 * 1024 * 1024;
-  if (file.size > maxSize) { alert('ไฟล์ใหญ่เกิน 10MB'); return; }
-
-  // Update upload area UI
-  document.getElementById('labUploadArea').innerHTML = `
-    <div style="font-size:24px;margin-bottom:6px">✅</div>
-    <div style="font-weight:700;color:var(--navy)">${file.name}</div>
-    <div style="font-size:11px;color:var(--muted)">${(file.size/1024).toFixed(0)} KB · คลิกเพื่อเปลี่ยนไฟล์</div>`;
-  document.getElementById('labFileName').textContent = file.name;
-
-  // Convert to base64
-  const base64 = await new Promise(resolve => {
-    const r = new FileReader();
-    r.onload = () => resolve(r.result.split(',')[1]);
-    r.readAsDataURL(file);
+  const slot = document.getElementById(`labSlot${idx}`);
+  const b64 = await new Promise(r => {
+    const rd = new FileReader();
+    rd.onload = () => r(rd.result.split(',')[1]);
+    rd.readAsDataURL(file);
   });
-
-  labFileData = base64;
-  labFileType = file.type === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
-
-  await analyzeLab();
+  labFiles[idx] = b64;
+  labFileTypes[idx] = file.type === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
+  labFileNames[idx] = file.name;
+  slot.innerHTML = `
+    <div style="font-size:18px;margin-bottom:4px">✅</div>
+    <div style="font-size:10px;font-weight:700;color:var(--navy);word-break:break-all">${file.name}</div>
+    <div style="font-size:9px;color:var(--muted)">${(file.size/1024).toFixed(0)} KB</div>`;
+  slot.style.borderColor = 'var(--green)';
+  slot.style.background = '#F0FDF4';
 }
 
-async function analyzeLab() {
-  if (!labFileData) { alert('กรุณาเลือกไฟล์ก่อน'); return; }
+async function analyzeAllLabs() {
+  const activeFiles = labFiles.map((f,i)=>f?i:-1).filter(i=>i>=0);
+  if (!activeFiles.length) { alert('กรุณาเลือกไฟล์อย่างน้อย 1 ไฟล์'); return; }
 
   const fuelType  = document.getElementById('labFuelType').value || 'เชื้อเพลิง';
   const compareId = document.getElementById('labCompareWith').value;
   const compareFuel = FUELS.find(f => f.id === compareId);
-
-  // Show loading
-  document.getElementById('labStatus').style.display = 'block';
-  document.getElementById('labResults').style.display = 'none';
-  document.getElementById('labStatusIcon').textContent = '🤖';
-  document.getElementById('labStatusText').textContent = 'AI กำลังอ่านและวิเคราะห์ผลแลป...';
-
   const standards = LAB_STANDARDS[fuelType] || {};
   const stdText = Object.entries(standards).map(([k,v])=>`${k}: ${v.val}`).join(', ');
 
-  const prompt = `คุณเป็นผู้เชี่ยวชาญวิเคราะห์ผลทดสอบเชื้อเพลิงอุตสาหกรรม
-วิเคราะห์เอกสารผลแลปนี้ซึ่งเป็นของ "${fuelType}" และตอบในรูป JSON เท่านั้น ไม่มีข้อความอื่น
-
-ค่ามาตรฐานอ้างอิง: ${stdText || 'ใช้ค่ามาตรฐานสากล'}
-${compareFuel ? `เชื้อเพลิงที่จะเปรียบเทียบ: ${compareFuel.name} (ราคา ฿${compareFuel.price}/${compareFuel.unit}, HV=${compareFuel.hv} MJ/${compareFuel.unit})` : ''}
-
-ตอบ JSON รูปแบบนี้เท่านั้น:
-{
-  "parameters": [
-    {
-      "name": "ชื่อพารามิเตอร์ภาษาไทย",
-      "labValue": "ค่าจากแลป + หน่วย",
-      "labNumeric": 0.0,
-      "unit": "หน่วย",
-      "standard": "ค่ามาตรฐาน",
-      "diff": "+X.X% หรือ -X.X% เทียบมาตรฐาน",
-      "status": "ผ่าน หรือ ไม่ผ่าน หรือ ปกติ",
-      "note": "หมายเหตุสั้นๆ"
-    }
-  ],
-  "hvLabValue": 0.0,
-  "hvUnit": "MJ/ลิตร หรือ MJ/กก.",
-  "summary": "สรุปคุณภาพเชื้อเพลิง 2-3 ประโยค",
-  "recommendation": "คำแนะนำการใช้งาน 1-2 ประโยค",
-  "overallStatus": "ผ่านมาตรฐาน หรือ ควรตรวจสอบ หรือ ไม่ผ่านมาตรฐาน"
-}`;
+  document.getElementById('labStatus').style.display = 'block';
+  document.getElementById('labResults').style.display = 'none';
+  document.getElementById('labStatusIcon').textContent = '🤖';
+  document.getElementById('labAnalyzeBtn').disabled = true;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: labFileType === 'application/pdf' ? 'document' : 'image',
-              source: { type: 'base64', media_type: labFileType, data: labFileData }
-            },
-            { type: 'text', text: prompt }
-          ]
-        }]
-      })
-    });
-
-    const data = await resp.json();
-    const text = data.content?.[0]?.text || '';
-    const clean = text.replace(/```json|```/g,'').trim();
-    const result = JSON.parse(clean);
-
-    renderLabResults(result, fuelType, compareFuel);
-  } catch(err) {
+    const results = [];
+    for (const idx of activeFiles) {
+      document.getElementById('labStatusText').textContent = `วิเคราะห์ไฟล์ที่ ${idx+1}/${activeFiles.length}...`;
+      const prompt = `วิเคราะห์ผลแลปเชื้อเพลิง "${fuelType}" ค่ามาตรฐาน: ${stdText||'มาตรฐานสากล'} ตอบ JSON เท่านั้น:
+{"parameters":[{"name":"ชื่อ","labValue":"ค่า+หน่วย","standard":"มาตรฐาน","diff":"+X%","status":"ผ่าน/ไม่ผ่าน","note":""}],"hvLabValue":0,"hvUnit":"MJ/ลิตร","summary":"สรุป","overallStatus":"ผ่านมาตรฐาน/ไม่ผ่าน"}`;
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body: JSON.stringify({
+          model:'claude-sonnet-4-20250514', max_tokens:1200,
+          messages:[{role:'user',content:[
+            {type: labFileTypes[idx]==='application/pdf'?'document':'image',
+             source:{type:'base64',media_type:labFileTypes[idx],data:labFiles[idx]}},
+            {type:'text',text:prompt}
+          ]}]
+        })
+      });
+      const data = await resp.json();
+      const text = data.content?.[0]?.text||'';
+      results.push(JSON.parse(text.replace(/```json|```/g,'').trim()));
+    }
+    renderMultiLabResults(results, activeFiles, fuelType, compareFuel);
+  } catch(e) {
     document.getElementById('labStatusIcon').textContent = '❌';
-    document.getElementById('labStatusText').textContent = 'เกิดข้อผิดพลาด: ' + err.message + ' — ลองอีกครั้ง';
+    document.getElementById('labStatusText').textContent = 'Error: ' + e.message;
   }
+  document.getElementById('labAnalyzeBtn').disabled = false;
 }
 
-function renderLabResults(r, fuelType, compareFuel) {
+function renderMultiLabResults(results, activeIdxs, fuelType, compareFuel) {
   document.getElementById('labStatus').style.display = 'none';
   document.getElementById('labResults').style.display = 'block';
+  const colors = ['var(--blue)','var(--green)','#F97316'];
 
-  // Table rows
-  const statusColor = { 'ผ่าน':'#059669', 'ปกติ':'#0EA5E9', 'ไม่ผ่าน':'#DC2626', 'ควรตรวจสอบ':'#F59E0B' };
-  const statusIcon  = { 'ผ่าน':'✅', 'ปกติ':'✅', 'ไม่ผ่าน':'❌', 'ควรตรวจสอบ':'⚠️' };
+  // Show/hide extra columns
+  activeIdxs.forEach((idx,i) => {
+    const th = document.getElementById(`labTh${i}`);
+    if (th) { th.style.display=''; th.textContent = labFileNames[idx]||`ไฟล์${idx+1}`; th.style.color = colors[i]; }
+  });
 
-  document.getElementById('labTableBody').innerHTML = (r.parameters||[]).map(p => `
-    <tr style="border-bottom:1px solid #F8FAFC">
-      <td style="padding:8px 12px;font-weight:600">${p.name}<br><span style="font-size:10px;color:var(--muted);font-weight:400">${p.note||''}</span></td>
-      <td style="padding:8px 12px;text-align:right;font-weight:800;color:var(--blue)">${p.labValue}</td>
-      <td style="padding:8px 12px;text-align:right;color:var(--gray);font-size:12px">${p.standard}</td>
-      <td style="padding:8px 12px;text-align:center;font-size:12px;color:${p.diff?.startsWith('-')?'var(--red)':'var(--green)'}">${p.diff||'—'}</td>
+  const statusIcon = {'ผ่าน':'✅','ปกติ':'✅','ไม่ผ่าน':'❌','ควรตรวจสอบ':'⚠️'};
+  const statusColor = {'ผ่าน':'#059669','ปกติ':'#0EA5E9','ไม่ผ่าน':'#DC2626','ควรตรวจสอบ':'#F59E0B'};
+
+  // Collect all param names
+  const allParams = [...new Set(results.flatMap(r => r.parameters?.map(p=>p.name)||[]))];
+
+  document.getElementById('labTableBody').innerHTML = allParams.map(name => {
+    const cells = activeIdxs.map((idx,i) => {
+      const p = results[i]?.parameters?.find(x=>x.name===name);
+      return p ? `<td style="padding:8px 12px;text-align:right;font-weight:700;color:${colors[i]}">${p.labValue}<br><span style="font-size:9px;color:var(--muted)">${p.diff||''}</span></td>` : `<td style="color:var(--muted);text-align:center">—</td>`;
+    });
+    const firstP = results[0]?.parameters?.find(p=>p.name===name);
+    return `<tr style="border-bottom:1px solid #F8FAFC">
+      <td style="padding:8px 12px;font-weight:600">${name}</td>
+      ${cells.join('')}
+      <td style="padding:8px 12px;text-align:center;font-size:11px;color:var(--gray)">${firstP?.standard||'—'}</td>
       <td style="padding:8px 12px;text-align:center">
-        <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:${statusColor[p.status]||'#64748B'}20;color:${statusColor[p.status]||'#64748B'}">
-          ${statusIcon[p.status]||'•'} ${p.status}
-        </span>
+        <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;background:${statusColor[firstP?.status]||'#64748B'}20;color:${statusColor[firstP?.status]||'#64748B'}">${statusIcon[firstP?.status]||'—'} ${firstP?.status||'—'}</span>
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
-  // Overall status
-  const oc = r.overallStatus?.includes('ผ่าน') ? '#059669' : r.overallStatus?.includes('ควร') ? '#F59E0B' : '#DC2626';
+  // Summary
+  const summaryHtml = results.map((r,i) => `
+    <div style="padding:10px;background:rgba(255,255,255,.6);border-radius:8px;border-left:3px solid ${colors[i]}">
+      <div style="font-size:11px;font-weight:700;color:${colors[i]};margin-bottom:4px">${labFileNames[activeIdxs[i]]||`ไฟล์${i+1}`}</div>
+      <div style="font-size:12px;font-weight:700;margin-bottom:4px">${r.overallStatus}</div>
+      <div style="font-size:12px;color:var(--text)">${r.summary}</div>
+    </div>`).join('');
+
   document.getElementById('labAISummary').innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-      <span style="font-size:20px">${r.overallStatus?.includes('ผ่าน')?'✅':r.overallStatus?.includes('ควร')?'⚠️':'❌'}</span>
-      <strong style="font-size:14px;color:${oc}">${r.overallStatus}</strong>
-    </div>
-    <div style="margin-bottom:8px;color:var(--text)">${r.summary}</div>
-    <div style="font-size:12px;color:var(--gray);border-top:1px solid var(--border);padding-top:8px;margin-top:8px">
-      💡 ${r.recommendation}
-    </div>`;
-
-  // Cost impact if compare fuel selected
-  if (compareFuel && r.hvLabValue > 0) {
-    const usage    = getUsageMJ();
-    const months   = getMonths();
-    const labCPM   = 0; // lab fuel has no price yet
-    const refCPM   = compareFuel.price / compareFuel.hv;
-    const refCost  = refCPM * usage;
-
-    // Update HV in tool if match
-    const matchFuel = FUELS.find(f =>
-      f.name.toLowerCase().includes(fuelType.toLowerCase().split('/')[0].trim().toLowerCase())
-    );
-    const hvNote = matchFuel ? `ค่าความร้อนจากแลป <strong>${r.hvLabValue} ${r.hvUnit}</strong> (ค่าในระบบ: ${matchFuel.hv} MJ/${matchFuel.unit})` : '';
-
-    document.getElementById('labCostImpact').style.display = 'block';
-    document.getElementById('labCostImpact').innerHTML = `
-      <div style="font-weight:800;color:var(--gold);margin-bottom:10px">💰 ผลกระทบต่อต้นทุน</div>
-      ${hvNote ? `<div style="font-size:12px;color:#93C5FD;margin-bottom:10px">${hvNote}</div>` : ''}
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#93C5FD">เชื้อเพลิงเปรียบเทียบ</div>
-          <div style="font-size:14px;font-weight:800;color:#fff">${compareFuel.name}</div>
-          <div style="font-size:16px;font-weight:800;color:#4ADE80">฿${refCPM.toFixed(3)}/MJ</div>
-          <div style="font-size:11px;color:#94A3B8">฿${fmt(refCost)}/เดือน</div>
-        </div>
-        <div style="background:rgba(255,255,255,.08);border-radius:8px;padding:10px;text-align:center">
-          <div style="font-size:10px;color:#93C5FD">แนะนำ</div>
-          <div style="font-size:12px;color:#fff;line-height:1.5">ใช้ค่า HV จากแลปใส่ในตารางด้านบนเพื่อคำนวณที่แม่นยำยิ่งขึ้น</div>
-          ${matchFuel ? `<button class="btn btn-gold" style="margin-top:8px;padding:5px 12px;font-size:11px" onclick="applyLabHV('${matchFuel.id}',${r.hvLabValue},'${r.hvUnit}')">✅ ใช้ค่านี้</button>` : ''}
-        </div>
-      </div>`;
-  }
-}
-
-function applyLabHV(fuelId, hvVal, hvUnit) {
-  // Convert to MJ if needed and apply to fuel
-  const f = FUELS.find(x => x.id === fuelId);
-  if (!f) return;
-  // Simple conversion: if unit contains kcal, convert
-  let mjVal = hvVal;
-  if (hvUnit.toLowerCase().includes('kcal')) mjVal = hvVal / 238.846;
-  else if (hvUnit.toLowerCase().includes('btu')) mjVal = hvVal / 947.817;
-  else if (hvUnit.toLowerCase().includes('kwh')) mjVal = hvVal * 3.6;
-
-  f.hv = parseFloat(mjVal.toFixed(2));
-  const el = document.getElementById('hv_' + fuelId);
-  if (el) el.value = toHVDisplay(f.hv);
-  updateCPM(f);
-  calc();
-  alert(`✅ อัปเดตค่าความร้อน ${f.name} เป็น ${f.hv} MJ/${f.unit} แล้ว`);
+    <div style="font-weight:800;font-size:13px;margin-bottom:10px">📋 สรุปผลการวิเคราะห์</div>
+    <div style="display:grid;grid-template-columns:repeat(${results.length},1fr);gap:8px">${summaryHtml}</div>`;
 }
 
 function resetLab() {
-  labFileData = null;
-  document.getElementById('labUploadArea').innerHTML = `
-    <div style="font-size:32px;margin-bottom:8px">📄</div>
-    <div style="font-weight:700;color:var(--navy);margin-bottom:4px">ลากไฟล์มาวางที่นี่ หรือคลิกเพื่อเลือก</div>
-    <div style="font-size:11px;color:var(--muted)">รองรับ PDF, PNG, JPG, JPEG · ขนาดไม่เกิน 10MB</div>
-    <input type="file" id="labFileInput" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="handleLabFile(this.files[0])">`;
+  labFiles = [null,null,null]; labFileTypes = [null,null,null]; labFileNames = ['','',''];
+  [0,1,2].forEach(i => {
+    const slot = document.getElementById(`labSlot${i}`);
+    if (!slot) return;
+    const labels = ['ไฟล์ที่ 1','ไฟล์ที่ 2 (เปรียบเทียบ)','ไฟล์ที่ 3 (เปรียบเทียบ)'];
+    slot.innerHTML = `<div style="font-size:22px;margin-bottom:4px">📄</div><div style="font-size:11px;font-weight:700;color:var(--navy)">${labels[i]}</div><div style="font-size:9px;color:var(--muted)">คลิกเพื่อเลือก</div><input type="file" id="labFile${i}" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(${i},this.files[0])">`;
+    slot.style.borderColor = 'var(--border)'; slot.style.background = '#FAFBFC';
+  });
   document.getElementById('labStatus').style.display = 'none';
   document.getElementById('labResults').style.display = 'none';
+  [0,1,2].forEach(i => { const th=document.getElementById(`labTh${i}`); if(th&&i>0)th.style.display='none'; });
 }
 
 // Init equiv panel also re-init lab
@@ -2418,7 +2384,7 @@ updateFeaturedBanner();
 (async () => {
   const cloudLoaded = await loadSponsorsFromCloud();
   await loadSlotsFromCloud();
-  if (cloudLoaded) renderFuelTable(); // re-render with cloud sponsors
+  if (cloudLoaded) { renderFuelTable(); renderSideSponsors(); updateFeaturedBanner(); }
 })();
 init();
 </script>
@@ -2563,10 +2529,13 @@ function saAuth() {
 }
 
 function renderSaRows() {
-  // Reload fresh from admin data each time
   SPONSOR_REGISTRY = loadSponsorRegistry();
+  // Ensure sp_none always exists
+  if (!SPONSOR_REGISTRY.find(s=>s.id==='sp_none')) {
+    SPONSOR_REGISTRY.push({id:'sp_none',name:'สอบถามราคา (ไม่มี Sponsor)',shortName:'สอบถามราคา',logo:'📞',verified:false,package:'listed'});
+  }
   const spOpts = SPONSOR_REGISTRY.map(s =>
-    `<option value="${s.id}">${s.logo} ${s.shortName}</option>`
+    `<option value="${s.id}">${s.logo||'🏭'} ${s.shortName||s.name}</option>`
   ).join('');
 
   document.getElementById('saRows').innerHTML = FUELS.map(f => {
@@ -2575,15 +2544,15 @@ function renderSaRows() {
     <div class="sa-row">
       <div style="text-align:center">
         <input type="checkbox" ${slot.show?'checked':''} style="width:16px;height:16px;cursor:pointer;accent-color:var(--green)"
-          onchange="updateSlot('${f.id}','show',this.checked)">
+          onchange="updateSlot('${f.id}','show',this.checked)" title="เปิด/ปิดปุ่มขอราคา">
       </div>
-      <div class="sa-fuel" style="color:${f.color}">${f.name}</div>
+      <div class="sa-fuel" style="color:${f.color};font-size:11px">${f.name}</div>
       <select class="sa-sel" onchange="updateSlot('${f.id}','sponsorId',this.value)">
         ${spOpts.replace(`value="${slot.sponsorId}"`, `value="${slot.sponsorId}" selected`)}
       </select>
-      <input class="sa-inp" value="${slot.btnText}" maxlength="12"
+      <input class="sa-inp" value="${slot.btnText}" maxlength="14"
         onchange="updateSlot('${f.id}','btnText',this.value)"
-        placeholder="ข้อความ">
+        placeholder="ข้อความปุ่ม">
     </div>`;
   }).join('');
 }
