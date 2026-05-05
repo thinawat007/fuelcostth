@@ -297,7 +297,9 @@ footer a{color:var(--blue);text-decoration:none}
       <div class="profile-avatar" id="profileAvatar">?</div>
       <span class="profile-name" id="profileName">—</span>
     </div>
-    <button class="btn btn-ghost" id="slotAdminBtn" onclick="openSlotAdmin()" title="จัดการ Sponsor per Fuel" style="font-size:11px;padding:4px 10px">⚙️ Slot</button>
+    <button class="btn btn-ghost" id="slotAdminBtn" onclick="openSlotAdmin()"
+      style="font-size:11px;padding:4px 10px;border:1px solid rgba(255,255,255,.3)"
+      title="เปิด/ปิดปุ่มซัพพลายเออร์ · เลือก Sponsor · ตั้งค่า API Key">⚙️ Slot</button>
     <button class="btn btn-ghost" onclick="exportExcel()">📊 Excel</button>
     <button class="btn btn-gold" onclick="exportPDF()">📄 PDF</button>
   </div>
@@ -454,7 +456,7 @@ footer a{color:var(--blue);text-decoration:none}
         <th style="min-width:70px">หน่วย</th>
         <th style="min-width:140px">ค่าความร้อน <span style="font-weight:400;font-size:9px;color:var(--muted)">(เลือกหน่วยได้)</span></th>
         <th style="min-width:80px;text-align:right">฿/MJ</th>
-        <th style="min-width:100px">ซัพพลายเออร์</th>
+        <th style="min-width:100px">ซัพพลายเออร์ <span style="font-size:9px;font-weight:400;color:var(--muted)" title="เปิด/ปิดที่ ⚙️ Slot">⚙️</span></th>
       </tr>
     </thead>
     <tbody id="fuelRows"></tbody>
@@ -664,13 +666,6 @@ footer a{color:var(--blue);text-decoration:none}
   Powered by FuelCostTH.com · เปรียบเทียบต้นทุนพลังงานฟรี
 </div>
 </div><!-- /layout -->
-
-<!-- BOTTOM DOWNLOAD BAR -->
-<div style="background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
-  <span style="color:#93C5FD;font-size:12px">📥 บันทึกรายงาน:</span>
-  <button class="btn" style="background:#10B981;color:#fff;padding:8px 20px;font-size:13px" onclick="exportExcel()">📊 ดาวน์โหลด Excel</button>
-  <button class="btn btn-gold" style="padding:8px 20px;font-size:13px" onclick="exportPDF()">📄 ดาวน์โหลด PDF</button>
-</div>
 
 <footer>
   ⚡ <strong style="color:#fff">FuelCostTH.com</strong> — เปรียบเทียบต้นทุนพลังงานฟรี |
@@ -979,28 +974,41 @@ async function loadSponsorsFromCloud() {
       .order('created_at', { ascending: false });
     if (error || !data?.length) return false;
 
-    // Map to SPONSOR_REGISTRY format
+    // Map Supabase format → SPONSOR_REGISTRY format
     SPONSOR_REGISTRY.length = 0;
     data.forEach(s => SPONSOR_REGISTRY.push({
       id:           s.id,
       name:         s.name,
       shortName:    s.short_name || s.name.substring(0,14),
-      logo:         s.logo_url || '🏭',   // URL หรือ emoji
-      logoIsUrl:    s.logo_url?.startsWith('http'),
+      logo:         s.logo_url || '🏭',
+      logoUrl:      s.logo_url || null,
       verified:     s.verified || false,
       tag:          s.tag || '',
+      fuelType:     s.fuel_types || '',
       displayPrice: s.display_price || '',
       email:        s.email || '',
       phone:        s.phone || '',
       package:      s.package,
+      status:       'active',
     }));
-    SPONSOR_REGISTRY.push({ id:'sp_none', name:'ติดต่อซัพพลายเออร์', shortName:'สอบถามราคา', logo:'📞', verified:false });
+    SPONSOR_REGISTRY.push({ id:'sp_none', name:'ติดต่อซัพพลายเออร์', shortName:'สอบถามราคา', logo:'📞', verified:false, package:'listed' });
 
-    // Update featured banner
+    // Update featured banner from Supabase data
     const featured = data.find(s => s.package === 'featured' || s.package === 'exclusive');
-    if (featured) updateFeaturedBannerData(featured);
+    if (featured) {
+      // Convert Supabase columns to banner format
+      updateFeaturedBannerData({
+        name:         featured.name,
+        tag:          featured.tag || '',
+        fuelType:     featured.fuel_types || '',
+        displayPrice: featured.display_price || '',
+        logoUrl:      featured.logo_url || null,
+      });
+    }
+
+    renderSideSponsors();
     return true;
-  } catch(e) { return false; }
+  } catch(e) { console.error('Supabase load error:', e); return false; }
 }
 
 // โหลด Fuel Slots จาก Supabase
@@ -1269,42 +1277,42 @@ function getSponsorsForFuel(fuelId) {
 const FUELS = [
   // ─── FOSSIL ───
   {
-    id:'fo_a', name:'น้ำมันเตา A', cat:'fossil', color:'#DC2626', enabled:true, selected:true,
+    id:'fo_a', name:'น้ำมันเตา A', cat:'fossil', color:'#DC2626', enabled:true, selected:false,
     price:24.5, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':38.5,'กก.':43.75,'ปอนด์':19.84},
     hv:38.5, sponsor:null
   },
   {
-    id:'fo_c', name:'น้ำมันเตา C', cat:'fossil', color:'#EA580C', enabled:true, selected:true,
+    id:'fo_c', name:'น้ำมันเตา C', cat:'fossil', color:'#EA580C', enabled:true, selected:false,
     price:20.8, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':39.8,'กก.':42.34,'ปอนด์':19.21},
     hv:39.8, sponsor:null
   },
   {
-    id:'fo_alt', name:'น้ำมันเตาทดแทน', cat:'fossil', color:'#B45309', enabled:true, selected:true,
+    id:'fo_alt', name:'น้ำมันเตาทดแทน', cat:'fossil', color:'#B45309', enabled:true, selected:false,
     price:15.5, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':36.0,'กก.':40.91,'ปอนด์':18.57},
     hv:36.0, sponsor:{name:'TAG Energy',verified:false}
   },
   {
-    id:'lpg', name:'LPG', cat:'fossil', color:'#CA8A04', enabled:true, selected:true,
+    id:'lpg', name:'LPG', cat:'fossil', color:'#CA8A04', enabled:true, selected:false,
     price:22.3, unit:'กก.',
     units:['กก.','ลิตร','ปอนด์'],
     hvByUnit:{'กก.':46.1,'ลิตร':25.3,'ปอนด์':20.91},
     hv:46.1, sponsor:{name:'Thai LPG Industrial',verified:true}
   },
   {
-    id:'lng', name:'LNG', cat:'fossil', color:'#0891B2', enabled:true, selected:true,
+    id:'lng', name:'LNG', cat:'fossil', color:'#0891B2', enabled:true, selected:false,
     price:18.9, unit:'กก.',
     units:['กก.','ลิตร','ปอนด์'],
     hvByUnit:{'กก.':48.6,'ลิตร':22.4,'ปอนด์':22.04},
     hv:48.6, sponsor:{name:'Prism Energy LNG',verified:true}
   },
   {
-    id:'cng', name:'ก๊าซธรรมชาติ (CNG)', cat:'fossil', color:'#0369A1', enabled:true, selected:true,
+    id:'cng', name:'ก๊าซธรรมชาติ (CNG)', cat:'fossil', color:'#0369A1', enabled:true, selected:false,
     price:12.5, unit:'m³',
     units:['m³','กก.'],
     hvByUnit:{'m³':35.9,'กก.':47.1},
@@ -1312,21 +1320,21 @@ const FUELS = [
   },
   // ─── BIOFUEL ───
   {
-    id:'hvo', name:'HVO Biodiesel', cat:'bio', color:'#059669', enabled:true, selected:true,
+    id:'hvo', name:'HVO Biodiesel', cat:'bio', color:'#059669', enabled:true, selected:false,
     price:28.1, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':34.3,'กก.':44.0,'ปอนด์':19.96},
     hv:34.3, sponsor:null
   },
   {
-    id:'b100', name:'B100 ไบโอดีเซล', cat:'bio', color:'#16A34A', enabled:true, selected:true,
+    id:'b100', name:'B100 ไบโอดีเซล', cat:'bio', color:'#16A34A', enabled:true, selected:false,
     price:26.0, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':32.8,'กก.':37.3,'ปอนด์':16.92},
     hv:32.8, sponsor:null
   },
   {
-    id:'b20', name:'B20 (ผสม 20%)', cat:'bio', color:'#22C55E', enabled:true, selected:true,
+    id:'b20', name:'B20 (ผสม 20%)', cat:'bio', color:'#22C55E', enabled:true, selected:false,
     price:21.5, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':35.8,'กก.':41.5,'ปอนด์':18.82},
@@ -1334,21 +1342,21 @@ const FUELS = [
   },
   // ─── BIOMASS ───
   {
-    id:'pellet', name:'Wood Pellet', cat:'biomass', color:'#92400E', enabled:true, selected:true,
+    id:'pellet', name:'Wood Pellet', cat:'biomass', color:'#92400E', enabled:true, selected:false,
     price:4.5, unit:'กก.',
     units:['กก.','ปอนด์','ตัน'],
     hvByUnit:{'กก.':17.5,'ปอนด์':7.94,'ตัน':17500},
     hv:17.5, sponsor:null
   },
   {
-    id:'palm', name:'กะลาปาล์ม', cat:'biomass', color:'#A16207', enabled:true, selected:true,
+    id:'palm', name:'กะลาปาล์ม', cat:'biomass', color:'#A16207', enabled:true, selected:false,
     price:3.2, unit:'กก.',
     units:['กก.','ปอนด์','ตัน'],
     hvByUnit:{'กก.':18.0,'ปอนด์':8.16,'ตัน':18000},
     hv:18.0, sponsor:null
   },
   {
-    id:'rice', name:'แกลบ / ชีวมวล', cat:'biomass', color:'#D97706', enabled:true, selected:true,
+    id:'rice', name:'แกลบ / ชีวมวล', cat:'biomass', color:'#D97706', enabled:true, selected:false,
     price:1.8, unit:'กก.',
     units:['กก.','ปอนด์','ตัน'],
     hvByUnit:{'กก.':13.0,'ปอนด์':5.90,'ตัน':13000},
@@ -1356,7 +1364,7 @@ const FUELS = [
   },
   // ─── GAS ───
   {
-    id:'biogas', name:'Biogas ก๊าซชีวภาพ', cat:'gas', color:'#7C3AED', enabled:true, selected:true,
+    id:'biogas', name:'Biogas ก๊าซชีวภาพ', cat:'gas', color:'#7C3AED', enabled:true, selected:false,
     price:3.5, unit:'m³',
     units:['m³'],
     hvByUnit:{'m³':23.4},
@@ -1364,7 +1372,7 @@ const FUELS = [
   },
   // ─── ELECTRIC ───
   {
-    id:'elec', name:'ไฟฟ้า (Boiler)', cat:'electric', color:'#6366F1', enabled:true, selected:true,
+    id:'elec', name:'ไฟฟ้า (Boiler)', cat:'electric', color:'#6366F1', enabled:true, selected:false,
     price:4.2, unit:'หน่วย',
     units:['หน่วย'],
     hvByUnit:{'หน่วย':3.6},
@@ -2123,17 +2131,26 @@ async function analyzeAllLabs() {
     const results = [];
     for (const idx of activeFiles) {
       document.getElementById('labStatusText').textContent = `วิเคราะห์ไฟล์ที่ ${idx+1}/${activeFiles.length}...`;
-      const prompt = `วิเคราะห์ผลแลปเชื้อเพลิง "${fuelType}" ค่ามาตรฐาน: ${stdText||'มาตรฐานสากล'} ตอบ JSON เท่านั้น:
-{"parameters":[{"name":"ชื่อ","labValue":"ค่า+หน่วย","standard":"มาตรฐาน","diff":"+X%","status":"ผ่าน/ไม่ผ่าน","note":""}],"hvLabValue":0,"hvUnit":"MJ/ลิตร","summary":"สรุป","overallStatus":"ผ่านมาตรฐาน/ไม่ผ่าน"}`;
+
+      // Check API key
+      const apiKey = localStorage.getItem('fct_claude_key') || '';
+      if (!apiKey) {
+        throw new Error('กรุณาใส่ Claude API Key ก่อน (กดปุ่ม ⚙️ Slot → แท็บ API Key)');
+      }
+
+      const prompt = `วิเคราะห์ผลแลปเชื้อเพลิง "${fuelType}" ค่ามาตรฐาน: ${stdText||'มาตรฐานสากล'} ตอบเป็น JSON เท่านั้น ไม่มีข้อความอื่น:
+{"parameters":[{"name":"ชื่อพารามิเตอร์","labValue":"ค่า+หน่วย","standard":"มาตรฐาน","diff":"+X%","status":"ผ่าน","note":""}],"hvLabValue":0,"hvUnit":"MJ/ลิตร","summary":"สรุปคุณภาพ","overallStatus":"ผ่านมาตรฐาน"}`;
+
       const resp = await fetch('https://api.anthropic.com/v1/messages', {
         method:'POST',
         headers:{
           'Content-Type':'application/json',
+          'x-api-key': apiKey,
           'anthropic-version':'2023-06-01',
           'anthropic-dangerous-direct-browser-access':'true'
         },
         body: JSON.stringify({
-          model:'claude-sonnet-4-20250514', max_tokens:1200,
+          model:'claude-sonnet-4-20250514', max_tokens:1500,
           messages:[{role:'user',content:[
             {type: labFileTypes[idx]==='application/pdf'?'document':'image',
              source:{type:'base64',media_type:labFileTypes[idx],data:labFiles[idx]}},
@@ -2141,9 +2158,18 @@ async function analyzeAllLabs() {
           ]}]
         })
       });
+
+      if (!resp.ok) {
+        const errData = await resp.json().catch(()=>({}));
+        throw new Error(errData?.error?.message || `HTTP ${resp.status}`);
+      }
+
       const data = await resp.json();
-      const text = data.content?.[0]?.text||'';
-      results.push(JSON.parse(text.replace(/```json|```/g,'').trim()));
+      const text = data.content?.[0]?.text || '';
+      // Extract JSON from response
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('AI ตอบกลับไม่ได้รูปแบบ JSON — ลองอีกครั้ง');
+      results.push(JSON.parse(jsonMatch[0]));
     }
     renderMultiLabResults(results, activeFiles, fuelType, compareFuel);
   } catch(e) {
@@ -2478,9 +2504,10 @@ function clearProfile() {
       </div>
       <!-- Slot config table (hidden until authed) -->
       <div id="saGrid" style="display:none">
-        <div style="font-size:11px;color:#94A3B8;margin-bottom:10px">
-          เปิด/ปิดปุ่มและเลือก Sponsor — <strong style="color:#FCD34D">บันทึกอัตโนมัติ อัปเดตหน้าเว็บทันที</strong><br>
-          <span style="font-size:10px;color:#64748B">⚠️ Sponsor ต้องเพิ่มใน Admin Panel (fuelcostth.com/FuelCostTH_admin.html) ก่อน จึงจะปรากฏในรายการ</span>
+        <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;line-height:1.9;color:#E2E8F0">
+          <div><strong style="color:#FCD34D">✅ ติ๊ก</strong> = แสดงปุ่มขอใบเสนอราคาในตาราง · <strong style="color:#94A3B8">☐ ไม่ติ๊ก</strong> = ซ่อนปุ่ม</div>
+          <div><strong style="color:#38BDF8">Sponsor ที่ link</strong> = Lead จะส่งไปหาบริษัทนี้</div>
+          <div style="color:#64748B;font-size:10px">⚠️ เพิ่ม Sponsor ได้ที่ <a href="FuelCostTH_admin.html" target="_blank" style="color:#93C5FD">Admin Panel → แท็บ Sponsor</a></div>
         </div>
         <div class="sa-row hdr">
           <div>แสดง</div>
@@ -2489,10 +2516,19 @@ function clearProfile() {
           <div>ข้อความปุ่ม</div>
         </div>
         <div id="saRows"></div>
-        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-blue" style="font-size:12px" onclick="saResetAll()">↺ Reset ทั้งหมด</button>
-          <button class="btn" style="background:rgba(255,255,255,.1);color:#fff;font-size:12px" onclick="closeSlotAdmin()">✓ เสร็จสิ้น</button>
-        </div>
+      <!-- API Key section -->
+      <div id="saApiBox" style="display:none;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:8px;padding:12px 14px;margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:#A5B4FC;margin-bottom:6px">🔑 Claude API Key (สำหรับวิเคราะห์ผลแลป AI)</div>
+        <input type="password" class="sa-inp" id="saApiKey" placeholder="sk-ant-api..." style="width:100%;margin-bottom:6px">
+        <button class="btn btn-blue" style="font-size:11px;padding:4px 12px" onclick="saveApiKey()">บันทึก API Key</button>
+        <div style="font-size:10px;color:#64748B;margin-top:4px">ได้จาก console.anthropic.com → API Keys · เก็บใน browser เท่านั้น</div>
+        <div id="saApiMsg" style="font-size:11px;margin-top:4px"></div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-blue" style="font-size:12px" onclick="saResetAll()">↺ Reset ทั้งหมด</button>
+        <button class="btn" style="background:rgba(124,58,237,.3);color:#A5B4FC;font-size:12px" onclick="document.getElementById('saApiBox').style.display=document.getElementById('saApiBox').style.display==='none'?'block':'none'">🔑 API Key</button>
+        <button class="btn" style="background:rgba(255,255,255,.1);color:#fff;font-size:12px" onclick="closeSlotAdmin()">✓ เสร็จสิ้น</button>
+      </div>
       </div>
     </div>
   </div>
@@ -2529,6 +2565,11 @@ function saAuth() {
 }
 
 function renderSaRows() {
+  // Pre-fill API key if saved
+  const savedKey = localStorage.getItem('fct_claude_key') || '';
+  const apiInput = document.getElementById('saApiKey');
+  if (apiInput && savedKey) apiInput.value = savedKey;
+
   SPONSOR_REGISTRY = loadSponsorRegistry();
   // Ensure sp_none always exists
   if (!SPONSOR_REGISTRY.find(s=>s.id==='sp_none')) {
@@ -2564,6 +2605,14 @@ function updateSlot(fuelId, key, val) {
     saveFuelSlots();
     renderFuelTable(); // update main table live
   }
+}
+
+function saveApiKey() {
+  const key = document.getElementById('saApiKey').value.trim();
+  if (!key.startsWith('sk-ant')) { document.getElementById('saApiMsg').textContent = '❌ Key ไม่ถูกต้อง ต้องขึ้นต้น sk-ant'; return; }
+  localStorage.setItem('fct_claude_key', key);
+  document.getElementById('saApiMsg').style.color = '#4ADE80';
+  document.getElementById('saApiMsg').textContent = '✅ บันทึกแล้ว';
 }
 
 function saResetAll() {
