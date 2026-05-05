@@ -306,21 +306,21 @@ footer a{color:var(--blue);text-decoration:none}
   </div>
 </nav>
 
-<div class="feat">
+<div class="feat" id="featBanner">
   <div class="feat-info">
-    <div class="feat-logo">🟠</div>
+    <div class="feat-logo" id="featLogo">🏭</div>
     <div>
       <div style="margin-bottom:3px"><span class="spbadge">⭐ Featured Sponsor</span></div>
-      <div class="feat-name">บิ๊กแก๊ส เทคโนโลยี จำกัด</div>
-      <div class="feat-tag">LPG & LNG อุตสาหกรรม · ส่งทั่วประเทศ · ISO 9001:2015</div>
+      <div class="feat-name" id="featName">กำลังโหลด...</div>
+      <div class="feat-tag" id="featTag"></div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
     <div style="text-align:right">
-      <div class="feat-price">฿22.30/กก.</div>
-      <div style="color:#93C5FD;font-size:10px">ราคา LPG อัปเดต</div>
+      <div class="feat-price" id="featPrice"></div>
+      <div style="color:#93C5FD;font-size:10px" id="featPriceLabel"></div>
     </div>
-    <button class="btn btn-gold" onclick="openLead('บิ๊กแก๊ส เทคโนโลยี','LPG & LNG')">ขอใบเสนอราคา →</button>
+    <button class="btn btn-gold" id="featBtn" onclick="openLead('','')">ขอใบเสนอราคา →</button>
   </div>
 </div>
 
@@ -1026,22 +1026,46 @@ async function loadSlotsFromCloud() {
 }
 
 function updateFeaturedBannerData(s) {
-  const nameEl  = document.querySelector('.feat-name');
-  const tagEl   = document.querySelector('.feat-tag');
-  const priceEl = document.querySelector('.feat-price');
-  const logoEl  = document.querySelector('.feat-logo');
-  const btnEl   = document.querySelector('.feat button.btn-gold');
-  if (nameEl)  nameEl.textContent  = s.name;
-  if (tagEl)   tagEl.textContent   = s.tag || '';
-  if (priceEl) priceEl.textContent = s.display_price || '';
-  if (logoEl) {
-    if (s.logo_url?.startsWith('http')) {
-      logoEl.innerHTML = `<img src="${s.logo_url}" style="width:44px;height:44px;object-fit:contain;border-radius:6px" onerror="this.parentElement.textContent='🏭'">`;
-    } else {
-      logoEl.textContent = s.logo_url || '🏭';
-    }
+  // s can be from localStorage admin or Supabase
+  const name     = s.name         || s.name         || '—';
+  const tag      = s.tag          || s.fuelType      || '';
+  const price    = s.display_price|| s.displayPrice  || '';
+  const logoUrl  = s.logo_url     || s.logoUrl       || null;
+  const fuelType = s.fuel_types   || s.fuelType      || tag;
+
+  document.getElementById('featName').textContent = name;
+  document.getElementById('featTag').textContent  = tag;
+  document.getElementById('featPrice').textContent = price;
+  document.getElementById('featPriceLabel').textContent = fuelType ? `ราคา ${fuelType} อัปเดต` : '';
+  document.getElementById('featBtn').setAttribute('onclick', `openLead('${name}','${fuelType}')`);
+
+  // Logo — image or emoji
+  const logoEl = document.getElementById('featLogo');
+  if (logoUrl && logoUrl.startsWith('http')) {
+    logoEl.innerHTML = `<img src="${logoUrl}" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:3px" onerror="this.parentElement.textContent='🏭'">`;
+  } else {
+    logoEl.textContent = logoUrl || '🏭';
   }
-  if (btnEl) btnEl.setAttribute('onclick', `openLead('${s.name}','${s.tag||''}')`);
+}
+
+function updateFeaturedBanner() {
+  try {
+    // Try Supabase-pushed data first
+    const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
+    const sponsors = adminData.sponsors || [];
+    const featured = sponsors.find(s =>
+      (s.package === 'featured' || s.package === 'exclusive') && s.status === 'active'
+    );
+    if (featured) { updateFeaturedBannerData(featured); return; }
+  } catch(e) {}
+  // Default fallback
+  document.getElementById('featName').textContent = 'ติดต่อเพื่อเป็น Featured Sponsor';
+  document.getElementById('featTag').textContent  = 'โฆษณาต่อกลุ่มฝ่ายจัดซื้อโรงงานโดยตรง';
+  document.getElementById('featLogo').textContent = '⭐';
+  document.getElementById('featPrice').textContent = '';
+  document.getElementById('featPriceLabel').textContent = '';
+  document.getElementById('featBtn').setAttribute('onclick', `openLead('Featured Sponsor','โฆษณา')`);
+  document.getElementById('featBtn').textContent = 'ติดต่อโฆษณา →';
 }
 
 // SQL สำหรับสร้าง Supabase tables (ใช้ใน SQL Editor)
