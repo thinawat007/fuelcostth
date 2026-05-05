@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FuelCostTH Admin — จัดการ Sponsor</title>
 <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{
   --navy:#0F2A5E;--navy2:#1B3A7A;--blue:#0EA5E9;--gold:#F59E0B;
@@ -314,6 +315,40 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 
     <!-- TAB 5: SETTINGS -->
     <div class="tab-panel" id="tab-settings">
+      <!-- SUPABASE SETUP -->
+      <div class="card" style="border:1px solid rgba(99,102,241,.4);background:rgba(99,102,241,.08)">
+        <div class="card-title" style="color:#A5B4FC">☁️ Supabase — Real-time Database (ฟรี)</div>
+        <div class="alert alert-info" style="margin-bottom:12px">
+          เชื่อม Supabase เพื่อให้ Sponsor ที่เพิ่มในระบบนี้แสดงบนเว็บสำหรับทุกคนแบบ Real-time · ไม่ต้อง upload ไฟล์ใหม่ทุกครั้ง
+        </div>
+        <div id="sbStatus" style="margin-bottom:12px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,.05)">
+          สถานะ: <span id="sbStatusText" style="color:#94A3B8">ยังไม่ได้เชื่อมต่อ (ใช้ localStorage)</span>
+        </div>
+        <div class="form-row">
+          <div class="form-full">
+            <label class="f-label">Supabase Project URL</label>
+            <input class="f-input" id="sbUrl" placeholder="https://xxxxxxxxxxxx.supabase.co">
+            <div style="font-size:10px;color:#64748B;margin-top:3px">supabase.com → Project → Settings → API → Project URL</div>
+          </div>
+          <div class="form-full">
+            <label class="f-label">Supabase Anon Key (public)</label>
+            <input class="f-input" id="sbKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+            <div style="font-size:10px;color:#64748B;margin-top:3px">Settings → API → anon/public key</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-blue" onclick="saveSbConfig()">🔌 เชื่อมต่อ Supabase</button>
+          <button class="btn btn-ghost" onclick="showSbSQL()">📋 ดู SQL สร้าง Tables</button>
+          <button class="btn btn-green" onclick="pushToSupabase()">⬆️ Push Sponsor ขึ้น Cloud</button>
+        </div>
+        <div id="sbMsg" style="margin-top:8px;font-size:12px"></div>
+        <div id="sbSqlBox" style="display:none;margin-top:12px">
+          <label class="f-label">SQL — วาง/รันใน Supabase SQL Editor</label>
+          <textarea class="f-input" id="sbSqlText" rows="12" style="font-family:monospace;font-size:11px;background:#0F172A;color:#4ADE80" readonly></textarea>
+          <button class="btn btn-ghost" onclick="copySQL()" style="margin-top:6px">📋 Copy SQL</button>
+        </div>
+      </div>
+
       <div class="card">
         <div class="card-title">🔑 เปลี่ยนรหัสผ่าน Admin</div>
         <div class="form-row">
@@ -883,6 +918,105 @@ function editSponsor(id) {
   document.getElementById('sponsorModal').classList.add('open');
 }
 
+// ─── SUPABASE CONFIG ─────────────────────────
+const SUPABASE_SQL_TEMPLATE = `-- วางและรันใน Supabase SQL Editor
+CREATE TABLE IF NOT EXISTS fct_sponsors (
+  id            TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  name          TEXT NOT NULL,
+  short_name    TEXT,
+  logo_url      TEXT,
+  package       TEXT DEFAULT 'listed',
+  price         INTEGER DEFAULT 3000,
+  tag           TEXT,
+  display_price TEXT,
+  fuel_types    TEXT,
+  email         TEXT,
+  phone         TEXT,
+  verified      BOOLEAN DEFAULT false,
+  status        TEXT DEFAULT 'active',
+  created_at    TIMESTAMPTZ DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS fct_fuel_slots (
+  fuel_id    TEXT PRIMARY KEY,
+  show       BOOLEAN DEFAULT true,
+  sponsor_id TEXT,
+  btn_text   TEXT DEFAULT 'ขอใบเสนอราคา'
+);
+ALTER TABLE fct_sponsors   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fct_fuel_slots ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public_read_sp"    ON fct_sponsors   FOR SELECT USING (true);
+CREATE POLICY "public_read_slots" ON fct_fuel_slots FOR SELECT USING (true);
+CREATE POLICY "auth_write_sp"     ON fct_sponsors   FOR ALL USING (true);
+CREATE POLICY "auth_write_slots"  ON fct_fuel_slots FOR ALL USING (true);`;
+
+function saveSbConfig() {
+  const url = document.getElementById('sbUrl').value.trim();
+  const key = document.getElementById('sbKey').value.trim();
+  if (!url || !key) { showSbMsg('กรุณาใส่ URL และ Key', 'red'); return; }
+  localStorage.setItem('fct_sb_url', url);
+  localStorage.setItem('fct_sb_key', key);
+  document.getElementById('sbStatusText').textContent = '✅ บันทึกแล้ว — Reload หน้าเว็บเพื่อเชื่อมต่อ';
+  document.getElementById('sbStatusText').style.color = '#4ADE80';
+  showSbMsg('✅ บันทึก Config สำเร็จ กรุณา Reload หน้าเว็บหลัก (fuelcostth.com)', 'green');
+}
+
+function showSbSQL() {
+  const box = document.getElementById('sbSqlBox');
+  document.getElementById('sbSqlText').value = SUPABASE_SQL_TEMPLATE;
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+}
+
+function copySQL() {
+  navigator.clipboard.writeText(document.getElementById('sbSqlText').value);
+  showSbMsg('✅ Copy SQL แล้ว — ไปวางใน Supabase SQL Editor', 'green');
+}
+
+async function pushToSupabase() {
+  const url = localStorage.getItem('fct_sb_url');
+  const key = localStorage.getItem('fct_sb_key');
+  if (!url || !key) { showSbMsg('กรุณาเชื่อมต่อ Supabase ก่อน', 'red'); return; }
+  if (!window.supabase) { showSbMsg('โหลด Supabase SDK ไม่ได้', 'red'); return; }
+
+  showSbMsg('⏳ กำลัง Push ข้อมูล...', 'gold');
+  try {
+    const sb = window.supabase.createClient(url, key);
+    // Push sponsors
+    const sponsors = state.sponsors.map(s => ({
+      id: s.id, name: s.name, short_name: s.name.substring(0,20),
+      logo_url: null, package: s.package, price: s.price,
+      tag: s.tag, display_price: s.displayPrice,
+      email: s.email, phone: s.phone,
+      verified: s.package === 'verified' || s.package === 'featured',
+      status: s.status,
+    }));
+    const { error: spErr } = await sb.from('fct_sponsors').upsert(sponsors);
+    if (spErr) throw spErr;
+
+    showSbMsg(`✅ Push สำเร็จ! Sponsor ${sponsors.length} ราย ขึ้น Cloud แล้ว — เว็บจะแสดงข้อมูลใหม่ทันที`, 'green');
+  } catch(e) {
+    showSbMsg('❌ Error: ' + e.message, 'red');
+  }
+}
+
+function showSbMsg(text, color) {
+  const el = document.getElementById('sbMsg');
+  const colors = { green:'#4ADE80', red:'#F87171', gold:'#FCD34D' };
+  el.style.color = colors[color] || '#fff';
+  el.textContent = text;
+  setTimeout(()=>{ el.textContent=''; }, 8000);
+}
+
+function loadSbConfig() {
+  const url = localStorage.getItem('fct_sb_url');
+  const key = localStorage.getItem('fct_sb_key');
+  if (url) document.getElementById('sbUrl').value = url;
+  if (key) document.getElementById('sbKey').value = key;
+  if (url && key) {
+    document.getElementById('sbStatusText').textContent = '✅ มี Config — เชื่อมต่อแล้ว';
+    document.getElementById('sbStatusText').style.color = '#4ADE80';
+  }
+}
+
 function saveSponsor() {
   const name = document.getElementById('spName').value.trim();
   if (!name) { alert('กรุณาใส่ชื่อบริษัท'); return; }
@@ -1007,6 +1141,7 @@ function renderAll() {
   renderRotation();
   renderSettings();
   loadContactSettings();
+  loadSbConfig();
 }
 
 // ═══════════════════════════════════════════════════════
