@@ -187,7 +187,25 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 
     <!-- TAB 2: SLOT MANAGEMENT -->
     <div class="tab-panel" id="tab-slots">
-      <div class="alert alert-info">📍 ตำแหน่งโฆษณาทั้งหมดบน FuelCostTH.com ที่มีอยู่ตอนนี้</div>
+      <!-- Position Guide -->
+      <div class="card" style="background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.3);margin-bottom:12px">
+        <div class="card-title" style="color:#38BDF8">🗺️ แผนผังตำแหน่งโฆษณาบนเว็บ</div>
+        <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:12px">
+          <div style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:8px;padding:10px">
+            <strong style="color:#F59E0B">⭐ Featured/Exclusive Banner (บนสุด)</strong> — แถบยาวเต็มหน้า · ฿12,000–25,000/เดือน<br>
+            <span style="color:#94A3B8">ควบคุมโดย: Package = featured หรือ exclusive ใน Tab Sponsor</span>
+          </div>
+          <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:10px">
+            <strong style="color:#10B981">✓ Verified Sponsor (คอลัมน์ขวา)</strong> — Card ขนาดกลาง · ฿6,000/เดือน<br>
+            <span style="color:#94A3B8">ควบคุมโดย: Package = verified ใน Tab Sponsor → แสดงทุกราย Active</span>
+          </div>
+          <div style="background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);border-radius:8px;padding:10px">
+            <strong style="color:#94A3B8">📋 Listed/Slot (ตาราง per-fuel)</strong> — ปุ่มขอราคาข้างแต่ละเชื้อเพลิง · ฿3,000/เดือน<br>
+            <span style="color:#64748B">ควบคุมโดย: ปุ่ม ⚙️ Slot ในหน้าเว็บ หรือ Mapping tab ด้านล่าง</span>
+          </div>
+        </div>
+      </div>
+      <div class="alert alert-info">📍 Slot ด้านล่างคือตำแหน่งที่กำหนดเองได้ (นอกจาก Featured และ Verified ที่ auto จาก Package)</div>
       <div class="slot-grid" id="slotGrid"></div>
       <div class="card">
         <div class="card-title">➕ เพิ่มพื้นที่โฆษณาใหม่</div>

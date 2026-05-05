@@ -10,10 +10,7 @@
 <style>
 :root{--navy:#0F2A5E;--navy2:#1B3A7A;--blue:#0EA5E9;--gold:#F59E0B;--green:#059669;--green2:#10B981;--red:#DC2626;--gray:#64748B;--lgray:#F1F5F9;--border:#E2E8F0;--white:#FFFFFF;--dark:#0F172A;--text:#1E293B;--muted:#94A3B8}
 *{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden}
 body{font-family:'Sarabun',sans-serif;background:var(--lgray);color:var(--text);font-size:14px;line-height:1.5}
-/* Prevent any element from causing horizontal scroll */
-.layout,.main-col,.card,.feat,.ssp{max-width:100%}
 img{max-width:100%}
 body{font-family:'Sarabun',sans-serif;background:var(--lgray);color:var(--text);font-size:14px;line-height:1.5}
 nav{background:var(--navy);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.3)}
@@ -618,41 +615,8 @@ footer a{color:var(--blue);text-decoration:none}
 
 <div class="side-col">
 
-  <!-- Sponsor 1 -->
-  <div class="ssp" style="background:#FFFBEB;border-color:#FCD34D">
-    <div class="ssp-head">
-      <div class="slogo">🟠</div>
-      <div><div class="sname">Thai LPG Industrial</div><div class="stype" style="color:var(--gold)">✓ Verified Price</div></div>
-      <span class="spbadge" style="margin-left:auto;font-size:8px">Verified</span>
-    </div>
-    <div class="sprice">฿22.30<span style="font-size:12px;font-weight:400;color:var(--gray)">/กก.</span></div>
-    <div class="sprice-label">อัปเดต 3 พ.ค. 2569</div>
-    <button class="btn btn-gold scta" onclick="openLead('Thai LPG Industrial','LPG')">ขอใบเสนอราคา</button>
-    <div class="sinfo">✓ ส่งทั่วไทย · MOQ 500 กก. · ตอบ 24 ชม.</div>
-  </div>
-
-  <!-- Sponsor 2 -->
-  <div class="ssp" style="background:#F0FDF4;border-color:#86EFAC">
-    <div class="ssp-head">
-      <div class="slogo">🔵</div>
-      <div><div class="sname">Prism Energy LNG</div><div class="stype" style="color:var(--green)">✓ Verified Price</div></div>
-      <span class="spbadge" style="margin-left:auto;font-size:8px;background:rgba(5,150,105,.1);color:var(--green);border-color:var(--green)">Verified</span>
-    </div>
-    <div class="sprice" style="color:var(--green)">฿18.90<span style="font-size:12px;font-weight:400;color:var(--gray)">/กก.</span></div>
-    <div class="sprice-label">อัปเดต 1 พ.ค. 2569</div>
-    <button class="btn btn-green scta" onclick="openLead('Prism Energy LNG','LNG')">ขอใบเสนอราคา</button>
-    <div class="sinfo">✓ ระบบ LNG ครบ · ติดตั้งฟรี · ประกัน 2 ปี</div>
-  </div>
-
-  <!-- Sponsor 3 -->
-  <div class="ssp">
-    <div class="ssp-head">
-      <div class="slogo">🌿</div>
-      <div><div class="sname">TAG Energy</div><div class="stype">น้ำมันเตาทดแทน / Green</div></div>
-    </div>
-    <div style="font-size:11px;color:var(--gray);margin-bottom:7px;line-height:1.5">ใช้แทนน้ำมันเตาได้ทันที ไม่ต้องเปลี่ยนอุปกรณ์ ราคาถูกกว่า 20–30%</div>
-    <button class="btn btn-navy scta" onclick="openLead('TAG Energy','น้ำมันเตาทดแทน')">สอบถามราคา</button>
-  </div>
+  <!-- Dynamic Sidebar Sponsors (loaded from admin) -->
+  <div id="sideSponsors"></div>
 
   <!-- Tips -->
   <div class="card">
@@ -664,14 +628,15 @@ footer a{color:var(--blue);text-decoration:none}
     <div class="tip-item"><div class="tip-num">5</div><div>Export PDF ส่งผู้บริหารได้เลย</div></div>
   </div>
 
-  <!-- Revenue preview -->
+  <!-- Revenue preview + Slot prices -->
   <div class="card" style="background:var(--dark);color:#fff">
-    <div class="card-title" style="color:var(--gold);font-size:12px">💰 รายได้ Sponsor (ตัวอย่าง)</div>
-    <div class="rev-item"><span style="color:#94A3B8">Featured</span><span style="font-weight:700;color:#C084FC">฿12,000</span></div>
-    <div class="rev-item"><span style="color:#94A3B8">Verified ×2</span><span style="font-weight:700;color:var(--gold)">฿12,000</span></div>
-    <div class="rev-item"><span style="color:#94A3B8">Listed ×1</span><span style="font-weight:700;color:#60A5FA">฿3,000</span></div>
-    <div class="rev-item"><span style="color:#94A3B8">Lead Fee ×20</span><span style="font-weight:700;color:var(--green2)">฿16,000</span></div>
-    <div class="rev-item"><span>รวม/เดือน</span><span style="font-weight:700;color:var(--green2);font-size:15px">฿43,000</span></div>
+    <div class="card-title" style="color:var(--gold);font-size:12px">📍 พื้นที่โฆษณาด้านขวา</div>
+    <div class="rev-item"><span style="color:#94A3B8">Verified Sponsor</span><span style="font-weight:700;color:#10B981">฿6,000/เดือน</span></div>
+    <div class="rev-item"><span style="color:#94A3B8">Listed Sponsor</span><span style="font-weight:700;color:#60A5FA">฿3,000/เดือน</span></div>
+    <div style="font-size:10px;color:#475569;margin-top:8px;padding-top:8px;border-top:1px solid #1E293B">
+      ⚙️ กำหนดในหน้า Admin → <strong style="color:#FCD34D">แท็บ Slot</strong><br>
+      เพิ่ม Sponsor ใน Admin → แท็บ <strong style="color:#FCD34D">Sponsor</strong>
+    </div>
   </div>
 
 </div><!-- /side-col -->
@@ -1026,20 +991,20 @@ async function loadSlotsFromCloud() {
 }
 
 function updateFeaturedBannerData(s) {
-  // s can be from localStorage admin or Supabase
-  const name     = s.name         || s.name         || '—';
-  const tag      = s.tag          || s.fuelType      || '';
-  const price    = s.display_price|| s.displayPrice  || '';
-  const logoUrl  = s.logo_url     || s.logoUrl       || null;
-  const fuelType = s.fuel_types   || s.fuelType      || tag;
+  const name     = s.name || '—';
+  const tag      = s.tag || '';                              // tagline ของบริษัท
+  const fuelType = s.fuelType || s.fuel_types || '';         // ประเภทเชื้อเพลิง
+  const price    = s.displayPrice || s.display_price || '';
+  const logoUrl  = s.logoUrl || s.logo_url || null;
 
-  document.getElementById('featName').textContent = name;
-  document.getElementById('featTag').textContent  = tag;
+  document.getElementById('featName').textContent  = name;
+  // แสดง tag (tagline) ไว้ใต้ชื่อ ถ้าไม่มีให้แสดง fuelType แทน
+  document.getElementById('featTag').textContent   = tag || fuelType;
   document.getElementById('featPrice').textContent = price;
-  document.getElementById('featPriceLabel').textContent = fuelType ? `ราคา ${fuelType} อัปเดต` : '';
-  document.getElementById('featBtn').setAttribute('onclick', `openLead('${name}','${fuelType}')`);
+  // แสดง fuelType ใต้ราคา เช่น "ราคาน้ำมันทดแทนเกรด LOW SULFUR อัปเดต"
+  document.getElementById('featPriceLabel').textContent = fuelType ? `ราคา${fuelType} อัปเดต` : (price ? 'ราคาอัปเดต' : '');
+  document.getElementById('featBtn').setAttribute('onclick', `openLead('${name}','${fuelType||tag}')`);
 
-  // Logo — image or emoji
   const logoEl = document.getElementById('featLogo');
   if (logoUrl && logoUrl.startsWith('http')) {
     logoEl.innerHTML = `<img src="${logoUrl}" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#fff;padding:3px" onerror="this.parentElement.textContent='🏭'">`;
@@ -1048,24 +1013,65 @@ function updateFeaturedBannerData(s) {
   }
 }
 
+// ── RENDER SIDEBAR SPONSORS (from admin data) ──
+function renderSideSponsors() {
+  try {
+    const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
+    const sponsors  = (adminData.sponsors || []).filter(s => s.status === 'active');
+    const el = document.getElementById('sideSponsors');
+    if (!el) return;
+
+    if (!sponsors.length) {
+      el.innerHTML = `<div class="ssp" style="text-align:center;color:var(--muted);font-size:12px;padding:16px">
+        <div style="font-size:24px;margin-bottom:6px">📢</div>
+        พื้นที่โฆษณา Verified<br>฿6,000/เดือน<br>
+        <a href="mailto:vkpintertrade@gmail.com" style="color:var(--blue);font-size:11px">ติดต่อโฆษณา</a>
+      </div>`;
+      return;
+    }
+
+    const pkgColor = { featured:'#F59E0B', verified:'#10B981', listed:'#64748B', exclusive:'#7C3AED' };
+    el.innerHTML = sponsors.map(s => {
+      const color = pkgColor[s.package] || '#64748B';
+      const logoHtml = s.logoUrl?.startsWith('http')
+        ? `<img src="${s.logoUrl}" style="width:38px;height:38px;object-fit:contain;border-radius:6px;background:#fff;padding:2px" onerror="this.parentElement.textContent='🏭'">`
+        : `<span style="font-size:26px">${s.logoUrl||'🏭'}</span>`;
+      return `
+      <div class="ssp" style="border-color:${color}40;background:${color}08">
+        <div class="ssp-head">
+          <div class="slogo">${logoHtml}</div>
+          <div style="flex:1">
+            <div class="sname">${s.name}</div>
+            <div class="stype" style="color:${color}">${s.verified?'✓ Verified Price':s.fuelType||''}</div>
+          </div>
+          <span class="spbadge" style="background:${color}15;color:${color};border-color:${color}40;font-size:8px">${s.package}</span>
+        </div>
+        ${s.displayPrice?`<div class="sprice" style="color:${color}">${s.displayPrice}</div>`:''}
+        ${s.tag?`<div style="font-size:11px;color:var(--gray);margin-bottom:7px;line-height:1.5">${s.tag}</div>`:''}
+        <button class="btn scta" style="background:${color};color:#fff;width:100%;justify-content:center"
+          onclick="openLead('${s.name}','${s.fuelType||''}')">ขอใบเสนอราคา</button>
+      </div>`;
+    }).join('');
+  } catch(e) {}
+}
+
 function updateFeaturedBanner() {
   try {
-    // Try Supabase-pushed data first
     const adminData = JSON.parse(localStorage.getItem('fuelcostth_admin')||'{}');
-    const sponsors = adminData.sponsors || [];
-    const featured = sponsors.find(s =>
-      (s.package === 'featured' || s.package === 'exclusive') && s.status === 'active'
+    const sponsors  = adminData.sponsors || [];
+    const featured  = sponsors.find(s =>
+      (s.package==='featured'||s.package==='exclusive') && s.status==='active'
     );
     if (featured) { updateFeaturedBannerData(featured); return; }
   } catch(e) {}
-  // Default fallback
-  document.getElementById('featName').textContent = 'ติดต่อเพื่อเป็น Featured Sponsor';
-  document.getElementById('featTag').textContent  = 'โฆษณาต่อกลุ่มฝ่ายจัดซื้อโรงงานโดยตรง';
-  document.getElementById('featLogo').textContent = '⭐';
-  document.getElementById('featPrice').textContent = '';
+  // fallback — ว่าง รอ Sponsor
+  document.getElementById('featName').textContent     = 'ติดต่อเพื่อเป็น Featured Sponsor';
+  document.getElementById('featTag').textContent      = 'โฆษณาตรงกลุ่มฝ่ายจัดซื้อโรงงาน · ฿12,000/เดือน';
+  document.getElementById('featLogo').textContent     = '⭐';
+  document.getElementById('featPrice').textContent    = '';
   document.getElementById('featPriceLabel').textContent = '';
-  document.getElementById('featBtn').setAttribute('onclick', `openLead('Featured Sponsor','โฆษณา')`);
-  document.getElementById('featBtn').textContent = 'ติดต่อโฆษณา →';
+  document.getElementById('featBtn').textContent      = 'ติดต่อโฆษณา →';
+  document.getElementById('featBtn').setAttribute('onclick', `location.href='mailto:vkpintertrade@gmail.com'`);
 }
 
 // SQL สำหรับสร้าง Supabase tables (ใช้ใน SQL Editor)
