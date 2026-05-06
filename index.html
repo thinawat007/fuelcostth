@@ -2132,43 +2132,41 @@ async function analyzeAllLabs() {
     for (const idx of activeFiles) {
       document.getElementById('labStatusText').textContent = `วิเคราะห์ไฟล์ที่ ${idx+1}/${activeFiles.length}...`;
 
-      // Check API key
-      const apiKey = localStorage.getItem('fct_claude_key') || '';
-      if (!apiKey) {
-        throw new Error('กรุณาใส่ Claude API Key ก่อน (กดปุ่ม ⚙️ Slot → แท็บ API Key)');
-      }
+      const apiKey = localStorage.getItem('fct_gemini_key') || '';
+      if (!apiKey) throw new Error('กรุณาใส่ Google Gemini API Key ก่อน\n(กด ⚙️ Slot → 🔑 API Key)');
 
-      const prompt = `วิเคราะห์ผลแลปเชื้อเพลิง "${fuelType}" ค่ามาตรฐาน: ${stdText||'มาตรฐานสากล'} ตอบเป็น JSON เท่านั้น ไม่มีข้อความอื่น:
-{"parameters":[{"name":"ชื่อพารามิเตอร์","labValue":"ค่า+หน่วย","standard":"มาตรฐาน","diff":"+X%","status":"ผ่าน","note":""}],"hvLabValue":0,"hvUnit":"MJ/ลิตร","summary":"สรุปคุณภาพ","overallStatus":"ผ่านมาตรฐาน"}`;
+      const prompt = `คุณเป็นผู้เชี่ยวชาญวิเคราะห์ผลทดสอบเชื้อเพลิงอุตสาหกรรม
+วิเคราะห์ผลแลปนี้ของ "${fuelType}" ค่ามาตรฐาน: ${stdText||'มาตรฐานสากล'}
+ตอบเป็น JSON เท่านั้น ไม่มีข้อความอื่น ไม่มี markdown:
+{"parameters":[{"name":"ชื่อพารามิเตอร์","labValue":"ค่า+หน่วย","standard":"มาตรฐาน","diff":"+X%","status":"ผ่าน","note":""}],"hvLabValue":0,"hvUnit":"MJ/ลิตร","summary":"สรุปคุณภาพ 2 ประโยค","overallStatus":"ผ่านมาตรฐาน"}`;
 
-      const resp = await fetch('https://api.anthropic.com/v1/messages', {
-        method:'POST',
-        headers:{
-          'Content-Type':'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version':'2023-06-01',
-          'anthropic-dangerous-direct-browser-access':'true'
-        },
-        body: JSON.stringify({
-          model:'claude-sonnet-4-20250514', max_tokens:1500,
-          messages:[{role:'user',content:[
-            {type: labFileTypes[idx]==='application/pdf'?'document':'image',
-             source:{type:'base64',media_type:labFileTypes[idx],data:labFiles[idx]}},
-            {type:'text',text:prompt}
-          ]}]
-        })
-      });
+      const mimeType = labFileTypes[idx] === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
+      const resp = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { inline_data: { mime_type: mimeType, data: labFiles[idx] } },
+                { text: prompt }
+              ]
+            }],
+            generationConfig: { temperature: 0.1, maxOutputTokens: 1500 }
+          })
+        }
+      );
 
       if (!resp.ok) {
-        const errData = await resp.json().catch(()=>({}));
-        throw new Error(errData?.error?.message || `HTTP ${resp.status}`);
+        const err = await resp.json().catch(()=>({}));
+        throw new Error(err?.error?.message || `HTTP ${resp.status} — ตรวจสอบ API Key`);
       }
 
       const data = await resp.json();
-      const text = data.content?.[0]?.text || '';
-      // Extract JSON from response
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
       const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) throw new Error('AI ตอบกลับไม่ได้รูปแบบ JSON — ลองอีกครั้ง');
+      if (!jsonMatch) throw new Error('AI ตอบกลับไม่ใช่ JSON — ลองอีกครั้ง');
       results.push(JSON.parse(jsonMatch[0]));
     }
     renderMultiLabResults(results, activeFiles, fuelType, compareFuel);
@@ -2517,11 +2515,13 @@ function clearProfile() {
         </div>
         <div id="saRows"></div>
       <!-- API Key section -->
-      <div id="saApiBox" style="display:none;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:8px;padding:12px 14px;margin-top:12px">
-        <div style="font-size:12px;font-weight:700;color:#A5B4FC;margin-bottom:6px">🔑 Claude API Key (สำหรับวิเคราะห์ผลแลป AI)</div>
-        <input type="password" class="sa-inp" id="saApiKey" placeholder="sk-ant-api..." style="width:100%;margin-bottom:6px">
+      <div id="saApiBox" style="display:none;background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.3);border-radius:8px;padding:12px 14px;margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:#93C5FD;margin-bottom:6px">🤖 Google Gemini API Key (ฟรี 1,500 ครั้ง/วัน)</div>
+        <input type="password" class="sa-inp" id="saApiKey" placeholder="AIza..." style="width:100%;margin-bottom:6px">
         <button class="btn btn-blue" style="font-size:11px;padding:4px 12px" onclick="saveApiKey()">บันทึก API Key</button>
-        <div style="font-size:10px;color:#64748B;margin-top:4px">ได้จาก console.anthropic.com → API Keys · เก็บใน browser เท่านั้น</div>
+        <div style="font-size:10px;color:#64748B;margin-top:4px">
+          ได้ฟรีที่ <a href="https://aistudio.google.com/apikey" target="_blank" style="color:#93C5FD">aistudio.google.com/apikey</a> → Create API Key
+        </div>
         <div id="saApiMsg" style="font-size:11px;margin-top:4px"></div>
       </div>
       <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
@@ -2566,7 +2566,7 @@ function saAuth() {
 
 function renderSaRows() {
   // Pre-fill API key if saved
-  const savedKey = localStorage.getItem('fct_claude_key') || '';
+  const savedKey = localStorage.getItem('fct_gemini_key') || '';
   const apiInput = document.getElementById('saApiKey');
   if (apiInput && savedKey) apiInput.value = savedKey;
 
@@ -2609,10 +2609,14 @@ function updateSlot(fuelId, key, val) {
 
 function saveApiKey() {
   const key = document.getElementById('saApiKey').value.trim();
-  if (!key.startsWith('sk-ant')) { document.getElementById('saApiMsg').textContent = '❌ Key ไม่ถูกต้อง ต้องขึ้นต้น sk-ant'; return; }
-  localStorage.setItem('fct_claude_key', key);
+  if (!key.startsWith('AIza')) {
+    document.getElementById('saApiMsg').style.color='#FCA5A5';
+    document.getElementById('saApiMsg').textContent = '❌ Key ไม่ถูกต้อง ต้องขึ้นต้น AIza';
+    return;
+  }
+  localStorage.setItem('fct_gemini_key', key);
   document.getElementById('saApiMsg').style.color = '#4ADE80';
-  document.getElementById('saApiMsg').textContent = '✅ บันทึกแล้ว';
+  document.getElementById('saApiMsg').textContent = '✅ บันทึกแล้ว พร้อมวิเคราะห์ผลแลปได้เลย';
 }
 
 function saResetAll() {
