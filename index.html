@@ -471,100 +471,6 @@ footer a{color:var(--blue);text-decoration:none}
 </div>
 
 <!-- ═══ LAB RESULT ANALYZER ═══ -->
-<div class="card" id="labCard">
-  <div class="card-title">🧪 วิเคราะห์ผลแลปเชื้อเพลิง <span style="font-size:11px;font-weight:400;color:var(--blue);background:#EFF6FF;padding:2px 8px;border-radius:10px">✨ AI-Powered</span></div>
-  <div style="font-size:12px;color:var(--gray);margin-bottom:14px;line-height:1.6">
-    อัปโหลดผลแลป 1–3 ไฟล์ (PDF หรือรูปภาพ) — AI จะอ่านและ<strong>เปรียบเทียบพร้อมกัน</strong>อัตโนมัติ
-  </div>
-
-  <!-- Multi-file upload slots -->
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px" id="labSlots">
-    <!-- Slot 1 -->
-    <div class="lab-slot" id="labSlot0" onclick="document.getElementById('labFile0').click()"
-      style="border:2px dashed var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;background:#FAFBFC;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center">
-      <div style="font-size:22px;margin-bottom:4px">📄</div>
-      <div style="font-size:11px;font-weight:700;color:var(--navy)">ไฟล์ที่ 1</div>
-      <div style="font-size:9px;color:var(--muted)">คลิกเพื่อเลือก</div>
-      <input type="file" id="labFile0" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(0,this.files[0])">
-    </div>
-    <!-- Slot 2 -->
-    <div class="lab-slot" id="labSlot1" onclick="document.getElementById('labFile1').click()"
-      style="border:2px dashed var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;background:#FAFBFC;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center">
-      <div style="font-size:22px;margin-bottom:4px">📄</div>
-      <div style="font-size:11px;font-weight:700;color:var(--navy)">ไฟล์ที่ 2</div>
-      <div style="font-size:9px;color:var(--muted)">เปรียบเทียบ (ไม่บังคับ)</div>
-      <input type="file" id="labFile1" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(1,this.files[0])">
-    </div>
-    <!-- Slot 3 -->
-    <div class="lab-slot" id="labSlot2" onclick="document.getElementById('labFile2').click()"
-      style="border:2px dashed var(--border);border-radius:8px;padding:14px 8px;text-align:center;cursor:pointer;background:#FAFBFC;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center">
-      <div style="font-size:22px;margin-bottom:4px">📄</div>
-      <div style="font-size:11px;font-weight:700;color:var(--navy)">ไฟล์ที่ 3</div>
-      <div style="font-size:9px;color:var(--muted)">เปรียบเทียบ (ไม่บังคับ)</div>
-      <input type="file" id="labFile2" accept=".pdf,.png,.jpg,.jpeg" style="display:none" onchange="loadLabSlot(2,this.files[0])">
-    </div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-    <div>
-      <label class="flabel">ประเภทเชื้อเพลิงหลัก</label>
-      <select class="finput" id="labFuelType" style="font-size:13px">
-        <option value="">— เลือกประเภท —</option>
-        <option>น้ำมันเตา A</option>
-        <option>น้ำมันเตา C</option>
-        <option>น้ำมันเตาทดแทน / Low Sulfur</option>
-        <option>LPG</option><option>LNG</option>
-        <option>HVO Biodiesel</option><option>Wood Pellet</option><option>อื่นๆ</option>
-      </select>
-    </div>
-    <div>
-      <label class="flabel">เปรียบเทียบกับ (ในตาราง)</label>
-      <select class="finput" id="labCompareWith" style="font-size:13px">
-        <option value="">— เลือกเชื้อเพลิง —</option>
-      </select>
-    </div>
-  </div>
-
-  <button class="btn btn-blue" onclick="analyzeAllLabs()" style="width:100%;justify-content:center;padding:10px;font-size:14px" id="labAnalyzeBtn">
-    🤖 วิเคราะห์ด้วย AI
-  </button>
-
-  <div id="labStatus" style="display:none;margin-top:14px;padding:12px;border-radius:8px;font-size:13px;text-align:center">
-    <div id="labStatusIcon" style="font-size:24px;margin-bottom:6px">⏳</div>
-    <div id="labStatusText">กำลังวิเคราะห์...</div>
-  </div>
-
-  <div id="labResults" style="display:none;margin-top:16px">
-    <div style="background:var(--navy);border-radius:10px 10px 0 0;padding:12px 16px;display:flex;justify-content:space-between;align-items:center">
-      <div style="color:#fff;font-weight:800;font-size:14px">📊 ผลการวิเคราะห์</div>
-      <div id="labFileName" style="color:#93C5FD;font-size:11px"></div>
-    </div>
-    <div style="border:1px solid var(--border);border-radius:0 0 10px 10px;overflow:hidden">
-      <table style="width:100%;border-collapse:collapse;font-size:13px" id="labTable">
-        <thead>
-          <tr style="background:#F8FAFC">
-            <th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border)">พารามิเตอร์</th>
-            <th id="labTh0" style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--blue);border-bottom:2px solid var(--border)">ไฟล์ที่ 1</th>
-            <th id="labTh1" style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--green);border-bottom:2px solid var(--border);display:none">ไฟล์ที่ 2</th>
-            <th id="labTh2" style="padding:8px 12px;text-align:right;font-size:10px;font-weight:700;color:var(--orange,#F97316);border-bottom:2px solid var(--border);display:none">ไฟล์ที่ 3</th>
-            <th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border)">มาตรฐาน</th>
-            <th style="padding:8px 12px;text-align:center;font-size:10px;font-weight:700;color:var(--gray);border-bottom:2px solid var(--border)">สถานะ</th>
-          </tr>
-        </thead>
-        <tbody id="labTableBody"></tbody>
-      </table>
-    </div>
-    <div id="labAISummary" style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:10px;padding:14px 16px;margin-top:12px;font-size:13px;line-height:1.8"></div>
-    <div id="labCostImpact" style="display:none;background:var(--navy);border-radius:10px;padding:14px 16px;margin-top:12px;color:#fff"></div>
-    <div style="display:flex;gap:10px;margin-top:12px">
-      <button class="btn btn-ghost btn-navy" style="flex:1;justify-content:center" onclick="resetLab()">🔄 วิเคราะห์ใหม่</button>
-      <button class="btn btn-gold" style="flex:1;justify-content:center" onclick="exportPDF()">📄 Export รายงาน</button>
-    </div>
-  </div>
-</div>
-
-<!-- Status and results follow -->
-
 <!-- SUMMARY -->
 <div class="sumbox" id="sumbox">
   <div class="card-title" style="color:#fff;margin-bottom:12px">💡 สรุปผล</div>
@@ -1036,7 +942,7 @@ function updateFeaturedBannerData(s) {
   // แสดง tag (tagline) ไว้ใต้ชื่อ ถ้าไม่มีให้แสดง fuelType แทน
   document.getElementById('featTag').textContent   = tag || fuelType;
   document.getElementById('featPrice').textContent = price;
-  // แสดง fuelType ใต้ราคา เช่น "ราคาน้ำมันทดแทนเกรด LOW SULFUR อัปเดต"
+  // แสดง fuelType ใต้ราคา
   document.getElementById('featPriceLabel').textContent = fuelType ? `ราคา${fuelType} อัปเดต` : (price ? 'ราคาอัปเดต' : '');
   document.getElementById('featBtn').setAttribute('onclick', `openLead('${name}','${fuelType||tag}')`);
 
@@ -2077,7 +1983,7 @@ function _doExcel() {
 const LAB_STANDARDS = {
   'น้ำมันเตา A':{'ค่าความร้อน':{val:'38.5 MJ/ลิตร',min:36,max:42},'ความหนืด(40°C)':{val:'≤20 cSt',max:20},'ซัลเฟอร์':{val:'≤0.5%',max:0.5},'จุดวาบไฟ':{val:'≥60°C',min:60}},
   'น้ำมันเตา C':{'ค่าความร้อน':{val:'39.8 MJ/ลิตร',min:37,max:42},'ความหนืด(50°C)':{val:'≤180 cSt',max:180},'ซัลเฟอร์':{val:'≤3.5%',max:3.5},'จุดวาบไฟ':{val:'≥66°C',min:66}},
-  'น้ำมันเตาทดแทน / Low Sulfur':{'ค่าความร้อน':{val:'36-38 MJ/ลิตร',min:34,max:40},'ซัลเฟอร์':{val:'≤0.005%',max:0.005}},
+  'น้ำมันเตาทดแทน':{'ค่าความร้อน':{val:'36-38 MJ/ลิตร',min:34,max:40},'ซัลเฟอร์':{val:'≤0.005%',max:0.005}},
   'LPG':{'ค่าความร้อน':{val:'46.1 MJ/กก.',min:44,max:48},'ซัลเฟอร์':{val:'≤0.02%',max:0.02}},
   'Wood Pellet':{'ค่าความร้อน':{val:'17.5 MJ/กก.',min:16,max:19},'ความชื้น':{val:'≤10%',max:10},'เถ้า':{val:'≤1.5%',max:1.5}},
 };
