@@ -2089,8 +2089,11 @@ let labFileNames = ['', '', ''];
 function initLabPanel() {
   const sel = document.getElementById('labCompareWith');
   if (!sel) return;
-  sel.innerHTML = '<option value="">— เลือกเชื้อเพลิง —</option>' +
-    FUELS.filter(f=>f.selected).map(f=>`<option value="${f.id}">${f.name}</option>`).join('');
+  // แสดงทุกเชื้อเพลิง ไม่ขึ้นกับการติ๊ก checkbox
+  sel.innerHTML = '<option value="">— เลือกเชื้อเพลิงที่ใช้อยู่ปัจจุบัน —</option>' +
+    FUELS.filter(f => f.hv > 0 && f.price > 0).map(f =>
+      `<option value="${f.id}">${f.name} (฿${f.price}/${f.unit})</option>`
+    ).join('');
 }
 
 async function loadLabSlot(idx, file) {
@@ -2142,7 +2145,7 @@ async function analyzeAllLabs() {
 
       const mimeType = labFileTypes[idx] === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
       const resp = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
