@@ -1063,7 +1063,7 @@ const SPONSOR_REGISTRY_DEFAULT = [
   { id:'sp_biggas', name:'บิ๊กแก๊ส เทคโนโลยี จำกัด', shortName:'บิ๊กแก๊ส',  logo:'🟠', verified:true,  tag:'LPG & LNG อุตสาหกรรม · ส่งทั่วประเทศ', displayPrice:'฿22.30/กก.' },
   { id:'sp_thailpg',name:'Thai LPG Industrial',        shortName:'Thai LPG',    logo:'🟠', verified:true,  tag:'ส่งทั่วไทย · MOQ 500 กก.', displayPrice:'฿22.30/กก.' },
   { id:'sp_prism',  name:'Prism Energy LNG',            shortName:'Prism LNG',   logo:'🔵', verified:true,  tag:'ระบบ LNG ครบ · ติดตั้งฟรี', displayPrice:'฿18.90/กก.' },
-  { id:'sp_tag',    name:'TAG Energy',                  shortName:'TAG Energy',  logo:'🌿', verified:false, tag:'น้ำมันทดแทน Green Energy', displayPrice:'' },
+  { id:'sp_tag',    name:'TAG Energy',                  shortName:'TAG Energy',  logo:'🌿', verified:false, tag:'น้ำมันทดแทนน้ำมันเตา Green Energy', displayPrice:'' },
   { id:'sp_none',   name:'ติดต่อซัพพลายเออร์',          shortName:'สอบถามราคา', logo:'📞', verified:false, tag:'', displayPrice:'' },
 ];
 
@@ -1197,7 +1197,7 @@ const FUELS = [
     hv:39.8, sponsor:null
   },
   {
-    id:'fo_alt', name:'น้ำมันเตาทดแทน', cat:'fossil', color:'#B45309', enabled:true, selected:false,
+    id:'fo_alt', name:'น้ำมันทดแทนน้ำมันเตา', cat:'fossil', color:'#B45309', enabled:true, selected:false,
     price:15.5, unit:'ลิตร',
     units:['ลิตร','กก.','ปอนด์'],
     hvByUnit:{'ลิตร':36.0,'กก.':40.91,'ปอนด์':18.57},
@@ -1807,7 +1807,7 @@ function _doPDF() {
       </td>
       <td style="text-align:right">฿${r.price}</td>
       <td style="text-align:center">${r.unit}</td>
-      <td style="text-align:center">${r.hv}</td>
+      <td style="text-align:center">${perRowHVDisplay(r)} <span style="font-size:10px;color:#94A3B8">${r.hvDisplayUnit||'MJ'}/${r.unit}</span></td>
       <td style="text-align:right;font-weight:800;color:${i===0?'#059669':'#0F172A'}">฿${r.cpm.toFixed(3)}</td>
       <td style="text-align:right">฿${fmt(r.mon)}</td>
       <td style="text-align:right;font-weight:700">฿${fmt(r.tot)}</td>
@@ -1951,7 +1951,7 @@ function doSavePDF() {
       <th>เชื้อเพลิง</th>
       <th style="text-align:right">ราคา/หน่วย</th>
       <th style="text-align:center">หน่วย</th>
-      <th style="text-align:center">HV (MJ/หน่วย)</th>
+      <th style="text-align:center">ค่าความร้อน</th>
       <th style="text-align:right">฿/MJ</th>
       <th style="text-align:right">฿/เดือน</th>
       <th style="text-align:right">รวม ${months} เดือน</th>
@@ -2048,7 +2048,7 @@ function _doExcel() {
 const LAB_STANDARDS = {
   'น้ำมันเตา A':{'ค่าความร้อน':{val:'38.5 MJ/ลิตร',min:36,max:42},'ความหนืด(40°C)':{val:'≤20 cSt',max:20},'ซัลเฟอร์':{val:'≤0.5%',max:0.5},'จุดวาบไฟ':{val:'≥60°C',min:60}},
   'น้ำมันเตา C':{'ค่าความร้อน':{val:'39.8 MJ/ลิตร',min:37,max:42},'ความหนืด(50°C)':{val:'≤180 cSt',max:180},'ซัลเฟอร์':{val:'≤3.5%',max:3.5},'จุดวาบไฟ':{val:'≥66°C',min:66}},
-  'น้ำมันเตาทดแทน':{'ค่าความร้อน':{val:'36-38 MJ/ลิตร',min:34,max:40},'ซัลเฟอร์':{val:'≤0.005%',max:0.005}},
+  'น้ำมันทดแทนน้ำมันเตา':{'ค่าความร้อน':{val:'36-38 MJ/ลิตร',min:34,max:40},'ซัลเฟอร์':{val:'≤0.005%',max:0.005}},
   'LPG':{'ค่าความร้อน':{val:'46.1 MJ/กก.',min:44,max:48},'ซัลเฟอร์':{val:'≤0.02%',max:0.02}},
   'Wood Pellet':{'ค่าความร้อน':{val:'17.5 MJ/กก.',min:16,max:19},'ความชื้น':{val:'≤10%',max:10},'เถ้า':{val:'≤1.5%',max:1.5}},
 };
