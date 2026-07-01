@@ -16,7 +16,6 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size:14px;min-height:100vh}
 
-/* LOGIN */
 .login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#0F172A 0%,#1B3A7A 100%)}
 .login-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:36px;width:380px;text-align:center;backdrop-filter:blur(10px)}
 .login-logo{font-size:32px;font-weight:800;color:#fff;margin-bottom:4px}
@@ -28,7 +27,6 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 .login-err{color:#FCA5A5;font-size:12px;margin-top:8px;display:none}
 .login-hint{color:#475569;font-size:11px;margin-top:12px}
 
-/* ADMIN LAYOUT */
 .admin{display:none}
 .topbar{background:var(--navy);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.1)}
 .topbar-logo{display:flex;align-items:center;gap:10px;color:#fff;font-size:17px;font-weight:800}
@@ -40,48 +38,38 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 
 .page{max-width:1200px;margin:0 auto;padding:24px 20px}
 
-/* TABS */
 .tabs{display:flex;gap:4px;margin-bottom:24px;background:rgba(255,255,255,.05);border-radius:10px;padding:4px}
 .tab{flex:1;padding:9px 16px;background:transparent;border:none;border-radius:7px;color:#94A3B8;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center}
 .tab.active{background:var(--navy2);color:#fff}
 .tab-panel{display:none}
 .tab-panel.active{display:block}
 
-/* CARDS */
 .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:18px;margin-bottom:16px}
 .card-title{font-size:14px;font-weight:800;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .section-title{font-size:16px;font-weight:800;color:#fff;margin-bottom:16px}
 
-/* REVENUE DASHBOARD */
 .rev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
 .rev-stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px 16px}
 .rev-stat-label{font-size:10px;color:#94A3B8;font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
 .rev-stat-val{font-size:22px;font-weight:800}
 .rev-stat-sub{font-size:11px;margin-top:3px;opacity:.7}
 
-/* SLOT GRID */
 .slot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
 .slot-card{border-radius:10px;padding:14px;border:2px solid}
-.slot-featured{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)}
-.slot-verified{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.3)}
-.slot-listed{background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.3)}
 .slot-empty{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);border-style:dashed}
 .slot-type{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
 .slot-company{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
 .slot-price-tag{font-size:18px;font-weight:800;margin:6px 0 2px}
-.slot-actions{display:flex;gap:6px;margin-top:10px}
+.slot-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 .slot-btn{border:none;border-radius:5px;padding:4px 10px;font-family:'Sarabun',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
 .slot-badge{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;text-transform:uppercase}
 
-/* SPONSOR TABLE */
 .sp-table{width:100%;border-collapse:collapse}
 .sp-table th{text-align:left;font-size:10px;font-weight:700;color:#64748B;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.08);text-transform:uppercase;letter-spacing:.05em}
 .sp-table td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:middle;font-size:13px}
 .sp-table tr:last-child td{border-bottom:none}
 .sp-table tr:hover td{background:rgba(255,255,255,.03)}
-.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
 
-/* FORM */
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
 .form-full{grid-column:1/-1}
 .f-label{font-size:11px;font-weight:600;color:#94A3B8;display:block;margin-bottom:5px}
@@ -90,7 +78,7 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 .f-select{width:100%;padding:9px 11px;background:rgba(30,41,59,.9);border:1.5px solid rgba(255,255,255,.12);border-radius:7px;color:#fff;font-family:'Sarabun',sans-serif;font-size:13px;cursor:pointer}
 .f-select:focus{outline:none;border-color:var(--blue)}
 .form-actions{display:flex;gap:8px;margin-top:16px}
-.btn{border:none;border-radius:7px;padding:8px 16px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn{border:none;border-radius:7px;padding:8px 16px;font-family:'Sarabun',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
 .btn-gold{background:var(--gold);color:var(--dark)}
 .btn-blue{background:var(--blue);color:#fff}
 .btn-red{background:var(--red);color:#fff}
@@ -98,13 +86,9 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 .btn-green{background:var(--green);color:#fff}
 .btn-sm{padding:4px 10px;font-size:11px;border-radius:5px}
 
-/* ROTATION QUEUE */
 .queue-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;margin-bottom:7px}
 .queue-num{width:24px;height:24px;border-radius:50%;background:var(--navy2);color:#93C5FD;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.queue-name{flex:1;font-weight:600;font-size:13px}
-.queue-days{font-size:11px;color:#94A3B8}
 
-/* REVENUE CHART */
 .bar-container{display:flex;flex-direction:column;gap:8px}
 .bar-row{display:flex;align-items:center;gap:10px}
 .bar-label{width:120px;font-size:12px;color:#94A3B8;flex-shrink:0;text-align:right}
@@ -112,22 +96,23 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
 .bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-weight:700;color:#fff;transition:width .5s ease}
 .bar-val{width:80px;font-size:12px;font-weight:700;color:#fff;text-align:right;flex-shrink:0}
 
-/* ALERTS */
 .alert{border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .alert-info{background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.3);color:#93C5FD}
 .alert-warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:#FCD34D}
 .alert-success{background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.3);color:#6EE7B7}
 
-/* MODAL */
 .modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
 .modal-ov.open{display:flex}
 .modal{background:#1E293B;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:24px;width:500px;max-width:95vw;max-height:90vh;overflow-y:auto}
 .modal-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:16px}
+
+/* ASSIGN SPONSOR SELECT MODAL */
+.assign-modal{background:#1E293B;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:20px;width:420px;max-width:95vw}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
     <div class="login-logo">⚡ FuelCostTH</div>
@@ -140,10 +125,8 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div class="admin" id="adminPanel">
-
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-logo">⚡ FuelCostTH <span>ADMIN</span></div>
     <div class="topbar-right">
@@ -153,8 +136,6 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
   </div>
 
   <div class="page">
-
-    <!-- TABS -->
     <div class="tabs">
       <button class="tab active" onclick="showTab('dashboard',this)">📊 Dashboard</button>
       <button class="tab" onclick="showTab('slots',this)">📍 พื้นที่โฆษณา</button>
@@ -164,56 +145,49 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
       <button class="tab" onclick="showTab('settings',this)">⚙️ ตั้งค่า</button>
     </div>
 
-    <!-- TAB 1: DASHBOARD -->
+    <!-- DASHBOARD -->
     <div class="tab-panel active" id="tab-dashboard">
       <div class="rev-grid" id="revStats"></div>
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="card">
           <div class="card-title">💰 รายได้แยกตาม Package</div>
           <div class="bar-container" id="revenueChart"></div>
         </div>
         <div class="card">
-          <div class="card-title">📅 Sponsor สัญญาหมดเร็วๆ นี้</div>
+          <div class="card-title">📅 สัญญาหมดเร็วๆ นี้ (30 วัน)</div>
           <div id="expiryList"></div>
         </div>
       </div>
-
       <div class="card" style="margin-top:16px">
-        <div class="card-title">📈 เป้าหมายรายได้</div>
+        <div class="card-title">📈 เป้าหมายรายได้/เดือน</div>
         <div id="goalBar"></div>
       </div>
     </div>
 
-    <!-- TAB 2: SLOT MANAGEMENT -->
+    <!-- SLOTS -->
     <div class="tab-panel" id="tab-slots">
-      <!-- Position Guide -->
       <div class="card" style="background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.3);margin-bottom:12px">
-        <div class="card-title" style="color:#38BDF8">🗺️ แผนผังตำแหน่งโฆษณาบนเว็บ</div>
-        <div style="display:grid;grid-template-columns:1fr;gap:8px;font-size:12px">
+        <div class="card-title" style="color:#38BDF8">🗺️ แผนผังตำแหน่งโฆษณา</div>
+        <div style="display:grid;gap:8px;font-size:12px">
           <div style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);border-radius:8px;padding:10px">
-            <strong style="color:#F59E0B">⭐ Featured/Exclusive Banner (บนสุด)</strong> — แถบยาวเต็มหน้า · ฿12,000–25,000/เดือน<br>
-            <span style="color:#94A3B8">ควบคุมโดย: Package = featured หรือ exclusive ใน Tab Sponsor</span>
+            <strong style="color:#F59E0B">⭐ Featured Banner (บนสุด)</strong> — แถบยาวเต็มหน้า · ฿12,000+/เดือน<br>
+            <span style="color:#94A3B8">ดึงจาก Sponsor ที่ package = featured/exclusive ใน Tab Sponsor</span>
           </div>
           <div style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);border-radius:8px;padding:10px">
-            <strong style="color:#10B981">✓ Verified Sponsor (คอลัมน์ขวา)</strong> — Card ขนาดกลาง · ฿6,000/เดือน<br>
-            <span style="color:#94A3B8">ควบคุมโดย: Package = verified ใน Tab Sponsor → แสดงทุกราย Active</span>
+            <strong style="color:#10B981">✓ Verified (คอลัมน์ขวา)</strong> — Card sidebar · ฿6,000/เดือน<br>
+            <span style="color:#94A3B8">ดึงจาก Sponsor ที่ package = verified ทุกรายที่ active</span>
           </div>
           <div style="background:rgba(100,116,139,.1);border:1px solid rgba(100,116,139,.3);border-radius:8px;padding:10px">
-            <strong style="color:#94A3B8">📋 Listed/Slot (ตาราง per-fuel)</strong> — ปุ่มขอราคาข้างแต่ละเชื้อเพลิง · ฿3,000/เดือน<br>
-            <span style="color:#64748B">ควบคุมโดย: ปุ่ม ⚙️ Slot ในหน้าเว็บ หรือ Mapping tab ด้านล่าง</span>
+            <strong style="color:#94A3B8">📋 Listed/Slot (ปุ่มขอราคาในตาราง)</strong> — ฿3,000/เดือน<br>
+            <span style="color:#64748B">จัดการในหน้านี้ หรือ Tab Mapping</span>
           </div>
         </div>
       </div>
-      <div class="alert alert-info">📍 Slot ด้านล่างคือตำแหน่งที่กำหนดเองได้ (นอกจาก Featured และ Verified ที่ auto จาก Package)</div>
       <div class="slot-grid" id="slotGrid"></div>
       <div class="card">
         <div class="card-title">➕ เพิ่มพื้นที่โฆษณาใหม่</div>
         <div class="form-row">
-          <div>
-            <label class="f-label">ชื่อตำแหน่ง</label>
-            <input class="f-input" id="newSlotName" placeholder="เช่น Sidebar Bottom">
-          </div>
+          <div><label class="f-label">ชื่อตำแหน่ง</label><input class="f-input" id="newSlotName" placeholder="เช่น Sidebar Bottom"></div>
           <div>
             <label class="f-label">ประเภท</label>
             <select class="f-select" id="newSlotType">
@@ -227,71 +201,37 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
       </div>
     </div>
 
-    <!-- TAB 3: SPONSORS -->
+    <!-- SPONSORS -->
     <div class="tab-panel" id="tab-sponsors">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
         <div class="section-title" style="margin:0">รายชื่อ Sponsor ทั้งหมด</div>
-        <button class="btn btn-gold" onclick="openAddSponsor()">➕ เพิ่ม Sponsor ใหม่</button>
+        <button class="btn btn-gold" onclick="openAddSponsor()">➕ เพิ่ม Sponsor</button>
       </div>
       <div class="card">
         <table class="sp-table" id="sponsorTable"></table>
       </div>
     </div>
 
-    <!-- TAB 4: SPONSOR-FUEL MAPPING -->
+    <!-- MAPPING -->
     <div class="tab-panel" id="tab-mapping">
-      <div class="alert alert-info">⚡ กำหนดว่า Sponsor ไหนจะแสดงปุ่ม "ขอใบเสนอราคา" ในแถวเชื้อเพลิงไหน — เปิด/ปิดได้ทันที</div>
-
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <!-- Add new sponsor -->
-        <div class="card">
-          <div class="card-title">➕ เพิ่ม Sponsor ใหม่</div>
-          <div style="display:flex;flex-direction:column;gap:10px">
-            <div><label class="f-label">ชื่อบริษัท *</label><input class="f-input" id="mapSpName" placeholder="บริษัท..."></div>
-            <div><label class="f-label">ชื่อสั้น</label><input class="f-input" id="mapSpShort" placeholder="ชื่อย่อ"></div>
-            <div><label class="f-label">Logo (Emoji)</label><input class="f-input" id="mapSpLogo" placeholder="🏭" style="font-size:18px;width:80px"></div>
-            <div><label class="f-label">ราคาที่แสดง</label><input class="f-input" id="mapSpPrice" placeholder="฿XX/กก."></div>
-            <div>
-              <label class="f-label">Package</label>
-              <select class="f-select" id="mapSpPkg">
-                <option value="featured">Featured</option>
-                <option value="verified">Verified</option>
-                <option value="listed">Listed</option>
-              </select>
-            </div>
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#E2E8F0;font-size:13px">
-              <input type="checkbox" id="mapSpVerified" style="accent-color:var(--green)"> แสดงป้าย ✓ Verified
-            </label>
-            <button class="btn btn-gold" onclick="addMappedSponsor()">➕ เพิ่ม Sponsor</button>
-          </div>
-        </div>
-
-        <!-- Sponsor list with active toggle -->
-        <div class="card">
-          <div class="card-title">📋 Sponsor ทั้งหมด</div>
-          <div id="sponsorActiveList"></div>
-        </div>
-      </div>
-
-      <!-- Fuel-Sponsor mapping matrix -->
+      <div class="alert alert-info">⚡ กำหนดว่า Sponsor ไหนจะแสดงปุ่ม "ขอใบเสนอราคา" ต่อเชื้อเพลิง — ดึงข้อมูลจาก Tab Sponsor โดยตรง</div>
       <div class="card">
         <div class="card-title">🔗 เชื้อเพลิง ↔ Sponsor Mapping</div>
-        <div style="font-size:11px;color:#64748B;margin-bottom:12px">ติ๊ก = แสดงปุ่ม "ขอใบเสนอราคา" ในแถวนั้น</div>
+        <div style="font-size:11px;color:#64748B;margin-bottom:12px">ติ๊ก = แสดงปุ่ม "ขอใบเสนอราคา" ในแถวนั้น · เพิ่ม/แก้ไข Sponsor ได้ใน Tab Sponsor</div>
         <div style="overflow-x:auto">
-          <table id="mappingMatrix" style="border-collapse:collapse;min-width:600px">
-          </table>
+          <table id="mappingMatrix" style="border-collapse:collapse;min-width:600px"></table>
         </div>
-        <div style="margin-top:14px">
-          <button class="btn btn-gold" onclick="saveMappingToStorage()">💾 บันทึกการตั้งค่า (มีผลทันทีบน fuelcostth.com)</button>
-          <button class="btn btn-ghost" style="margin-left:8px" onclick="resetMapping()">↩️ รีเซ็ตเป็นค่าเริ่มต้น</button>
+        <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-gold" onclick="saveMappingToCloud()">💾 บันทึก + Push Supabase</button>
+          <button class="btn btn-ghost" onclick="saveMappingLocal()">💾 บันทึก Local</button>
         </div>
         <div id="mappingSaveMsg" style="font-size:12px;margin-top:8px;color:#6EE7B7"></div>
       </div>
     </div>
 
-    <!-- TAB 5: ROTATION -->
+    <!-- ROTATION -->
     <div class="tab-panel" id="tab-rotation">
-      <div class="alert alert-warn">🔄 เมื่อ Sponsor มากกว่าพื้นที่ ระบบจะสลับแสดงตามลำดับคิวอัตโนมัติทุก X วัน</div>
+      <div class="alert alert-warn">🔄 เมื่อ Sponsor มากกว่าพื้นที่ ระบบจะสลับแสดงตามลำดับคิวอัตโนมัติ</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
         <div class="card">
           <div class="card-title">⚙️ ตั้งค่าการสลับ</div>
@@ -302,20 +242,20 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
               <option value="3">ทุก 3 วัน</option>
               <option value="7" selected>ทุก 7 วัน</option>
               <option value="14">ทุก 14 วัน</option>
-              <option value="30">ทุก 30 วัน (รายเดือน)</option>
+              <option value="30">ทุก 30 วัน</option>
             </select>
           </div>
           <div style="margin-bottom:12px">
-            <label class="f-label">Package ที่เปิดใช้ Rotation</label>
+            <label class="f-label">Package ที่เปิด Rotation</label>
             <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#E2E8F0;font-size:13px">
-                <input type="checkbox" id="rotFeatured" onchange="saveRotation()" style="accent-color:var(--gold)"> Featured Sponsor
+                <input type="checkbox" id="rotFeatured" onchange="saveRotation()" style="accent-color:var(--gold)"> Featured
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#E2E8F0;font-size:13px">
-                <input type="checkbox" id="rotVerified" checked onchange="saveRotation()" style="accent-color:var(--blue)"> Verified Sponsor
+                <input type="checkbox" id="rotVerified" checked onchange="saveRotation()" style="accent-color:var(--blue)"> Verified
               </label>
               <label style="display:flex;align-items:center;gap:8px;cursor:pointer;color:#E2E8F0;font-size:13px">
-                <input type="checkbox" id="rotListed" checked onchange="saveRotation()" style="accent-color:var(--gray)"> Listed Sponsor
+                <input type="checkbox" id="rotListed" checked onchange="saveRotation()" style="accent-color:var(--gray)"> Listed
               </label>
             </div>
           </div>
@@ -331,38 +271,33 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
       </div>
     </div>
 
-    <!-- TAB 5: SETTINGS -->
+    <!-- SETTINGS -->
     <div class="tab-panel" id="tab-settings">
-      <!-- SUPABASE SETUP -->
       <div class="card" style="border:1px solid rgba(99,102,241,.4);background:rgba(99,102,241,.08)">
-        <div class="card-title" style="color:#A5B4FC">☁️ Supabase — Real-time Database (ฟรี)</div>
-        <div class="alert alert-info" style="margin-bottom:12px">
-          เชื่อม Supabase เพื่อให้ Sponsor ที่เพิ่มในระบบนี้แสดงบนเว็บสำหรับทุกคนแบบ Real-time · ไม่ต้อง upload ไฟล์ใหม่ทุกครั้ง
-        </div>
+        <div class="card-title" style="color:#A5B4FC">☁️ Supabase</div>
+        <div class="alert alert-info" style="margin-bottom:12px">เชื่อม Supabase เพื่อให้ Sponsor แสดงบนเว็บแบบ Real-time ไม่ต้องแก้ไฟล์</div>
         <div id="sbStatus" style="margin-bottom:12px;font-size:12px;padding:8px 12px;border-radius:6px;background:rgba(255,255,255,.05)">
-          สถานะ: <span id="sbStatusText" style="color:#94A3B8">ยังไม่ได้เชื่อมต่อ (ใช้ localStorage)</span>
+          สถานะ: <span id="sbStatusText" style="color:#94A3B8">ยังไม่ได้เชื่อมต่อ</span>
         </div>
         <div class="form-row">
           <div class="form-full">
             <label class="f-label">Supabase Project URL</label>
             <input class="f-input" id="sbUrl" placeholder="https://xxxxxxxxxxxx.supabase.co">
-            <div style="font-size:10px;color:#64748B;margin-top:3px">supabase.com → Project → Settings → API → Project URL</div>
           </div>
           <div class="form-full">
-            <label class="f-label">Supabase Anon Key (public)</label>
+            <label class="f-label">Supabase Anon Key</label>
             <input class="f-input" id="sbKey" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
-            <div style="font-size:10px;color:#64748B;margin-top:3px">Settings → API → anon/public key</div>
           </div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-blue" onclick="saveSbConfig()">🔌 เชื่อมต่อ Supabase</button>
-          <button class="btn btn-ghost" onclick="showSbSQL()">📋 ดู SQL สร้าง Tables</button>
-          <button class="btn btn-green" onclick="pushToSupabase()">⬆️ Push Sponsor ขึ้น Cloud</button>
+          <button class="btn btn-blue" onclick="saveSbConfig()">🔌 บันทึก Config</button>
+          <button class="btn btn-ghost" onclick="showSbSQL()">📋 ดู SQL</button>
+          <button class="btn btn-green" onclick="pushAllToSupabase()">⬆️ Push ทั้งหมดขึ้น Cloud</button>
         </div>
         <div id="sbMsg" style="margin-top:8px;font-size:12px"></div>
         <div id="sbSqlBox" style="display:none;margin-top:12px">
-          <label class="f-label">SQL — วาง/รันใน Supabase SQL Editor</label>
-          <textarea class="f-input" id="sbSqlText" rows="12" style="font-family:monospace;font-size:11px;background:#0F172A;color:#4ADE80" readonly></textarea>
+          <label class="f-label">SQL — วางใน Supabase SQL Editor</label>
+          <textarea class="f-input" id="sbSqlText" rows="14" style="font-family:monospace;font-size:11px;background:#0F172A;color:#4ADE80" readonly></textarea>
           <button class="btn btn-ghost" onclick="copySQL()" style="margin-top:6px">📋 Copy SQL</button>
         </div>
       </div>
@@ -370,82 +305,47 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
       <div class="card">
         <div class="card-title">🔑 เปลี่ยนรหัสผ่าน Admin</div>
         <div class="form-row">
-          <div>
-            <label class="f-label">รหัสผ่านปัจจุบัน</label>
-            <input type="password" class="f-input" id="oldPw">
-          </div>
-          <div>
-            <label class="f-label">รหัสผ่านใหม่</label>
-            <input type="password" class="f-input" id="newPw">
-          </div>
+          <div><label class="f-label">รหัสผ่านปัจจุบัน</label><input type="password" class="f-input" id="oldPw"></div>
+          <div><label class="f-label">รหัสผ่านใหม่</label><input type="password" class="f-input" id="newPw"></div>
         </div>
         <button class="btn btn-gold" onclick="changePw()">บันทึกรหัสผ่านใหม่</button>
         <div id="pwMsg" style="margin-top:8px;font-size:12px"></div>
       </div>
 
       <div class="card">
-        <div class="card-title">📦 ราคา Package</div>
+        <div class="card-title">💰 ราคา Package & เป้าหมาย</div>
         <div id="packagePrices"></div>
       </div>
 
       <div class="card">
-        <div class="card-title">🔗 ข้อมูลเว็บไซต์</div>
-        <div class="form-row">
-          <div>
-            <label class="f-label">ชื่อเว็บ</label>
-            <input class="f-input" value="FuelCostTH" readonly style="opacity:.6">
-          </div>
-          <div>
-            <label class="f-label">Domain</label>
-            <input class="f-input" value="fuelcostth.com" readonly style="opacity:.6">
-          </div>
-        </div>
-        <div class="alert alert-info">💡 แก้ไขข้อมูลเว็บในไฟล์ index.html โดยตรง</div>
-      </div>
-
-      <!-- EMAIL & PRIVACY SETTINGS -->
-      <div class="card">
-        <div class="card-title">📧 ข้อมูลติดต่อ & นโยบายความเป็นส่วนตัว</div>
+        <div class="card-title">📧 ข้อมูลติดต่อ & Privacy Policy</div>
         <div style="margin-bottom:12px">
-          <label class="f-label">อีเมลติดต่อโฆษณา / Sponsor</label>
-          <input class="f-input" id="contactEmail" placeholder="contact@fuelcostth.com">
-          <div style="font-size:11px;color:#64748B;margin-top:4px">แสดงในหน้าเว็บ ลิงก์ "ติดต่อโฆษณา" ใน Footer</div>
+          <label class="f-label">อีเมลติดต่อโฆษณา</label>
+          <input class="f-input" id="contactEmail" placeholder="vkpintertrade@gmail.com">
         </div>
         <div style="margin-bottom:12px">
           <label class="f-label">อีเมลรับ Lead (FormSubmit)</label>
           <input class="f-input" id="leadEmail" placeholder="vkpintertrade@gmail.com">
-          <div style="font-size:11px;color:#64748B;margin-top:4px">อีเมลที่ Lead form จะส่งข้อมูลมาให้</div>
         </div>
         <div style="margin-bottom:12px">
-          <label class="f-label">นโยบายความเป็นส่วนตัว (Privacy Policy)</label>
-          <textarea class="f-input" id="privacyText" rows="8"
-            style="font-size:12px;line-height:1.6;resize:vertical"
-            placeholder="พิมพ์ข้อความนโยบายความเป็นส่วนตัวที่นี่..."></textarea>
+          <label class="f-label">Privacy Policy</label>
+          <textarea class="f-input" id="privacyText" rows="8" style="font-size:12px;line-height:1.6;resize:vertical"></textarea>
         </div>
         <button class="btn btn-gold" onclick="saveContactSettings()">💾 บันทึก</button>
         <div id="contactMsg" style="margin-top:8px;font-size:12px"></div>
-        <div class="alert alert-warn" style="margin-top:12px">
-          ⚠️ หลังบันทึกข้อมูลนี้จะเก็บใน browser — หากต้องการให้แสดงบนเว็บจริงต้องแก้ในไฟล์ index.html ด้วยครับ
-        </div>
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /page -->
+</div><!-- /admin -->
 
 <!-- ADD/EDIT SPONSOR MODAL -->
-<div class="modal-ov" id="sponsorModal" onclick="closeModalOut(event)">
+<div class="modal-ov" id="sponsorModal" onclick="closeModalOut(event,'sponsorModal')">
   <div class="modal">
     <div class="modal-title" id="modalTitle">➕ เพิ่ม Sponsor ใหม่</div>
     <div class="form-row">
-      <div>
-        <label class="f-label">ชื่อบริษัท *</label>
-        <input class="f-input" id="spName" placeholder="บริษัท...">
-      </div>
-      <div>
-        <label class="f-label">ประเภทเชื้อเพลิง</label>
-        <input class="f-input" id="spFuelType" placeholder="LPG, LNG, น้ำมันเตา...">
-      </div>
+      <div><label class="f-label">ชื่อบริษัท *</label><input class="f-input" id="spName" placeholder="บริษัท..."></div>
+      <div><label class="f-label">ประเภทเชื้อเพลิง</label><input class="f-input" id="spFuelType" placeholder="LPG, LNG..."></div>
     </div>
     <div class="form-row">
       <div>
@@ -457,56 +357,33 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
           <option value="exclusive">Exclusive — ฿25,000/เดือน</option>
         </select>
       </div>
-      <div>
-        <label class="f-label">ราคาที่ตกลง (฿/เดือน)</label>
-        <input class="f-input" id="spPrice" type="number" placeholder="12000">
-      </div>
+      <div><label class="f-label">ราคาที่ตกลง (฿/เดือน)</label><input class="f-input" id="spPrice" type="number" placeholder="12000"></div>
     </div>
     <div class="form-row">
-      <div>
-        <label class="f-label">ราคาสินค้าที่แสดง</label>
-        <input class="f-input" id="spDisplayPrice" placeholder="฿22.30/กก.">
-      </div>
-      <div>
-        <label class="f-label">โทรศัพท์ติดต่อ</label>
-        <input class="f-input" id="spPhone" placeholder="08X-XXX-XXXX">
-      </div>
+      <div><label class="f-label">ราคาสินค้าที่แสดง</label><input class="f-input" id="spDisplayPrice" placeholder="฿22.30/กก."></div>
+      <div><label class="f-label">โทรศัพท์</label><input class="f-input" id="spPhone" placeholder="08X-XXX-XXXX"></div>
     </div>
     <div class="form-row">
-      <div>
-        <label class="f-label">วันที่เริ่มสัญญา</label>
-        <input class="f-input" id="spStart" type="date">
-      </div>
-      <div>
-        <label class="f-label">วันที่สิ้นสุดสัญญา</label>
-        <input class="f-input" id="spEnd" type="date">
-      </div>
+      <div><label class="f-label">วันเริ่มสัญญา</label><input class="f-input" id="spStart" type="date"></div>
+      <div><label class="f-label">วันสิ้นสุดสัญญา</label><input class="f-input" id="spEnd" type="date"></div>
     </div>
+    <div style="margin-bottom:12px"><label class="f-label">อีเมลรับ Lead</label><input class="f-input" id="spEmail" type="email" placeholder="sponsor@company.com"></div>
+    <div style="margin-bottom:12px"><label class="f-label">Tagline</label><input class="f-input" id="spTag" placeholder="ส่งทั่วไทย · ISO 9001..."></div>
     <div style="margin-bottom:12px">
-      <label class="f-label">อีเมลรับ Lead</label>
-      <input class="f-input" id="spEmail" type="email" placeholder="sponsor@company.com">
-    </div>
-    <div style="margin-bottom:12px">
-      <label class="f-label">Tagline</label>
-      <input class="f-input" id="spTag" placeholder="ส่งทั่วไทย · ISO 9001...">
-    </div>
-    <div style="margin-bottom:12px">
-      <label class="f-label">🖼️ Logo URL (ใส่ URL รูปภาพ หรือ Emoji)</label>
+      <label class="f-label">🖼️ Logo URL หรือ Emoji</label>
       <div style="display:flex;gap:8px;align-items:center">
         <input class="f-input" id="spLogoUrl" placeholder="https://... หรือ 🏭" oninput="previewLogo()">
         <div id="logoPreview" style="width:48px;height:48px;border-radius:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;overflow:hidden">🏭</div>
       </div>
-      <div style="font-size:10px;color:#64748B;margin-top:4px">
-        วิธีอัปโหลดรูป: Supabase → Storage → สร้าง bucket "sponsors" → Upload รูป → Copy URL
-      </div>
+      <div style="font-size:10px;color:#64748B;margin-top:4px">Supabase → Storage → bucket "sponsors" → Upload → Copy URL</div>
     </div>
     <div style="margin-bottom:12px">
       <label class="f-label">สถานะ</label>
       <select class="f-select" id="spStatus">
-        <option value="active">✅ Active — กำลังแสดง</option>
-        <option value="queue">⏳ Queue — รอคิวสลับ</option>
-        <option value="paused">⏸️ Paused — หยุดชั่วคราว</option>
-        <option value="expired">❌ Expired — หมดสัญญา</option>
+        <option value="active">✅ Active</option>
+        <option value="queue">⏳ Queue</option>
+        <option value="paused">⏸️ Paused</option>
+        <option value="expired">❌ Expired</option>
       </select>
     </div>
     <div class="form-actions">
@@ -516,17 +393,22 @@ body{font-family:'Sarabun',sans-serif;background:#0F172A;color:#E2E8F0;font-size
   </div>
 </div>
 
+<!-- ASSIGN SLOT MODAL -->
+<div class="modal-ov" id="assignModal" onclick="closeModalOut(event,'assignModal')">
+  <div class="assign-modal">
+    <div style="font-size:15px;font-weight:800;color:#fff;margin-bottom:14px" id="assignTitle">เลือก Sponsor</div>
+    <div id="assignList" style="display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow-y:auto"></div>
+    <div style="margin-top:14px">
+      <button class="btn btn-ghost" onclick="document.getElementById('assignModal').classList.remove('open')">ยกเลิก</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const PACKAGE_PRICES = {
-  featured:  12000,
-  verified:  6000,
-  listed:    3000,
-  exclusive: 25000,
-};
-
+const PACKAGE_PRICES = { featured:12000, verified:6000, listed:3000, exclusive:25000 };
 const PACKAGE_COLORS = {
   featured:  {bg:'rgba(245,158,11,.15)',border:'rgba(245,158,11,.4)',text:'#F59E0B'},
   verified:  {bg:'rgba(14,165,233,.15)',border:'rgba(14,165,233,.4)',text:'#38BDF8'},
@@ -534,12 +416,30 @@ const PACKAGE_COLORS = {
   exclusive: {bg:'rgba(124,58,237,.15)',border:'rgba(124,58,237,.4)',text:'#A78BFA'},
 };
 
-// ─── DEFAULT DATA ────────────────────────────────────
+// เชื้อเพลิงทั้งหมด (ต้องตรงกับ id ในหน้าเว็บหลัก)
+const ALL_FUELS = [
+  {id:'fo_a',  name:'น้ำมันเตา A'},
+  {id:'fo_c',  name:'น้ำมันเตา C'},
+  {id:'fo_alt',name:'น้ำมันเตาทดแทน'},
+  {id:'lpg',   name:'LPG'},
+  {id:'lng',   name:'LNG'},
+  {id:'cng',   name:'ก๊าซธรรมชาติ (CNG)'},
+  {id:'hvo',   name:'HVO Biodiesel'},
+  {id:'b100',  name:'B100 ไบโอดีเซล'},
+  {id:'b20',   name:'B20 (ผสม 20%)'},
+  {id:'pellet',name:'Wood Pellet'},
+  {id:'palm',  name:'กะลาปาล์ม'},
+  {id:'rice',  name:'แกลบ/ชีวมวล'},
+  {id:'biogas',name:'Biogas'},
+  {id:'elec',  name:'ไฟฟ้า (Boiler)'},
+];
+
+// ─── DEFAULT STATE ────────────────────────────────────
 const DEFAULT_SPONSORS = [
-  {id:'sp1',name:'บิ๊กแก๊ส เทคโนโลยี',fuelType:'LPG & LNG',package:'featured',price:12000,displayPrice:'฿22.30/กก.',phone:'02-xxx-xxxx',email:'sale@biggas.co.th',tag:'LPG & LNG อุตสาหกรรม · ส่งทั่วประเทศ',status:'active',start:'2026-05-01',end:'2026-10-31'},
-  {id:'sp2',name:'Thai LPG Industrial',fuelType:'LPG',package:'verified',price:6000,displayPrice:'฿22.30/กก.',phone:'08x-xxx-xxxx',email:'',tag:'ส่งทั่วไทย · MOQ 500 กก.',status:'active',start:'2026-05-01',end:'2026-07-31'},
-  {id:'sp3',name:'Prism Energy LNG',fuelType:'LNG',package:'verified',price:6000,displayPrice:'฿18.90/กก.',phone:'',email:'',tag:'ระบบ LNG ครบ · ติดตั้งฟรี',status:'active',start:'2026-05-01',end:'2026-07-31'},
-  {id:'sp4',name:'TAG Energy',fuelType:'น้ำมันเตาทดแทน',package:'listed',price:3000,displayPrice:'',phone:'',email:'',tag:'น้ำมันทดแทน Green Energy',status:'active',start:'2026-05-01',end:'2026-05-31'},
+  {id:'sp1',name:'บิ๊กแก๊ส เทคโนโลยี',fuelType:'LPG & LNG',fuelTypes:['lpg','lng'],package:'featured',price:12000,displayPrice:'฿22.30/กก.',phone:'02-xxx-xxxx',email:'sale@biggas.co.th',tag:'LPG & LNG อุตสาหกรรม · ส่งทั่วประเทศ',logoUrl:'🟠',status:'active',start:'2026-05-01',end:'2026-10-31'},
+  {id:'sp2',name:'Thai LPG Industrial',fuelType:'LPG',fuelTypes:['lpg'],package:'verified',price:6000,displayPrice:'฿22.30/กก.',phone:'08x-xxx-xxxx',email:'',tag:'ส่งทั่วไทย · MOQ 500 กก.',logoUrl:'🟠',status:'active',start:'2026-05-01',end:'2026-07-31'},
+  {id:'sp3',name:'Prism Energy LNG',fuelType:'LNG',fuelTypes:['lng'],package:'verified',price:6000,displayPrice:'฿18.90/กก.',phone:'',email:'',tag:'ระบบ LNG ครบ · ติดตั้งฟรี',logoUrl:'🔵',status:'active',start:'2026-05-01',end:'2026-07-31'},
+  {id:'sp4',name:'TAG Energy',fuelType:'น้ำมันเตาทดแทน',fuelTypes:['fo_alt'],package:'listed',price:3000,displayPrice:'',phone:'',email:'',tag:'น้ำมันทดแทน Green Energy',logoUrl:'🌿',status:'active',start:'2026-05-01',end:'2026-05-31'},
 ];
 
 const DEFAULT_SLOTS = [
@@ -555,7 +455,7 @@ const DEFAULT_SLOTS = [
 let state = {
   sponsors: [],
   slots: [],
-  rotation: { freq: 7, featured: false, verified: true, listed: true, lastDate: null },
+  rotation: {freq:7, featured:false, verified:true, listed:true, lastDate:null},
   password: 'admin1234',
   leadFee: 800,
   leadCount: 20,
@@ -565,7 +465,15 @@ let state = {
 function loadState() {
   const saved = localStorage.getItem('fuelcostth_admin');
   if (saved) {
-    try { Object.assign(state, JSON.parse(saved)); } catch(e) {}
+    try {
+      const parsed = JSON.parse(saved);
+      Object.assign(state, parsed);
+      // migrate: ensure fuelTypes[] exists on all sponsors
+      state.sponsors = state.sponsors.map(s => ({
+        fuelTypes: [],
+        ...s,
+      }));
+    } catch(e) {}
   } else {
     state.sponsors = DEFAULT_SPONSORS;
     state.slots    = DEFAULT_SLOTS;
@@ -577,7 +485,7 @@ function saveState() {
 }
 
 // ═══════════════════════════════════════════════════════
-// LOGIN
+// AUTH
 // ═══════════════════════════════════════════════════════
 function doLogin() {
   const pw = document.getElementById('pwInput').value;
@@ -599,75 +507,19 @@ function doLogout() {
   document.getElementById('loginErr').style.display = 'none';
 }
 
-function saveContactSettings() {
-  const email   = document.getElementById('contactEmail').value.trim();
-  const lead    = document.getElementById('leadEmail').value.trim();
-  const privacy = document.getElementById('privacyText').value.trim();
-  const data = { contactEmail:email, leadEmail:lead, privacyText:privacy };
-  localStorage.setItem('fct_contact_settings', JSON.stringify(data));
-  const msg = document.getElementById('contactMsg');
-  msg.style.color = '#6EE7B7';
-  msg.textContent = '✅ บันทึกแล้ว';
-  setTimeout(()=>{ msg.textContent=''; }, 3000);
-}
-
-function loadContactSettings() {
-  try {
-    const d = JSON.parse(localStorage.getItem('fct_contact_settings')||'{}');
-    document.getElementById('contactEmail').value = d.contactEmail || 'vkpintertrade@gmail.com';
-    document.getElementById('leadEmail').value    = d.leadEmail    || 'vkpintertrade@gmail.com';
-    document.getElementById('privacyText').value  = d.privacyText  || getDefaultPrivacy();
-  } catch(e) {}
-}
-
-function getDefaultPrivacy() {
-  return `นโยบายความเป็นส่วนตัว (Privacy Policy)
-FuelCostTH.com — บริหารงานโดย V.K.P. Intertrade Co., Ltd.
-อัปเดตล่าสุด: พฤษภาคม 2568
-
-1. ข้อมูลที่เก็บรวบรวม
-เราเก็บข้อมูลที่ท่านกรอกผ่านแบบฟอร์มขอใบเสนอราคาและฟอร์ม Export รายงาน ได้แก่ ชื่อ-นามสกุล ตำแหน่งงาน ชื่อบริษัท/โรงงาน ประเภทธุรกิจ จังหวัด เบอร์โทรศัพท์ และอีเมล
-
-2. วัตถุประสงค์การใช้ข้อมูล
-- ส่งต่อข้อมูลให้ซัพพลายเออร์ที่ท่านร้องขอใบเสนอราคา
-- ส่งข่าวสารราคาเชื้อเพลิงและข้อมูลที่เป็นประโยชน์ (เฉพาะกรณีที่ท่านยินยอม)
-- ปรับปรุงบริการของเว็บไซต์
-
-3. การเปิดเผยข้อมูล
-เราจะไม่ขายหรือเปิดเผยข้อมูลส่วนบุคคลของท่านแก่บุคคลภายนอก ยกเว้นซัพพลายเออร์ที่ท่านร้องขอโดยตรงและได้รับความยินยอมจากท่านแล้วเท่านั้น
-
-4. ระยะเวลาการเก็บข้อมูล
-เราเก็บข้อมูลไว้ไม่เกิน 1 ปี นับจากวันที่ท่านกรอกข้อมูล หรือจนกว่าท่านจะขอลบข้อมูล
-
-5. สิทธิของเจ้าของข้อมูล
-ท่านมีสิทธิ์ขอดู แก้ไข หรือลบข้อมูลส่วนบุคคลของท่านได้ทุกเมื่อ โดยติดต่อมาที่อีเมล vkpintertrade@gmail.com
-
-6. การรักษาความปลอดภัย
-เราใช้มาตรการที่เหมาะสมในการรักษาความปลอดภัยของข้อมูล รวมถึงการเข้ารหัส SSL และการจำกัดการเข้าถึงข้อมูล
-
-7. คุกกี้และ Local Storage
-เว็บไซต์นี้ใช้ Local Storage ของเบราว์เซอร์เพื่อจดจำข้อมูลการใช้งาน ไม่มีการส่งข้อมูลนี้ออกไปภายนอก
-
-8. การเปลี่ยนแปลงนโยบาย
-เราอาจปรับปรุงนโยบายนี้เป็นครั้งคราว โดยจะแจ้งให้ทราบผ่านหน้าเว็บไซต์
-
-9. ติดต่อเรา
-V.K.P. Intertrade Co., Ltd.
-อีเมล: vkpintertrade@gmail.com
-เว็บไซต์: fuelcostth.com
-
-นโยบายนี้เป็นไปตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)`;
-}
-
 function changePw() {
+  const old = document.getElementById('oldPw').value;   // ✅ fixed: ประกาศตัวแปรก่อน
   const nw  = document.getElementById('newPw').value;
   const msg = document.getElementById('pwMsg');
-  if (old !== state.password) { msg.style.color='#FCA5A5'; msg.textContent='รหัสผ่านปัจจุบันไม่ถูกต้อง'; return; }
-  if (nw.length < 6) { msg.style.color='#FCA5A5'; msg.textContent='รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร'; return; }
+  if (old !== state.password) {
+    msg.style.color = '#FCA5A5'; msg.textContent = 'รหัสผ่านปัจจุบันไม่ถูกต้อง'; return;
+  }
+  if (nw.length < 6) {
+    msg.style.color = '#FCA5A5'; msg.textContent = 'รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร'; return;
+  }
   state.password = nw;
   saveState();
-  msg.style.color = '#6EE7B7';
-  msg.textContent = '✅ เปลี่ยนรหัสผ่านสำเร็จ';
+  msg.style.color = '#6EE7B7'; msg.textContent = '✅ เปลี่ยนรหัสผ่านสำเร็จ';
   document.getElementById('oldPw').value = '';
   document.getElementById('newPw').value = '';
 }
@@ -679,137 +531,91 @@ function startClock() {
 }
 
 // ═══════════════════════════════════════════════════════
-// TABS
+// TABS — re-render on switch
 // ═══════════════════════════════════════════════════════
+const TAB_RENDERS = {
+  dashboard: () => renderDashboard(),
+  slots:     () => renderSlots(),
+  sponsors:  () => renderSponsorTable(),
+  mapping:   () => renderMappingTab(),   // ✅ fixed: was never called
+  rotation:  () => renderRotation(),
+  settings:  () => renderSettings(),
+};
+
 function showTab(name, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('tab-'+name).classList.add('active');
+  if (TAB_RENDERS[name]) TAB_RENDERS[name]();  // ✅ fixed: trigger render on switch
 }
 
 // ═══════════════════════════════════════════════════════
 // HELPERS
 // ═══════════════════════════════════════════════════════
 function fmt(n) { return Math.round(n).toLocaleString('th-TH'); }
-
 function getSponsor(id) { return state.sponsors.find(s => s.id === id); }
-
-function getActiveRevenue() {
-  return state.sponsors
-    .filter(s => s.status === 'active')
-    .reduce((sum, s) => sum + (s.price||0), 0);
-}
-
-function daysLeft(endDate) {
-  if (!endDate) return null;
-  const diff = new Date(endDate) - new Date();
-  return Math.ceil(diff / 86400000);
-}
+function daysLeft(d) { if(!d) return null; return Math.ceil((new Date(d)-new Date())/86400000); }
 
 // ═══════════════════════════════════════════════════════
 // DASHBOARD
 // ═══════════════════════════════════════════════════════
 function renderDashboard() {
-  const active   = state.sponsors.filter(s => s.status === 'active');
-  const queue    = state.sponsors.filter(s => s.status === 'queue');
-  const spRev    = active.reduce((s,sp) => s + (sp.price||0), 0);
-  const leadRev  = state.leadFee * state.leadCount;
-  const totalRev = spRev + leadRev;
-  const filledSlots = state.slots.filter(s => s.sponsorId).length;
+  const active  = state.sponsors.filter(s => s.status === 'active');
+  const spRev   = active.reduce((s,sp) => s+(sp.price||0), 0);
+  const leadRev = state.leadFee * state.leadCount;
+  const total   = spRev + leadRev;
+  const filled  = state.slots.filter(s => s.sponsorId).length;
 
-  // Stats
   document.getElementById('revStats').innerHTML = `
-    <div class="rev-stat">
-      <div class="rev-stat-label">รายได้ Sponsor/เดือน</div>
-      <div class="rev-stat-val" style="color:#4ADE80">฿${fmt(spRev)}</div>
-      <div class="rev-stat-sub" style="color:#4ADE80">${active.length} Sponsor Active</div>
-    </div>
-    <div class="rev-stat">
-      <div class="rev-stat-label">Lead Fee/เดือน</div>
-      <div class="rev-stat-val" style="color:#38BDF8">฿${fmt(leadRev)}</div>
-      <div class="rev-stat-sub">฿${state.leadFee} × ${state.leadCount} leads</div>
-    </div>
-    <div class="rev-stat">
-      <div class="rev-stat-label">รวมทั้งหมด/เดือน</div>
-      <div class="rev-stat-val" style="color:#F59E0B">฿${fmt(totalRev)}</div>
-      <div class="rev-stat-sub">รายปี ≈ ฿${fmt(totalRev*12)}</div>
-    </div>
-    <div class="rev-stat">
-      <div class="rev-stat-label">พื้นที่ว่าง</div>
-      <div class="rev-stat-val" style="color:${filledSlots<state.slots.length?'#F59E0B':'#4ADE80'}">${state.slots.length - filledSlots}/${state.slots.length}</div>
-      <div class="rev-stat-sub">slot ยังว่างอยู่</div>
-    </div>`;
+    <div class="rev-stat"><div class="rev-stat-label">รายได้ Sponsor/เดือน</div><div class="rev-stat-val" style="color:#4ADE80">฿${fmt(spRev)}</div><div class="rev-stat-sub" style="color:#4ADE80">${active.length} ราย Active</div></div>
+    <div class="rev-stat"><div class="rev-stat-label">Lead Fee/เดือน</div><div class="rev-stat-val" style="color:#38BDF8">฿${fmt(leadRev)}</div><div class="rev-stat-sub">฿${state.leadFee} × ${state.leadCount} leads</div></div>
+    <div class="rev-stat"><div class="rev-stat-label">รวม/เดือน</div><div class="rev-stat-val" style="color:#F59E0B">฿${fmt(total)}</div><div class="rev-stat-sub">รายปี ≈ ฿${fmt(total*12)}</div></div>
+    <div class="rev-stat"><div class="rev-stat-label">Slot ว่าง</div><div class="rev-stat-val" style="color:${filled<state.slots.length?'#F59E0B':'#4ADE80'}">${state.slots.length-filled}/${state.slots.length}</div><div class="rev-stat-sub">รอ Sponsor</div></div>`;
 
-  // Revenue chart
-  const pkgRevenue = {};
-  active.forEach(s => { pkgRevenue[s.package] = (pkgRevenue[s.package]||0) + s.price; });
-  const maxRev = Math.max(...Object.values(pkgRevenue), 1);
-  const pkgColors = { featured:'#F59E0B', verified:'#38BDF8', listed:'#94A3B8', exclusive:'#A78BFA' };
-  const pkgNames  = { featured:'Featured', verified:'Verified', listed:'Listed', exclusive:'Exclusive' };
-
+  const pkgRev = {};
+  active.forEach(s => { pkgRev[s.package] = (pkgRev[s.package]||0) + s.price; });
+  const maxR = Math.max(...Object.values(pkgRev), 1);
+  const pkgC = {featured:'#F59E0B',verified:'#38BDF8',listed:'#94A3B8',exclusive:'#A78BFA'};
+  const pkgN = {featured:'Featured',verified:'Verified',listed:'Listed',exclusive:'Exclusive'};
   document.getElementById('revenueChart').innerHTML = [
-    ...Object.entries(pkgRevenue).map(([pkg,rev]) => `
+    ...Object.entries(pkgRev).map(([pkg,rev]) => `
       <div class="bar-row">
-        <div class="bar-label">${pkgNames[pkg]||pkg}</div>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:${rev/maxRev*100}%;background:${pkgColors[pkg]||'#64748B'}">
-            ${active.filter(s=>s.package===pkg).length} ราย
-          </div>
-        </div>
-        <div class="bar-val" style="color:${pkgColors[pkg]||'#fff'}">฿${fmt(rev)}</div>
+        <div class="bar-label">${pkgN[pkg]||pkg}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${rev/maxR*100}%;background:${pkgC[pkg]||'#64748B'}">${active.filter(s=>s.package===pkg).length} ราย</div></div>
+        <div class="bar-val" style="color:${pkgC[pkg]||'#fff'}">฿${fmt(rev)}</div>
       </div>`),
     `<div class="bar-row" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1)">
       <div class="bar-label" style="color:#fff">Lead Fee</div>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:${leadRev/maxRev*100}%;background:#059669">
-          ${state.leadCount} leads
-        </div>
-      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:${leadRev/maxR*100}%;background:#059669">${state.leadCount} leads</div></div>
       <div class="bar-val" style="color:#4ADE80">฿${fmt(leadRev)}</div>
     </div>`
   ].join('');
 
-  // Expiry
-  const expiring = state.sponsors
-    .filter(s => s.status === 'active' && s.end)
-    .map(s => ({ ...s, days: daysLeft(s.end) }))
-    .filter(s => s.days !== null && s.days <= 30)
-    .sort((a,b) => a.days - b.days);
-
-  document.getElementById('expiryList').innerHTML = expiring.length === 0
+  const exp = state.sponsors
+    .filter(s => s.status==='active' && s.end)
+    .map(s => ({...s, days:daysLeft(s.end)}))
+    .filter(s => s.days!==null && s.days<=30)
+    .sort((a,b) => a.days-b.days);
+  document.getElementById('expiryList').innerHTML = exp.length===0
     ? '<div style="color:#64748B;font-size:12px;text-align:center;padding:16px">ไม่มีสัญญาหมดใน 30 วัน ✅</div>'
-    : expiring.map(s => `
+    : exp.map(s => `
       <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-        <div>
-          <div style="font-weight:700;font-size:13px">${s.name}</div>
-          <div style="font-size:11px;color:#94A3B8">${s.package} · ฿${fmt(s.price)}/เดือน</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-weight:800;font-size:14px;color:${s.days<=7?'#F87171':s.days<=14?'#FCD34D':'#4ADE80'}">${s.days} วัน</div>
-          <div style="font-size:10px;color:#94A3B8">${s.end}</div>
-        </div>
+        <div><div style="font-weight:700;font-size:13px">${s.name}</div><div style="font-size:11px;color:#94A3B8">${s.package} · ฿${fmt(s.price)}/เดือน</div></div>
+        <div style="text-align:right"><div style="font-weight:800;font-size:14px;color:${s.days<=7?'#F87171':s.days<=14?'#FCD34D':'#4ADE80'}">${s.days} วัน</div><div style="font-size:10px;color:#94A3B8">${s.end}</div></div>
       </div>`).join('');
 
-  // Goal bar
-  const pct = Math.min(totalRev / state.goal * 100, 100).toFixed(0);
+  const pct = Math.min(total/state.goal*100, 100).toFixed(0);
   document.getElementById('goalBar').innerHTML = `
     <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px">
-      <span style="color:#94A3B8">ปัจจุบัน: <strong style="color:#fff">฿${fmt(totalRev)}</strong></span>
+      <span style="color:#94A3B8">ปัจจุบัน: <strong style="color:#fff">฿${fmt(total)}</strong></span>
       <span style="color:#94A3B8">เป้าหมาย: <strong style="color:#F59E0B">฿${fmt(state.goal)}</strong></span>
     </div>
     <div style="background:rgba(255,255,255,.08);border-radius:8px;height:28px;overflow:hidden">
-      <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#059669,#4ADE80);border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:700;color:#fff;transition:width .8s ease">
-        ${pct}%
-      </div>
+      <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,#059669,#4ADE80);border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:12px;font-weight:700;color:#fff;transition:width .8s">${pct}%</div>
     </div>
     <div style="display:flex;gap:16px;margin-top:10px">
-      <div style="font-size:11px;color:#94A3B8">
-        เหลืออีก: <strong style="color:#FCD34D">฿${fmt(Math.max(state.goal-totalRev,0))}</strong>
-      </div>
-      <div style="font-size:11px;color:#94A3B8">
-        Potential ถ้าเต็มทุก slot: <strong style="color:#4ADE80">฿${fmt(state.slots.reduce((s,sl)=>s+(PACKAGE_PRICES[sl.type]||0),0) + leadRev)}</strong>
-      </div>
+      <div style="font-size:11px;color:#94A3B8">เหลืออีก: <strong style="color:#FCD34D">฿${fmt(Math.max(state.goal-total,0))}</strong></div>
     </div>`;
 }
 
@@ -829,8 +635,8 @@ function renderSlots() {
         <div class="slot-price-tag" style="color:${col.text}">฿${fmt(sp.price)}<span style="font-size:11px;font-weight:400;color:#94A3B8">/เดือน</span></div>
         <div class="slot-actions">
           <span class="slot-badge" style="background:${col.bg};color:${col.text};border:1px solid ${col.border}">${slot.type}</span>
-          <button class="slot-btn btn-ghost" style="background:rgba(255,255,255,.1);color:#fff" onclick="removeFromSlot('${slot.id}')">ถอด</button>
-          <button class="slot-btn btn-blue" style="background:#0EA5E9;color:#fff" onclick="assignSlot('${slot.id}')">เปลี่ยน</button>
+          <button class="slot-btn btn-ghost" style="background:rgba(220,38,38,.2);color:#FCA5A5" onclick="removeFromSlot('${slot.id}')">ถอด</button>
+          <button class="slot-btn btn-blue" style="background:#0EA5E9;color:#fff" onclick="openAssignModal('${slot.id}')">เปลี่ยน</button>
         </div>
       </div>` : `
       <div class="slot-card slot-empty">
@@ -839,7 +645,7 @@ function renderSlots() {
         <div style="font-size:12px;color:#64748B;margin-bottom:8px">มูลค่า: ฿${fmt(PACKAGE_PRICES[slot.type]||0)}/เดือน</div>
         <div class="slot-actions">
           <span class="slot-badge" style="background:rgba(100,116,139,.2);color:#94A3B8;border:1px solid rgba(100,116,139,.3)">${slot.type}</span>
-          <button class="slot-btn btn-gold" style="background:#F59E0B;color:#1a1a1a" onclick="assignSlot('${slot.id}')">➕ ใส่ Sponsor</button>
+          <button class="slot-btn btn-gold" style="background:#F59E0B;color:#1a1a1a" onclick="openAssignModal('${slot.id}')">➕ ใส่ Sponsor</button>
           <button class="slot-btn" style="background:rgba(220,38,38,.15);color:#FCA5A5;border:1px solid rgba(220,38,38,.3)" onclick="removeSlot('${slot.id}')">ลบ slot</button>
         </div>
       </div>`;
@@ -850,10 +656,8 @@ function addSlot() {
   const name = document.getElementById('newSlotName').value.trim();
   const type = document.getElementById('newSlotType').value;
   if (!name) { alert('กรุณาใส่ชื่อตำแหน่ง'); return; }
-  state.slots.push({ id: 'slot'+Date.now(), name, type, sponsorId: null });
-  saveState();
-  renderSlots();
-  renderDashboard();
+  state.slots.push({id:'slot'+Date.now(), name, type, sponsorId:null});
+  saveState(); renderSlots(); renderDashboard();
   document.getElementById('newSlotName').value = '';
 }
 
@@ -868,27 +672,39 @@ function removeFromSlot(slotId) {
   if (slot) { slot.sponsorId = null; saveState(); renderSlots(); renderDashboard(); }
 }
 
-function assignSlot(slotId) {
+// ✅ FIXED: ใช้ modal แทน prompt()
+let assigningSlotId = null;
+function openAssignModal(slotId) {
+  assigningSlotId = slotId;
   const slot = state.slots.find(s => s.id === slotId);
-  if (!slot) return;
+  document.getElementById('assignTitle').textContent = `เลือก Sponsor สำหรับ "${slot?.name||''}"`;
   const available = state.sponsors.filter(s => s.status === 'active' || s.status === 'queue');
-  if (!available.length) { alert('ไม่มี Sponsor ที่พร้อมใช้งาน'); return; }
-  const opts = available.map(s => `${s.name} (${s.package})`).join('\n');
-  const idx  = available.findIndex(s => s.id === slot.sponsorId);
-  const choice = prompt(`เลือก Sponsor สำหรับ "${slot.name}":\n\n${available.map((s,i)=>`${i+1}. ${s.name} (${s.package}) ฿${fmt(s.price)}`).join('\n')}\n\nพิมพ์หมายเลข (1-${available.length}):`);
-  const n = parseInt(choice);
-  if (n >= 1 && n <= available.length) {
-    slot.sponsorId = available[n-1].id;
-    saveState(); renderSlots(); renderDashboard();
-  }
+  document.getElementById('assignList').innerHTML = available.length
+    ? available.map(s => `
+      <div onclick="doAssign('${s.id}')" style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.05)'">
+        <span style="font-size:22px">${s.logoUrl||'🏭'}</span>
+        <div style="flex:1">
+          <div style="font-weight:700;color:#fff">${s.name}</div>
+          <div style="font-size:11px;color:#94A3B8">${s.package} · ฿${fmt(s.price)}/เดือน · ${s.status}</div>
+        </div>
+        ${slot?.sponsorId===s.id?'<span style="font-size:11px;color:#4ADE80;font-weight:700">✓ ใช้อยู่</span>':''}
+      </div>`).join('')
+    : '<div style="color:#64748B;text-align:center;padding:20px">ไม่มี Sponsor ที่พร้อมใช้งาน<br><small>เพิ่ม Sponsor ใน Tab Sponsor ก่อนครับ</small></div>';
+  document.getElementById('assignModal').classList.add('open');
+}
+
+function doAssign(sponsorId) {
+  const slot = state.slots.find(s => s.id === assigningSlotId);
+  if (slot) { slot.sponsorId = sponsorId; saveState(); renderSlots(); renderDashboard(); }
+  document.getElementById('assignModal').classList.remove('open');
 }
 
 // ═══════════════════════════════════════════════════════
 // SPONSORS TABLE
 // ═══════════════════════════════════════════════════════
 function renderSponsorTable() {
-  const statusLabel = { active:'🟢 Active', queue:'🟡 Queue', paused:'⚪ Paused', expired:'🔴 Expired' };
-  const pkgCol = { featured:'#F59E0B', verified:'#38BDF8', listed:'#94A3B8', exclusive:'#A78BFA' };
+  const sLabel = {active:'🟢 Active',queue:'🟡 Queue',paused:'⚪ Paused',expired:'🔴 Expired'};
+  const pCol   = {featured:'#F59E0B',verified:'#38BDF8',listed:'#94A3B8',exclusive:'#A78BFA'};
   document.getElementById('sponsorTable').innerHTML = `
     <thead><tr>
       <th>บริษัท</th><th>เชื้อเพลิง</th><th>Package</th>
@@ -898,21 +714,19 @@ function renderSponsorTable() {
       <tr>
         <td><div style="font-weight:700">${s.name}</div><div style="font-size:10px;color:#64748B">${s.tag||''}</div></td>
         <td style="color:#94A3B8;font-size:12px">${s.fuelType||'—'}</td>
-        <td><span style="background:rgba(255,255,255,.06);color:${pkgCol[s.package]||'#fff'};padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${s.package}</span></td>
+        <td><span style="background:rgba(255,255,255,.06);color:${pCol[s.package]||'#fff'};padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${s.package}</span></td>
         <td style="text-align:right;font-weight:700;color:#4ADE80">฿${fmt(s.price)}</td>
         <td style="font-size:12px;color:${s.end&&daysLeft(s.end)<=14?'#FCD34D':'#94A3B8'}">${s.end||'—'}</td>
-        <td style="font-size:12px">${statusLabel[s.status]||s.status}</td>
-        <td>
-          <div style="display:flex;gap:5px">
-            <button class="btn btn-blue btn-sm" onclick="editSponsor('${s.id}')">แก้ไข</button>
-            <button class="btn btn-red btn-sm" onclick="deleteSponsor('${s.id}')">ลบ</button>
-          </div>
-        </td>
-      </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:#64748B;padding:24px">ยังไม่มี Sponsor</td></tr>'}
+        <td style="font-size:12px">${sLabel[s.status]||s.status}</td>
+        <td><div style="display:flex;gap:5px">
+          <button class="btn btn-blue btn-sm" onclick="editSponsor('${s.id}')">แก้ไข</button>
+          <button class="btn btn-red btn-sm" onclick="deleteSponsor('${s.id}')">ลบ</button>
+        </div></td>
+      </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:#64748B;padding:24px">ยังไม่มี Sponsor — กด ➕ เพิ่ม Sponsor</td></tr>'}
     </tbody>`;
 }
 
-// ─── ADD/EDIT SPONSOR ────────────────────────────────
+// ─── ADD/EDIT ────────────────────────────────────────
 let editingId = null;
 
 function openAddSponsor() {
@@ -932,7 +746,7 @@ function editSponsor(id) {
   const s = getSponsor(id);
   if (!s) return;
   editingId = id;
-  document.getElementById('modalTitle').textContent = '✏️ แก้ไข Sponsor';
+  document.getElementById('modalTitle').textContent     = '✏️ แก้ไข Sponsor';
   document.getElementById('spName').value         = s.name||'';
   document.getElementById('spFuelType').value     = s.fuelType||'';
   document.getElementById('spPackage').value      = s.package||'featured';
@@ -949,123 +763,15 @@ function editSponsor(id) {
   document.getElementById('sponsorModal').classList.add('open');
 }
 
-// ─── SUPABASE CONFIG ─────────────────────────
-const SUPABASE_SQL_TEMPLATE = `-- วางและรันใน Supabase SQL Editor
-CREATE TABLE IF NOT EXISTS fct_sponsors (
-  id            TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
-  name          TEXT NOT NULL,
-  short_name    TEXT,
-  logo_url      TEXT,
-  package       TEXT DEFAULT 'listed',
-  price         INTEGER DEFAULT 3000,
-  tag           TEXT,
-  display_price TEXT,
-  fuel_types    TEXT,
-  email         TEXT,
-  phone         TEXT,
-  verified      BOOLEAN DEFAULT false,
-  status        TEXT DEFAULT 'active',
-  created_at    TIMESTAMPTZ DEFAULT now()
-);
-CREATE TABLE IF NOT EXISTS fct_fuel_slots (
-  fuel_id    TEXT PRIMARY KEY,
-  show       BOOLEAN DEFAULT true,
-  sponsor_id TEXT,
-  btn_text   TEXT DEFAULT 'ขอใบเสนอราคา'
-);
-ALTER TABLE fct_sponsors   ENABLE ROW LEVEL SECURITY;
-ALTER TABLE fct_fuel_slots ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "public_read_sp"    ON fct_sponsors   FOR SELECT USING (true);
-CREATE POLICY "public_read_slots" ON fct_fuel_slots FOR SELECT USING (true);
-CREATE POLICY "auth_write_sp"     ON fct_sponsors   FOR ALL USING (true);
-CREATE POLICY "auth_write_slots"  ON fct_fuel_slots FOR ALL USING (true);`;
-
-function saveSbConfig() {
-  const url = document.getElementById('sbUrl').value.trim();
-  const key = document.getElementById('sbKey').value.trim();
-  if (!url || !key) { showSbMsg('กรุณาใส่ URL และ Key', 'red'); return; }
-  localStorage.setItem('fct_sb_url', url);
-  localStorage.setItem('fct_sb_key', key);
-  document.getElementById('sbStatusText').textContent = '✅ บันทึกแล้ว — Reload หน้าเว็บเพื่อเชื่อมต่อ';
-  document.getElementById('sbStatusText').style.color = '#4ADE80';
-  showSbMsg('✅ บันทึก Config สำเร็จ กรุณา Reload หน้าเว็บหลัก (fuelcostth.com)', 'green');
-}
-
-function showSbSQL() {
-  const box = document.getElementById('sbSqlBox');
-  document.getElementById('sbSqlText').value = SUPABASE_SQL_TEMPLATE;
-  box.style.display = box.style.display === 'none' ? 'block' : 'none';
-}
-
-function copySQL() {
-  navigator.clipboard.writeText(document.getElementById('sbSqlText').value);
-  showSbMsg('✅ Copy SQL แล้ว — ไปวางใน Supabase SQL Editor', 'green');
-}
-
-async function pushToSupabase() {
-  const url = localStorage.getItem('fct_sb_url');
-  const key = localStorage.getItem('fct_sb_key');
-  if (!url || !key) { showSbMsg('กรุณาเชื่อมต่อ Supabase ก่อน', 'red'); return; }
-  if (!window.supabase) { showSbMsg('โหลด Supabase SDK ไม่ได้', 'red'); return; }
-
-  showSbMsg('⏳ กำลัง Push ข้อมูล...', 'gold');
-  try {
-    const sb = window.supabase.createClient(url, key);
-    // Push sponsors
-    const sponsors = state.sponsors.map(s => ({
-      id: s.id, name: s.name, short_name: s.name.substring(0,20),
-      logo_url: null, package: s.package, price: s.price,
-      tag: s.tag, display_price: s.displayPrice,
-      email: s.email, phone: s.phone,
-      verified: s.package === 'verified' || s.package === 'featured',
-      status: s.status,
-    }));
-    const { error: spErr } = await sb.from('fct_sponsors').upsert(sponsors);
-    if (spErr) throw spErr;
-
-    showSbMsg(`✅ Push สำเร็จ! Sponsor ${sponsors.length} ราย ขึ้น Cloud แล้ว — เว็บจะแสดงข้อมูลใหม่ทันที`, 'green');
-  } catch(e) {
-    showSbMsg('❌ Error: ' + e.message, 'red');
-  }
-}
-
-function showSbMsg(text, color) {
-  const el = document.getElementById('sbMsg');
-  const colors = { green:'#4ADE80', red:'#F87171', gold:'#FCD34D' };
-  el.style.color = colors[color] || '#fff';
-  el.textContent = text;
-  setTimeout(()=>{ el.textContent=''; }, 8000);
-}
-
-function loadSbConfig() {
-  const url = localStorage.getItem('fct_sb_url');
-  const key = localStorage.getItem('fct_sb_key');
-  if (url) document.getElementById('sbUrl').value = url;
-  if (key) document.getElementById('sbKey').value = key;
-  if (url && key) {
-    document.getElementById('sbStatusText').textContent = '✅ มี Config — เชื่อมต่อแล้ว';
-    document.getElementById('sbStatusText').style.color = '#4ADE80';
-  }
-}
-
-function previewLogo() {
-  const val = document.getElementById('spLogoUrl').value.trim();
-  const prev = document.getElementById('logoPreview');
-  if (!prev) return;
-  if (val.startsWith('http')) {
-    prev.innerHTML = `<img src="${val}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentElement.textContent='❌'">`;
-  } else {
-    prev.textContent = val || '🏭';
-  }
-}
-
 function saveSponsor() {
   const name = document.getElementById('spName').value.trim();
   if (!name) { alert('กรุณาใส่ชื่อบริษัท'); return; }
+  const existing = editingId ? getSponsor(editingId) : null;
   const data = {
     id:           editingId || 'sp'+Date.now(),
     name,
     fuelType:     document.getElementById('spFuelType').value.trim(),
+    fuelTypes:    existing?.fuelTypes || [],   // ✅ preserve mapping data
     package:      document.getElementById('spPackage').value,
     price:        parseFloat(document.getElementById('spPrice').value)||0,
     displayPrice: document.getElementById('spDisplayPrice').value.trim(),
@@ -1094,10 +800,79 @@ function deleteSponsor(id) {
 }
 
 function closeSponsorModal() { document.getElementById('sponsorModal').classList.remove('open'); }
-function closeModalOut(e) { if (e.target.id === 'sponsorModal') closeSponsorModal(); }
-function updatePackagePrice() {
-  const pkg = document.getElementById('spPackage').value;
-  document.getElementById('spPrice').value = PACKAGE_PRICES[pkg] || '';
+function closeModalOut(e, id) { if (e.target.id === id) document.getElementById(id).classList.remove('open'); }
+function updatePackagePrice() { document.getElementById('spPrice').value = PACKAGE_PRICES[document.getElementById('spPackage').value]||''; }
+function previewLogo() {
+  const val = document.getElementById('spLogoUrl').value.trim();
+  const prev = document.getElementById('logoPreview');
+  if (!prev) return;
+  if (val.startsWith('http')) prev.innerHTML = `<img src="${val}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentElement.textContent='❌'">`;
+  else prev.textContent = val || '🏭';
+}
+
+// ═══════════════════════════════════════════════════════
+// MAPPING TAB — ✅ FIXED: ใช้ state.sponsors โดยตรง
+// ═══════════════════════════════════════════════════════
+function renderMappingTab() {
+  const sponsors = state.sponsors.filter(s => s.status !== 'expired');
+
+  if (!sponsors.length) {
+    document.getElementById('mappingMatrix').innerHTML = `
+      <tr><td style="padding:20px;color:#64748B;text-align:center">
+        ยังไม่มี Sponsor — เพิ่มได้ใน Tab Sponsor ก่อนครับ
+      </td></tr>`;
+    return;
+  }
+
+  document.getElementById('mappingMatrix').innerHTML = `
+    <thead>
+      <tr>
+        <th style="padding:8px 12px;text-align:left;font-size:11px;color:#64748B;border-bottom:1px solid rgba(255,255,255,.1);min-width:150px">เชื้อเพลิง</th>
+        ${sponsors.map(sp => `
+          <th style="padding:8px 10px;text-align:center;font-size:11px;border-bottom:1px solid rgba(255,255,255,.1);min-width:110px">
+            <div style="font-size:18px">${sp.logoUrl||'🏭'}</div>
+            <div style="color:${sp.status==='active'?'#fff':'#475569'};font-weight:700;font-size:12px">${sp.name.length>14?sp.name.slice(0,14)+'…':sp.name}</div>
+            <div style="font-size:9px;color:#64748B">${sp.package}</div>
+            <div style="font-size:9px;color:${sp.status==='active'?'#4ADE80':'#F87171'}">${sp.status==='active'?'✅ Active':'⏸️ '+sp.status}</div>
+          </th>`).join('')}
+      </tr>
+    </thead>
+    <tbody>
+      ${ALL_FUELS.map((f, ri) => `
+        <tr style="background:${ri%2===0?'rgba(255,255,255,.02)':'transparent'}">
+          <td style="padding:7px 12px;font-size:13px;font-weight:600;color:#E2E8F0;border-bottom:1px solid rgba(255,255,255,.05)">${f.name}</td>
+          ${sponsors.map(sp => {
+            const linked = (sp.fuelTypes||[]).includes(f.id);
+            const disabled = sp.status === 'paused' || sp.status === 'expired';
+            return `<td style="padding:7px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05)">
+              <input type="checkbox" ${linked?'checked':''} ${disabled?'disabled':''}
+                style="width:16px;height:16px;cursor:${disabled?'not-allowed':'pointer'};accent-color:var(--green)"
+                onchange="toggleMapping('${sp.id}','${f.id}',this.checked)"
+                title="${sp.name} ↔ ${f.name}">
+            </td>`;
+          }).join('')}
+        </tr>`).join('')}
+    </tbody>`;
+}
+
+// ✅ FIXED: toggleMapping อัปเดต state.sponsors โดยตรง
+function toggleMapping(spId, fuelId, checked) {
+  const sp = state.sponsors.find(s => s.id === spId);
+  if (!sp) return;
+  if (!sp.fuelTypes) sp.fuelTypes = [];
+  if (checked && !sp.fuelTypes.includes(fuelId)) sp.fuelTypes.push(fuelId);
+  if (!checked) sp.fuelTypes = sp.fuelTypes.filter(f => f !== fuelId);
+  saveState(); // บันทึกทันที
+}
+
+function saveMappingLocal() {
+  saveState();
+  showMsg('mappingSaveMsg', '✅ บันทึกแล้ว — refresh fuelcostth.com เพื่อดูผล', '#6EE7B7');
+}
+
+async function saveMappingToCloud() {
+  saveMappingLocal();
+  await pushAllToSupabase();
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1105,23 +880,20 @@ function updatePackagePrice() {
 // ═══════════════════════════════════════════════════════
 function renderRotation() {
   const r = state.rotation;
-  document.getElementById('rotFreq').value      = r.freq||7;
-  document.getElementById('rotFeatured').checked= r.featured||false;
+  document.getElementById('rotFreq').value       = r.freq||7;
+  document.getElementById('rotFeatured').checked = r.featured||false;
   document.getElementById('rotVerified').checked = r.verified!==false;
-  document.getElementById('rotListed').checked  = r.listed!==false;
+  document.getElementById('rotListed').checked   = r.listed!==false;
   document.getElementById('lastRotate').textContent = r.lastDate
-    ? new Date(r.lastDate).toLocaleDateString('th-TH') : 'ยังไม่เคยสลับ';
-
-  const queueSponsors = state.sponsors.filter(s => s.status === 'queue');
-  document.getElementById('rotationQueue').innerHTML = queueSponsors.length ? queueSponsors.map((s,i) => `
-    <div class="queue-item">
-      <div class="queue-num">${i+1}</div>
-      <div>
-        <div class="queue-name">${s.name}</div>
-        <div class="queue-days">${s.package} · ฿${fmt(s.price)}/เดือน</div>
-      </div>
-      <button class="btn btn-green btn-sm" onclick="activateSponsor('${s.id}')">เปิดใช้</button>
-    </div>`) .join('')
+    ? new Date(r.lastDate).toLocaleDateString('th-TH') : 'ยังไม่เคย';
+  const queue = state.sponsors.filter(s => s.status==='queue');
+  document.getElementById('rotationQueue').innerHTML = queue.length
+    ? queue.map((s,i) => `
+      <div class="queue-item">
+        <div class="queue-num">${i+1}</div>
+        <div><div style="font-weight:600;font-size:13px">${s.name}</div><div style="font-size:11px;color:#94A3B8">${s.package} · ฿${fmt(s.price)}/เดือน</div></div>
+        <button class="btn btn-green btn-sm" onclick="activateSponsor('${s.id}')">เปิดใช้</button>
+      </div>`).join('')
     : '<div style="color:#64748B;font-size:12px;text-align:center;padding:16px">ไม่มี Sponsor รอในคิว</div>';
 }
 
@@ -1137,7 +909,6 @@ function rotateNow() {
   if (!confirm('สลับ Sponsor ตอนนี้?')) return;
   state.rotation.lastDate = new Date().toISOString();
   saveState(); renderRotation();
-  alert('✅ สลับ Sponsor เรียบร้อย (ในระบบ Production จะอัปเดตไฟล์จริงอัตโนมัติ)');
 }
 
 function activateSponsor(id) {
@@ -1150,7 +921,7 @@ function activateSponsor(id) {
 // ═══════════════════════════════════════════════════════
 function renderSettings() {
   document.getElementById('packagePrices').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
       ${Object.entries(PACKAGE_PRICES).map(([pkg,price]) => `
         <div style="background:rgba(255,255,255,.06);border-radius:8px;padding:12px;text-align:center">
           <div style="font-size:11px;color:#94A3B8;text-transform:uppercase;font-weight:700;margin-bottom:4px">${pkg}</div>
@@ -1158,185 +929,198 @@ function renderSettings() {
           <div style="font-size:10px;color:#64748B">/เดือน</div>
         </div>`).join('')}
     </div>
-    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div>
-        <label class="f-label">Lead Fee (฿/lead)</label>
-        <input class="f-input" type="number" value="${state.leadFee}" onchange="state.leadFee=+this.value;saveState();renderDashboard()">
-      </div>
-      <div>
-        <label class="f-label">จำนวน Lead ประมาณ/เดือน</label>
-        <input class="f-input" type="number" value="${state.leadCount}" onchange="state.leadCount=+this.value;saveState();renderDashboard()">
-      </div>
-      <div>
-        <label class="f-label">เป้าหมายรายได้/เดือน (฿)</label>
-        <input class="f-input" type="number" value="${state.goal}" onchange="state.goal=+this.value;saveState();renderDashboard()">
-      </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div><label class="f-label">Lead Fee (฿/lead)</label>
+        <input class="f-input" type="number" value="${state.leadFee}" onchange="state.leadFee=+this.value;saveState();renderDashboard()"></div>
+      <div><label class="f-label">Lead ประมาณ/เดือน</label>
+        <input class="f-input" type="number" value="${state.leadCount}" onchange="state.leadCount=+this.value;saveState();renderDashboard()"></div>
+      <div><label class="f-label">เป้าหมายรายได้/เดือน</label>
+        <input class="f-input" type="number" value="${state.goal}" onchange="state.goal=+this.value;saveState();renderDashboard()"></div>
     </div>`;
+  loadSbConfig();
+  loadContactSettings();
 }
 
 // ═══════════════════════════════════════════════════════
-// RENDER ALL
+// SUPABASE
+// ═══════════════════════════════════════════════════════
+const SUPABASE_SQL_TEMPLATE = `-- วาง/รันใน Supabase SQL Editor
+CREATE TABLE IF NOT EXISTS fct_sponsors (
+  id            TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  name          TEXT NOT NULL,
+  short_name    TEXT,
+  logo_url      TEXT,
+  package       TEXT DEFAULT 'listed',
+  price         INTEGER DEFAULT 3000,
+  tag           TEXT,
+  display_price TEXT,
+  fuel_types    TEXT,
+  email         TEXT,
+  phone         TEXT,
+  verified      BOOLEAN DEFAULT false,
+  status        TEXT DEFAULT 'active',
+  created_at    TIMESTAMPTZ DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS fct_fuel_slots (
+  fuel_id    TEXT PRIMARY KEY,
+  show       BOOLEAN DEFAULT true,
+  sponsor_id TEXT,
+  btn_text   TEXT DEFAULT 'ขอใบเสนอราคา'
+);
+ALTER TABLE fct_sponsors   ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fct_fuel_slots ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public_read_sp"    ON fct_sponsors   FOR SELECT USING (true);
+CREATE POLICY "public_read_slots" ON fct_fuel_slots FOR SELECT USING (true);
+CREATE POLICY "auth_write_sp"     ON fct_sponsors   FOR ALL   USING (true);
+CREATE POLICY "auth_write_slots"  ON fct_fuel_slots FOR ALL   USING (true);`;
+
+function saveSbConfig() {
+  const url = document.getElementById('sbUrl').value.trim();
+  const key = document.getElementById('sbKey').value.trim();
+  if (!url || !key) { showSbMsg('กรุณาใส่ URL และ Key', 'red'); return; }
+  localStorage.setItem('fct_sb_url', url);
+  localStorage.setItem('fct_sb_key', key);
+  document.getElementById('sbStatusText').textContent = '✅ บันทึกแล้ว';
+  document.getElementById('sbStatusText').style.color = '#4ADE80';
+  showSbMsg('✅ บันทึก Config สำเร็จ', 'green');
+}
+
+function showSbSQL() {
+  const box = document.getElementById('sbSqlBox');
+  document.getElementById('sbSqlText').value = SUPABASE_SQL_TEMPLATE;
+  box.style.display = box.style.display==='none' ? 'block' : 'none';
+}
+
+function copySQL() {
+  navigator.clipboard.writeText(document.getElementById('sbSqlText').value);
+  showSbMsg('✅ Copy SQL แล้ว', 'green');
+}
+
+async function pushAllToSupabase() {
+  const url = localStorage.getItem('fct_sb_url');
+  const key = localStorage.getItem('fct_sb_key');
+  if (!url || !key) { showSbMsg('กรุณาบันทึก Supabase Config ก่อน', 'red'); return; }
+  if (!window.supabase) { showSbMsg('โหลด Supabase SDK ไม่ได้', 'red'); return; }
+  showSbMsg('⏳ กำลัง Push...', 'gold');
+  try {
+    const sb = window.supabase.createClient(url, key);
+
+    // Push sponsors
+    const sponsors = state.sponsors.map(s => ({
+      id: s.id,
+      name: s.name,
+      short_name: s.name.length > 20 ? s.name.slice(0,20) : s.name,
+      logo_url:      s.logoUrl || null,
+      package:       s.package,
+      price:         s.price,
+      tag:           s.tag || null,
+      display_price: s.displayPrice || null,
+      fuel_types:    (s.fuelTypes||[]).join(','),
+      email:         s.email || null,
+      phone:         s.phone || null,
+      verified:      ['verified','featured','exclusive'].includes(s.package),
+      status:        s.status,
+    }));
+    const { error: spErr } = await sb.from('fct_sponsors').upsert(sponsors);
+    if (spErr) throw spErr;
+
+    // ✅ Push fct_fuel_slots (fuel → sponsor mapping)
+    const slots = [];
+    ALL_FUELS.forEach(f => {
+      const sp = state.sponsors.find(s => (s.fuelTypes||[]).includes(f.id) && s.status==='active');
+      slots.push({
+        fuel_id:    f.id,
+        show:       !!sp,
+        sponsor_id: sp?.id || null,
+        btn_text:   'ขอใบเสนอราคา',
+      });
+    });
+    const { error: slotErr } = await sb.from('fct_fuel_slots').upsert(slots);
+    if (slotErr) throw slotErr;
+
+    showSbMsg(`✅ Push สำเร็จ — Sponsor ${sponsors.length} ราย + Fuel slots ${slots.length} รายการ`, 'green');
+  } catch(e) {
+    showSbMsg('❌ Error: ' + e.message, 'red');
+  }
+}
+
+function showSbMsg(text, color) {
+  const el = document.getElementById('sbMsg');
+  const c  = {green:'#4ADE80', red:'#F87171', gold:'#FCD34D'};
+  el.style.color  = c[color] || '#fff';
+  el.textContent  = text;
+  setTimeout(() => { el.textContent = ''; }, 8000);
+}
+
+function loadSbConfig() {
+  const url = localStorage.getItem('fct_sb_url');
+  const key = localStorage.getItem('fct_sb_key');
+  if (url) document.getElementById('sbUrl').value = url;
+  if (key) document.getElementById('sbKey').value = key;
+  if (url && key) {
+    document.getElementById('sbStatusText').textContent = '✅ มี Config — พร้อม Push';
+    document.getElementById('sbStatusText').style.color = '#4ADE80';
+  }
+}
+
+// ─── CONTACT / PRIVACY ────────────────────────────────
+function saveContactSettings() {
+  const data = {
+    contactEmail: document.getElementById('contactEmail').value.trim(),
+    leadEmail:    document.getElementById('leadEmail').value.trim(),
+    privacyText:  document.getElementById('privacyText').value.trim(),
+  };
+  localStorage.setItem('fct_contact_settings', JSON.stringify(data));
+  showMsg('contactMsg', '✅ บันทึกแล้ว', '#6EE7B7');
+}
+
+function loadContactSettings() {
+  try {
+    const d = JSON.parse(localStorage.getItem('fct_contact_settings')||'{}');
+    document.getElementById('contactEmail').value = d.contactEmail || 'vkpintertrade@gmail.com';
+    document.getElementById('leadEmail').value    = d.leadEmail    || 'vkpintertrade@gmail.com';
+    document.getElementById('privacyText').value  = d.privacyText  || getDefaultPrivacy();
+  } catch(e) {}
+}
+
+function getDefaultPrivacy() {
+  return `นโยบายความเป็นส่วนตัว (Privacy Policy)
+FuelCostTH.com — V.K.P. Intertrade Co., Ltd.
+อัปเดตล่าสุด: มิถุนายน 2568
+
+1. ข้อมูลที่เก็บ: ชื่อ ตำแหน่ง บริษัท ประเภทธุรกิจ จังหวัด เบอร์โทร อีเมล
+2. วัตถุประสงค์: ส่งต่อให้ซัพพลายเออร์ที่ร้องขอ / ส่งข่าวสารราคาเชื้อเพลิง (เฉพาะกรณียินยอม)
+3. การเปิดเผย: ไม่ขายข้อมูล — ส่งเฉพาะซัพพลายเออร์ที่ร้องขอโดยตรง
+4. ระยะเวลา: ไม่เกิน 1 ปี
+5. สิทธิ์: ขอดู แก้ไข หรือลบได้ที่ vkpintertrade@gmail.com
+6. เป็นไปตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)`;
+}
+
+// ─── UTILS ────────────────────────────────────────────
+function showMsg(elId, text, color, ms=3000) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.style.color = color;
+  el.textContent = text;
+  setTimeout(() => { el.textContent = ''; }, ms);
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER ALL — ✅ FIXED: รวม renderMappingTab
 // ═══════════════════════════════════════════════════════
 function renderAll() {
   renderDashboard();
   renderSlots();
   renderSponsorTable();
+  renderMappingTab();   // ✅ fixed: เพิ่มแล้ว
   renderRotation();
   renderSettings();
-  loadContactSettings();
-  loadSbConfig();
 }
 
 // ═══════════════════════════════════════════════════════
-// FUEL-SPONSOR MAPPING
+// INIT
 // ═══════════════════════════════════════════════════════
-const ALL_FUELS = [
-  {id:'fo_a',  name:'น้ำมันเตา A'},
-  {id:'fo_c',  name:'น้ำมันเตา C'},
-  {id:'fo_alt',name:'น้ำมันเตาทดแทน'},
-  {id:'lpg',   name:'LPG'},
-  {id:'lng',   name:'LNG'},
-  {id:'cng',   name:'ก๊าซธรรมชาติ (CNG)'},
-  {id:'hvo',   name:'HVO Biodiesel'},
-  {id:'b100',  name:'B100 ไบโอดีเซล'},
-  {id:'b20',   name:'B20 (ผสม 20%)'},
-  {id:'pellet',name:'Wood Pellet'},
-  {id:'palm',  name:'กะลาปาล์ม'},
-  {id:'rice',  name:'แกลบ/ชีวมวล'},
-  {id:'biogas',name:'Biogas'},
-  {id:'elec',  name:'ไฟฟ้า (Boiler)'},
-];
-
-const DEFAULT_SPONSORS_MAP = [
-  {id:'sp_biggas', name:'บิ๊กแก๊ส เทคโนโลยี', shortName:'บิ๊กแก๊ส', logo:'🟠', price:'฿22.30/กก.', verified:true, active:true, fuelTypes:['lpg','lng']},
-  {id:'sp_thailpg',name:'Thai LPG Industrial',  shortName:'Thai LPG',  logo:'🟠', price:'฿22.30/กก.', verified:true, active:true, fuelTypes:['lpg']},
-  {id:'sp_prism',  name:'Prism Energy LNG',      shortName:'Prism LNG', logo:'🔵', price:'฿18.90/กก.', verified:true, active:true, fuelTypes:['lng']},
-  {id:'sp_tag',    name:'TAG Energy',             shortName:'TAG Energy',logo:'🌿', price:'',            verified:false,active:true, fuelTypes:['fo_alt']},
-];
-
-function getMappedSponsors() {
-  try {
-    const s = localStorage.getItem('fct_sponsors');
-    return s ? JSON.parse(s) : DEFAULT_SPONSORS_MAP;
-  } catch(e) { return DEFAULT_SPONSORS_MAP; }
-}
-
-function saveMappedSponsors(sps) {
-  localStorage.setItem('fct_sponsors', JSON.stringify(sps));
-}
-
-function renderMappingTab() {
-  const sponsors = getMappedSponsors();
-
-  // Sponsor active toggle list
-  document.getElementById('sponsorActiveList').innerHTML = sponsors.length
-    ? sponsors.map(sp => `
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
-        <div style="display:flex;align-items:center;gap:8px">
-          <span>${sp.logo||'🏭'}</span>
-          <div>
-            <div style="font-weight:600;font-size:13px">${sp.name}</div>
-            <div style="font-size:10px;color:#64748B">${sp.price||'—'} · ${sp.fuelTypes.length} เชื้อเพลิง</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:#E2E8F0">
-            <input type="checkbox" ${sp.active?'checked':''} style="accent-color:var(--green)"
-              onchange="toggleSponsorActive('${sp.id}',this.checked)">
-            เปิด
-          </label>
-          <button class="btn btn-red btn-sm" onclick="deleteMappedSponsor('${sp.id}')">ลบ</button>
-        </div>
-      </div>`)
-    .join('')
-    : '<div style="color:#475569;font-size:12px;text-align:center;padding:16px">ยังไม่มี Sponsor</div>';
-
-  // Matrix table
-  const pkgColor = {featured:'#F59E0B',verified:'#38BDF8',listed:'#94A3B8'};
-  const table = document.getElementById('mappingMatrix');
-  table.innerHTML = `
-    <thead>
-      <tr>
-        <th style="padding:8px 12px;text-align:left;font-size:11px;color:#64748B;border-bottom:1px solid rgba(255,255,255,.1);min-width:150px">เชื้อเพลิง</th>
-        ${sponsors.map(sp=>`
-          <th style="padding:8px 10px;text-align:center;font-size:11px;border-bottom:1px solid rgba(255,255,255,.1);min-width:100px">
-            <div>${sp.logo||'🏭'}</div>
-            <div style="color:${sp.active?'#fff':'#475569'};font-weight:700">${sp.shortName}</div>
-            <div style="font-size:9px;color:#64748B">${sp.active?'✅ เปิด':'⏸️ ปิด'}</div>
-          </th>`).join('')}
-      </tr>
-    </thead>
-    <tbody>
-      ${ALL_FUELS.map((f,ri)=>`
-        <tr style="background:${ri%2===0?'rgba(255,255,255,.02)':'transparent'}">
-          <td style="padding:7px 12px;font-size:13px;font-weight:600;color:#E2E8F0;border-bottom:1px solid rgba(255,255,255,.05)">${f.name}</td>
-          ${sponsors.map(sp=>{
-            const linked = sp.fuelTypes.includes(f.id);
-            return `<td style="padding:7px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05)">
-              <input type="checkbox" ${linked?'checked':''} ${!sp.active?'disabled':''}
-                style="width:16px;height:16px;cursor:pointer;accent-color:var(--green)"
-                onchange="toggleMapping('${sp.id}','${f.id}',this.checked)"
-                title="${sp.name} ↔ ${f.name}">
-            </td>`;
-          }).join('')}
-        </tr>`).join('')}
-    </tbody>`;
-}
-
-function toggleSponsorActive(spId, active) {
-  const sps = getMappedSponsors();
-  const sp = sps.find(s => s.id === spId);
-  if (sp) { sp.active = active; saveMappedSponsors(sps); renderMappingTab(); }
-}
-
-function toggleMapping(spId, fuelId, checked) {
-  const sps = getMappedSponsors();
-  const sp  = sps.find(s => s.id === spId);
-  if (!sp) return;
-  if (checked && !sp.fuelTypes.includes(fuelId)) sp.fuelTypes.push(fuelId);
-  if (!checked) sp.fuelTypes = sp.fuelTypes.filter(f => f !== fuelId);
-  saveMappedSponsors(sps);
-}
-
-function addMappedSponsor() {
-  const name  = document.getElementById('mapSpName').value.trim();
-  const short = document.getElementById('mapSpShort').value.trim() || name;
-  if (!name) { alert('กรุณาใส่ชื่อบริษัท'); return; }
-  const sps = getMappedSponsors();
-  sps.push({
-    id:       'sp_' + Date.now(),
-    name, shortName: short,
-    logo:     document.getElementById('mapSpLogo').value.trim() || '🏭',
-    price:    document.getElementById('mapSpPrice').value.trim(),
-    verified: document.getElementById('mapSpVerified').checked,
-    active:   true,
-    fuelTypes:[],
-  });
-  saveMappedSponsors(sps);
-  ['mapSpName','mapSpShort','mapSpLogo','mapSpPrice'].forEach(id => document.getElementById(id).value='');
-  renderMappingTab();
-}
-
-function deleteMappedSponsor(id) {
-  if (!confirm('ลบ Sponsor นี้?')) return;
-  const sps = getMappedSponsors().filter(s => s.id !== id);
-  saveMappedSponsors(sps);
-  renderMappingTab();
-}
-
-function saveMappingToStorage() {
-  // Already saved on each toggle — just show confirmation
-  const msg = document.getElementById('mappingSaveMsg');
-  msg.textContent = '✅ บันทึกแล้ว! เปิด fuelcostth.com ใน browser แล้ว refresh จะเห็นการเปลี่ยนแปลงทันที';
-  setTimeout(()=>{ msg.textContent=''; }, 4000);
-}
-
-function resetMapping() {
-  if (!confirm('รีเซ็ตเป็นค่าเริ่มต้น?')) return;
-  localStorage.removeItem('fct_sponsors');
-  renderMappingTab();
-  document.getElementById('mappingSaveMsg').textContent = '↩️ รีเซ็ตแล้ว';
-}
+loadState();
 </script>
 </body>
 </html>
