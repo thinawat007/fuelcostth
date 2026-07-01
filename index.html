@@ -1487,7 +1487,7 @@ function toggleFuel(id, checked) {
   f.selected = checked;
   const tr = document.getElementById('tr_'+id);
   if (tr) tr.style.opacity = checked ? '' : '0.45';
-  ['price_','unit_','hv_'].forEach(prefix => {
+  ['price_','unit_','hv_','hvunit_'].forEach(prefix => {  // ✅ fixed: เพิ่ม hvunit_
     const el = document.getElementById(prefix+id);
     if (el) el.disabled = !checked;
   });
@@ -1503,7 +1503,7 @@ function toggleAll(checked) {
     if (chk) chk.checked = checked;
     const tr  = document.getElementById('tr_'+f.id);
     if (tr)  tr.style.opacity = checked ? '' : '0.45';
-    ['price_','unit_','hv_'].forEach(prefix => {
+    ['price_','unit_','hv_','hvunit_'].forEach(prefix => {  // ✅ fixed
       const el = document.getElementById(prefix+f.id);
       if (el) el.disabled = !checked;
     });
@@ -1578,7 +1578,7 @@ function changeUnit(id, newUnit) {
   if (f.hvByUnit[newUnit] !== undefined) {
     f.hv = f.hvByUnit[newUnit]; // store in MJ
     const hvEl = document.getElementById('hv_' + id);
-    if (hvEl) hvEl.value = toHVDisplay(f.hv); // show in selected unit
+    if (hvEl) hvEl.value = perRowHVDisplay(f); // ✅ fixed: respect hvDisplayUnit (MJ/BTU/kcal/kWh)
   }
   updateCPM(f);
   calc();
@@ -1730,8 +1730,76 @@ function _doPDF() {
     .sort((a,b)=>a.cpm-b.cpm);
   const catLabels={fossil:'ฟอสซิล',bio:'ชีวภาพ',biomass:'ชีวมวล',gas:'ก๊าซชีวภาพ',electric:'ไฟฟ้า'};
   const cheapest=results[0], mostExp=results[results.length-1];
+  // ── EQUIV ANALYSIS SECTION (for PDF) ─────────────────────
+  const eqSection = lastEquivData ? (() => {
+    const { fA, fB, qtyA, qtyB, costA, costB, cpmA, cpmB, hvRatio, diff, diffPct, usage, months } = lastEquivData;
+    const isACheaper = diff > 0;
+    const verdictColor = Math.abs(diff) < 1 ? '#64748B' : (isACheaper ? '#059669' : '#DC2626');
+    const verdictText  = Math.abs(diff) < 1
+      ? 'ต้นทุนใกล้เคียงกัน'
+      : isACheaper
+        ? `${fA.name} ถูกกว่าจริง ${Math.abs(diffPct)}% เมื่อคิดตามพลังงานที่ได้`
+        : `${fB.name} แพงกว่าจริง ${Math.abs(diffPct)}% แม้ว่าราคา/หน่วยอาจถูกกว่า`;
+    return `
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;font-weight:800;color:#0F2A5E;margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid #0F2A5E">
+        🔬 วิเคราะห์ความคุ้มค่า — เมื่อค่าความร้อนต่างกัน
+      </div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:10px">
+        เปรียบเทียบต้นทุนจริงสำหรับพลังงาน <strong>${fmt(usage)} MJ/เดือน</strong>
+      </div>
+      <table style="width:100%;border-collapse:collapse;margin-bottom:10px">
+        <thead>
+          <tr style="background:#F1F5F9">
+            <th style="padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:#64748B"></th>
+            <th style="padding:7px 10px;text-align:center;font-size:12px;font-weight:800;color:#0EA5E9">${fA.name}</th>
+            <th style="padding:7px 10px;text-align:center;font-size:12px;font-weight:800;color:#F97316">${fB.name}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fff"><td style="padding:6px 10px;font-size:11px;color:#64748B;border-bottom:1px solid #F1F5F9">ราคา/หน่วย</td><td style="padding:6px 10px;text-align:center;font-size:12px;font-weight:700;border-bottom:1px solid #F1F5F9">฿${fA.price}/${fA.unit}</td><td style="padding:6px 10px;text-align:center;font-size:12px;font-weight:700;border-bottom:1px solid #F1F5F9">฿${fB.price}/${fB.unit}</td></tr>
+          <tr style="background:#F8FAFC"><td style="padding:6px 10px;font-size:11px;color:#64748B;border-bottom:1px solid #F1F5F9">ค่าความร้อน</td><td style="padding:6px 10px;text-align:center;font-size:12px;border-bottom:1px solid #F1F5F9">${fA.hv} MJ/${fA.unit}</td><td style="padding:6px 10px;text-align:center;font-size:12px;border-bottom:1px solid #F1F5F9">${fB.hv} MJ/${fB.unit}</td></tr>
+          <tr style="background:#fff"><td style="padding:6px 10px;font-size:11px;color:#64748B;border-bottom:1px solid #F1F5F9">ปริมาณที่ต้องใช้</td><td style="padding:6px 10px;text-align:center;font-size:12px;border-bottom:1px solid #F1F5F9">${fmt(qtyA)} ${fA.unit}</td><td style="padding:6px 10px;text-align:center;font-size:12px;border-bottom:1px solid #F1F5F9">${fmt(qtyB)} ${fB.unit} (×${hvRatio.toFixed(2)})</td></tr>
+          <tr style="background:#F8FAFC"><td style="padding:6px 10px;font-size:11px;color:#64748B;border-bottom:1px solid #F1F5F9">ค่าใช้จ่าย/เดือน</td><td style="padding:6px 10px;text-align:center;font-size:13px;font-weight:800;color:#0EA5E9;border-bottom:1px solid #F1F5F9">฿${fmt(costA)}</td><td style="padding:6px 10px;text-align:center;font-size:13px;font-weight:800;color:#F97316;border-bottom:1px solid #F1F5F9">฿${fmt(costB)}</td></tr>
+          <tr style="background:#fff"><td style="padding:6px 10px;font-size:11px;color:#64748B">฿/MJ</td><td style="padding:6px 10px;text-align:center;font-size:12px;font-weight:700">฿${cpmA.toFixed(3)}</td><td style="padding:6px 10px;text-align:center;font-size:12px;font-weight:700">฿${cpmB.toFixed(3)}</td></tr>
+        </tbody>
+      </table>
+      <div style="background:${Math.abs(diff)<1?'#F1F5F9':isACheaper?'#F0FDF4':'#FFF7ED'};border:1px solid ${Math.abs(diff)<1?'#E2E8F0':isACheaper?'#BBF7D0':'#FED7AA'};border-radius:6px;padding:10px 14px">
+        <div style="font-size:12px;font-weight:800;color:${verdictColor};margin-bottom:6px">${Math.abs(diff)<1?'⚖️':'isACheaper'?'✅':'⚠️'} ${verdictText}</div>
+        ${Math.abs(diff) >= 1 ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px">
+          <div style="text-align:center;background:rgba(255,255,255,.7);border-radius:4px;padding:6px">
+            <div style="font-size:10px;color:#64748B">${isACheaper?'ประหยัดได้/เดือน':'แพงกว่า/เดือน'}</div>
+            <div style="font-size:14px;font-weight:800;color:${isACheaper?'#059669':'#DC2626'}">฿${fmt(Math.abs(diff))}</div>
+          </div>
+          <div style="text-align:center;background:rgba(255,255,255,.7);border-radius:4px;padding:6px">
+            <div style="font-size:10px;color:#64748B">${months} เดือน</div>
+            <div style="font-size:14px;font-weight:800;color:${isACheaper?'#059669':'#DC2626'}">฿${fmt(Math.abs(diff)*months)}</div>
+          </div>
+          <div style="text-align:center;background:rgba(255,255,255,.7);border-radius:4px;padding:6px">
+            <div style="font-size:10px;color:#64748B">ต่างกัน</div>
+            <div style="font-size:14px;font-weight:800;color:${verdictColor}">${Math.abs(diffPct)}%</div>
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  })() : '';
+
+  // ── SPONSORS SECTION (dynamic from SPONSOR_REGISTRY) ─────
+  const activeSps = SPONSOR_REGISTRY.filter(s =>
+    s.id !== 'sp_none' && (s.package === 'verified' || s.package === 'featured' || s.package === 'listed')
+  ).slice(0, 4);
+  const spSection = activeSps.length ? `
+    <div style="display:grid;grid-template-columns:${activeSps.length > 2 ? '1fr 1fr' : '1fr 1fr'};gap:10px;margin-bottom:14px">
+      ${activeSps.map(s => `
+        <div style="border:1px solid #E2E8F0;border-radius:6px;padding:10px 12px">
+          <div style="font-weight:700;font-size:13px">${s.logo||'🏭'} ${s.name}</div>
+          ${s.displayPrice ? `<div style="font-size:15px;font-weight:800;color:#F59E0B;margin:3px 0">${s.displayPrice}</div>` : ''}
+          <div style="font-size:11px;color:#64748B">${s.verified?'✓ Verified · ':''} ${s.tag||s.fuelType||''}</div>
+        </div>`).join('')}
+    </div>` : '';
+
   const rows = results.map((r,i)=>`
-    <tr style="background:${i%2===0?'#fff':'#F8FAFC'}">
       <td style="text-align:center;font-weight:800;color:${i===0?'#059669':'#64748B'}">${i===0?'★':i+1}</td>
       <td><span style="font-weight:700;color:${r.color}">${r.name}</span><br>
         <span style="font-size:10px;background:${r.cat==='bio'?'#DCFCE7':r.cat==='biomass'?'#FEF9C3':r.cat==='electric'?'#EDE9FE':r.cat==='gas'?'#DBEAFE':'#FEF3C7'};color:#555;padding:1px 6px;border-radius:3px;font-size:9px">${catLabels[r.cat]||r.cat}</span>
@@ -1890,17 +1958,14 @@ function doSavePDF() {
     </tr></thead>
     <tbody>${rows}</tbody>
   </table>
+  ${eqSection}
   <div class="sponsors">
+    ${spSection || `
     <div class="sp-box" style="background:#FFFBEB;border-color:#FCD34D">
-      <div class="sp-name">🟠 Thai LPG Industrial</div>
-      <div class="sp-price">฿22.30/กก.</div>
-      <div style="font-size:11px;color:#92400E">✓ Verified · ส่งทั่วไทย</div>
-    </div>
-    <div class="sp-box" style="background:#F0FDF4;border-color:#86EFAC">
-      <div class="sp-name">🔵 Prism Energy LNG</div>
-      <div class="sp-price" style="color:#059669">฿18.90/กก.</div>
-      <div style="font-size:11px;color:#166534">✓ Verified · ติดตั้งฟรี</div>
-    </div>
+      <div class="sp-name">📢 สนใจลงโฆษณา</div>
+      <div class="sp-price" style="color:#059669">฿6,000/เดือน</div>
+      <div style="font-size:11px;color:#166534">ติดต่อ: vkpintertrade@gmail.com</div>
+    </div>`}
   </div>
   <div class="wm">Powered by FuelCostTH.com · เปรียบเทียบต้นทุนพลังงานฟรี</div>
 </div>
@@ -2165,6 +2230,9 @@ function initEquivPanel() {
   calcEquiv();
 }
 
+// ─── EQUIV DATA (for PDF export) ─────────────
+let lastEquivData = null;
+
 function calcEquiv() {
   const fA = FUELS.find(f => f.id === document.getElementById('eqFuelA').value);
   const fB = FUELS.find(f => f.id === document.getElementById('eqFuelB').value);
@@ -2208,6 +2276,9 @@ function calcEquiv() {
   const cheaper  = diff < 0 ? fB.name : fA.name;
   const verdictEl = document.getElementById('eqVerdict');
   const months   = getMonths();
+
+  // ✅ fixed: เก็บข้อมูลไว้ใช้ใน PDF
+  lastEquivData = { fA, fB, qtyA, qtyB, costA, costB, cpmA, cpmB, hvRatio, diff, diffPct, usage, months };
 
   if (Math.abs(diff) < 1) {
     verdictEl.style.background = '#F1F5F9';
