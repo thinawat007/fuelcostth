@@ -1724,6 +1724,13 @@ function _doPDF() {
   const usage  = getUsageMJ();
   const months = getMonths();
   const today  = new Date().toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'});
+  // ── ORIGINAL INPUT (fuel + qty + unit ที่ผู้ใช้กรอกจริง) ──
+  let sourceLabel = '';
+  if (currentMode === 'qty') {
+    const srcFuel = FUELS.find(x => x.id === document.getElementById('currentFuel').value);
+    const qty = getQtyAmount();
+    if (srcFuel && qty > 0) sourceLabel = `${srcFuel.name} ${fmt(qty)} ${srcFuel.unit}/เดือน`;
+  }
   const visible = FUELS.filter(f => (activeCategory==='all'||f.cat===activeCategory) && f.selected);
   const results = visible.filter(f=>f.hv>0&&f.price>=0)
     .map(f=>({...f,cpm:f.price/f.hv,mon:f.price/f.hv*usage,tot:f.price/f.hv*usage*months}))
@@ -1751,7 +1758,7 @@ function _doPDF() {
         🔬 วิเคราะห์ความคุ้มค่า — เมื่อค่าความร้อนต่างกัน
       </div>
       <div style="font-size:11px;color:#64748B;margin-bottom:10px">
-        เปรียบเทียบต้นทุนจริงสำหรับพลังงาน <strong>${fmt(usage)} MJ/เดือน</strong>
+        เปรียบเทียบต้นทุนจริงสำหรับพลังงาน <strong>${fmt(usage)} MJ/เดือน</strong>${sourceLabel ? ` (จาก ${sourceLabel})` : ''}
       </div>
       <table style="width:100%;border-collapse:collapse;margin-bottom:10px">
         <thead>
@@ -1934,10 +1941,11 @@ function doSavePDF() {
   </div>
   <div class="header-right">
     <strong>วันที่: ${today}</strong>
-    <span>ปริมาณ: ${fmt(usage)} MJ/เดือน</span>
+    <span>${sourceLabel ? sourceLabel + ' · ' : ''}${fmt(usage)} MJ/เดือน</span>
   </div>
 </div>
 <div class="meta">
+  ${sourceLabel ? `<span>ปริมาณที่ใช้จริง: <strong>${sourceLabel}</strong></span>` : ''}
   <span>ปริมาณพลังงาน: <strong>${fmt(usage)} MJ/เดือน</strong></span>
   <span>ระยะเวลาเปรียบเทียบ: <strong>${months} เดือน</strong></span>
   <span>จำนวนเชื้อเพลิงที่เปรียบเทียบ: <strong>${results.length} ชนิด</strong></span>
